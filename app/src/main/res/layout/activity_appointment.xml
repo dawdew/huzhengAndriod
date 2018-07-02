@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="100dp"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingTop="100dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_birthr_egistration"
+                style="@style/advisory_menu"
+                android:layout_marginLeft="0dp"
+                android:background="@color/download_birthr_egistration_bg"
+                android:text="出生登记" />
+
+            <TextView
+                style="@style/advisory_menu"
+                android:background="@color/download_cancel_account_bg"
+                android:text="注销户口" />
+
+            <TextView
+                style="@style/advisory_menu"
+                android:background="@color/download_migration_account_bg"
+                android:text="户口迁移" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/advisory_menu"
+                android:layout_marginLeft="0dp"
+                android:background="@color/download_things_change_bg"
+                android:text="事项变更" />
+
+            <TextView
+                style="@style/advisory_menu"
+                android:background="@color/download_certificates_reissue_bg"
+                android:text="证件补发" />
+
+            <TextView
+                style="@style/advisory_menu"
+                android:background="@color/download_recover_account_bg"
+                android:text="恢复户口" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

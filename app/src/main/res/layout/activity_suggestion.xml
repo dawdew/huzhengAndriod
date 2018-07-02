@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="200dp"
+    android:paddingRight="200dp"
+    android:paddingBottom="150dp"
+    android:paddingTop="80dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/ic_suggestion_bg"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="50dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingRight="100dp">
+
+            <TextView
+                style="@style/suggestion_tv"
+                android:text="姓        名：" />
+
+            <EditText
+                android:id="@+id/edtName"
+                style="@style/suggestion_edt" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="200dp"
+                android:id="@+id/rg">
+                <RadioButton
+                    style="@style/suggestion_radioButton"
+                    android:text="表扬"
+                    android:id="@+id/rbPraise"
+                   />
+                <RadioButton
+                    android:layout_marginLeft="20dp"
+                    style="@style/suggestion_radioButton"
+                    android:text="意见"
+                    android:id="@+id/rbOpinion"
+                    />
+                <RadioButton
+                    android:layout_marginLeft="20dp"
+                    style="@style/suggestion_radioButton"
+                    android:text="建议"
+                    android:id="@+id/rbSuggest"
+                    />
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:paddingRight="100dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/suggestion_tv"
+                android:text="内        容：" />
+
+            <EditText
+                android:gravity="top"
+                android:id="@+id/edtContent"
+                style="@style/suggestion_edt"
+                android:minLines="6" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:paddingRight="100dp">
+
+            <TextView
+                style="@style/suggestion_tv"
+                android:text="联系方式：" />
+
+            <EditText
+                android:id="@+id/edtPhone"
+                style="@style/suggestion_edt"
+                android:inputType="phone" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="200dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="35dp"
+            android:text="提交"
+            android:textSize="40dp"
+            android:textColor="@color/white"
+            android:background="#00a0e9"/>
+    </LinearLayout>
+
+</LinearLayout>

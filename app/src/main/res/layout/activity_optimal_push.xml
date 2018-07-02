@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="300dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginRight="200dp"
+        android:background="@drawable/optimal_push_bg"
+        android:padding="50dp">
+
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="解释说明:"
+            android:layout_marginLeft="400dp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:textSize="60dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/llBtn"
+            android:layout_below="@+id/textTitle"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:lineSpacingMultiplier="1.5"
+            android:text="填写个人信息即可由系统推送适合您的最优业务"
+            android:textColor="@color/white"
+            android:textSize="45dp" />
+
+        <RelativeLayout
+            android:id="@+id/llBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btnContinue"
+                android:layout_width="240dp"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:background="@color/green_btn"
+                android:textSize="45dp"
+                android:text="继续" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

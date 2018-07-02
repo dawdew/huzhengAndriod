@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- 实心 -->
+    <solid android:color="@color/black_translucence" />
+    <!--描边-->
+    <stroke
+        android:width="10dp"
+        android:color="@color/blue_translucence" />
+
+</shape>

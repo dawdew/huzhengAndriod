@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFF</color>
+    <color name="black">#000</color>
+    <color name="menu1">#3e69f3</color>
+    <color name="menu2">#ff8400</color>
+    <color name="menu3">#7800ff</color>
+    <color name="menu4">#08a683</color>
+    <color name="menu5">#b90faf</color>
+    <color name="menu6">#cf1b78</color>
+    <color name="menu7">#0d2ffd</color>
+    <!--信息查询-录入框灰色字体-->
+    <color name="gray">#c1c1c1</color>
+    <!--信息查询-蓝色按钮-->
+    <color name="BlueBtn">#063da3</color>
+    <!--信息查询-灰色边框-->
+    <color name="grayBorder">#bfbfbf</color>
+    <!--推优办理—60%透明黑色背景-->
+    <color name="black_translucence">#99000000</color>
+    <!--推优办理—背景蓝色边框-->
+    <color name="blue_translucence">#9900479d</color>
+    <!--推优办理-灰色按钮-->
+    <color name="gray_btn">#959595</color>
+    <!--推优办理-绿色按钮-->
+    <color name="green_btn">#3dbf5f</color>
+    <color name="blue_line">#113dbc</color>
+    <color name="divider_line">#d9d9d9</color>
+    <!--浅的文字颜色-->
+    <color name="textcolor_light">#666</color>
+    <color name="gray_line">#dddddd</color>
+    <color name="translucent_black">#AC000000</color>
+    <color name="title_bar_bg">#1c44ac</color>
+    <color name="ListText">#eeeeee</color>
+    <color name="state_red">#ff0000</color>
+    <color name="state_green">#00ff7e</color>
+    <color name="state_blue">#1e54cf</color>
+    <color name="state_violet">#cb10d2</color>
+    <color name="state_orange">#ff8400</color>
+    <color name="resolve_bg">#04be76</color>
+    <color name="logistics_information_circle">#f29a76</color>
+    <color name="DarkFont">#333</color>
+    <color name="logistics_information_line">#8d8d8d</color>
+    <color name="download_birthr_egistration_bg">#287ede</color>
+    <color name="download_cancel_account_bg">#6f9925</color>
+    <color name="download_migration_account_bg">#ff7800</color>
+    <color name="download_things_change_bg">#9617c5</color>
+    <color name="download_certificates_reissue_bg">#25d4d2</color>
+    <color name="download_recover_account_bg">#3cd139</color>
+    <color name="download_btn">#00b7ee</color>
+    <color name="synopsis_accept_range">#e10e99</color>
+    <color name="synopsis_honor">#25ad98</color>
+    <color name="synopsis_staff_faculty">#ffcc00</color>
+    <color name="synopsis_departments">#3949e0</color>
+    <color name="synopsis_suggestion">#8d26dd</color>
+    <color name="red_line">#ff3838</color>
+    <color name="staff_faculty_title">#367eff</color>
+    <color name="departments_title1">#be2c19</color>
+    <color name="departments_title2">#234fdf</color>
+    <color name="departments_title3">#4ede43</color>
+    <color name="departments_title4">#5f3fea</color>
+    <color name="advisory_details_btn_select">#802539cb</color>
+</resources>

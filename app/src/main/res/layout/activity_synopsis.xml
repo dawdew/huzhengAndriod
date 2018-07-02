@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingLeft="320dp"
+    android:paddingBottom="80dp"
+    android:paddingRight="320dp">
+
+    <LinearLayout
+        android:id="@+id/ll_accept_range"
+        style="@style/synopsis_ll">
+
+        <ImageView
+            style="@style/synopsis_img"
+            android:background="@color/synopsis_accept_range"
+            android:src="@mipmap/ic_accept_range" />
+
+        <TextView
+            style="@style/synopsis_tv"
+            android:background="@color/synopsis_accept_range"
+            android:text="大厅受理范围" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_honor"
+        style="@style/synopsis_ll"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            style="@style/synopsis_img"
+            android:background="@color/synopsis_honor"
+            android:src="@mipmap/ic_honor" />
+
+        <TextView
+            style="@style/synopsis_tv"
+            android:background="@color/synopsis_honor"
+            android:text="荣誉展示" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_staff_faculty"
+        style="@style/synopsis_ll"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            style="@style/synopsis_img"
+            android:background="@color/synopsis_staff_faculty"
+            android:src="@mipmap/ic_staff_faculty" />
+
+        <TextView
+            style="@style/synopsis_tv"
+            android:background="@color/synopsis_staff_faculty"
+            android:text="人员介绍" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_departments"
+        style="@style/synopsis_ll"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            style="@style/synopsis_img"
+            android:background="@color/synopsis_departments"
+            android:src="@mipmap/ic_departments" />
+
+        <TextView
+            style="@style/synopsis_tv"
+            android:background="@color/synopsis_departments"
+            android:text="相关部门信息" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_suggestion"
+        style="@style/synopsis_ll"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            style="@style/synopsis_img"
+            android:background="@color/synopsis_suggestion"
+            android:src="@mipmap/ic_suggestion" />
+
+        <TextView
+            style="@style/synopsis_tv"
+            android:background="@color/synopsis_suggestion"
+            android:text="意见建议" />
+    </LinearLayout>
+</LinearLayout>

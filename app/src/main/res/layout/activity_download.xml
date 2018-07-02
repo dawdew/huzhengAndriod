@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="100dp"
+    android:paddingTop="100dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="220dp"
+        android:layout_marginRight="220dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_birthr_egistration"
+            style="@style/download_btn"
+            android:background="@drawable/download_birth_registration"
+            android:text="出生登记" />
+        <Button
+            android:id="@+id/btn_cancel_account"
+            style="@style/download_btn"
+            android:background="@drawable/download_cancel_account"
+            android:text="注销户口" />
+        <Button
+            android:id="@+id/btn_migration_account"
+            style="@style/download_btn"
+            android:background="@drawable/download_migration_account"
+            android:text="户口迁移" />
+        <Button
+            android:id="@+id/btn_things_change"
+            style="@style/download_btn"
+            android:background="@drawable/download_things_change_bg"
+            android:text="事项变更" />
+        <Button
+            android:id="@+id/btn_certificates_reissue"
+            style="@style/download_btn"
+            android:background="@drawable/download_certificates_reissue"
+            android:text="证件补发" />
+        <Button
+            android:id="@+id/btn_recover_account"
+            style="@style/download_btn"
+            android:background="@drawable/download_recover_account"
+            android:text="恢复户口" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="220dp"
+        android:layout_marginRight="220dp"
+        android:layout_marginBottom="150dp"
+        android:background="@color/black_translucence">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
+    </LinearLayout>
+
+</LinearLayout>

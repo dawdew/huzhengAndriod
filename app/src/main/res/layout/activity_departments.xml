@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="100dp"
+    android:paddingTop="100dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <Button
+            style="@style/activity_departments_title"
+            android:layout_marginLeft="0dp"
+            android:background="@drawable/departments_title1"
+            android:text="部门1"
+            android:id="@+id/btnDepartment1"/>
+
+        <Button
+            style="@style/activity_departments_title"
+            android:background="@drawable/departments_title2"
+            android:text="部门2"
+            android:id="@+id/btnDepartment2"/>
+
+        <Button
+            style="@style/activity_departments_title"
+            android:background="@drawable/departments_title3"
+            android:text="部门3"
+            android:id="@+id/btnDepartment3"/>
+
+        <Button
+            style="@style/activity_departments_title"
+            android:background="@drawable/departments_title4"
+            android:text="部门4"
+            android:id="@+id/btnDepartment4"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_translucence"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="40dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_address"
+                style="@style/activity_departments_tv"
+                android:text="地址：XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" />
+            <TextView
+                android:id="@+id/tv_phone"
+                style="@style/activity_departments_tv"
+                android:text="联系电话：022-80000000" />
+            <TextView
+                android:id="@+id/tv_transportation"
+                style="@style/activity_departments_tv"
+                android:text="交通出行：西市大街公交站 503路  640路  687路" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:padding="30dp">
+            <com.amap.api.maps.MapView
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+            </com.amap.api.maps.MapView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

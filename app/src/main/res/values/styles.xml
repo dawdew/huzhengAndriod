@@ -1,0 +1,204 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"></style>
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--</style>-->
+    <!--主页面菜单背景-->
+    <style name="MuenBg">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <!--主页菜单图片-->
+    <style name="MenuImg">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <!--主页菜单文字-->
+    <style name="MenuText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">#FFF</item>
+        <item name="android:textSize">36dp</item>
+    </style>
+    <!--推优办理——个人信息——菜单-->
+    <style name="personal_information_menu_ll">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+    <!--推优办理——个人信息——图标-->
+    <style name="personal_information_menu_img">
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">25dp</item>
+    </style>
+    <!--推优办理——个人信息——菜单名称-->
+    <style name="personal_information_menu_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">40dp</item>
+    </style>
+    <!--推优办理——个人信息——内容——列表名称-->
+    <style name="personal_information_content_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">40dp</item>
+        <item name=" android:textColor">@color/white</item>
+
+    </style>
+    <style name="white_rounded_bg">
+        <item name="android:background">@drawable/white_rounded_bg</item>
+        <item name="android:padding">10dp</item>
+    </style>
+    <!--下载申请按钮-->
+    <style name="download_btn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginTop">@dimen/download_btn_margin</item>
+    </style>
+    <!--大厅简介-->
+    <style name="synopsis_ll">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">120dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <style name="synopsis_img">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">20dp</item>
+    </style>
+    <style name="synopsis_tv">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">40dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+    </style>
+    <!--大厅简介-相关部门信息-->
+    <style name="activity_departments_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+
+    </style>
+    <!--大厅简介-相关部门信息-->
+    <style name="activity_departments_tv">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name=" android:lineSpacingMultiplier">1.2</item>
+    </style>
+    <!--大厅简介-意见建议-->
+    <style name="suggestion_tv">
+        <item name="android:layout_width">wrap_content</item>
+        <item name=" android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+    <!--大厅简介-意见建议-录入框-->
+    <style name="suggestion_edt">
+        <item name="android:layout_width">match_parent</item>
+        <item name=" android:layout_height">wrap_content</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:padding">5dp</item>
+    </style>
+    <!--大厅简介-意见建议-单选-->
+    <style name="suggestion_radioButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:button">@null</item>
+        <item name="android:drawableLeft">@drawable/image_radiobutton</item>
+        <item name="android:drawablePadding">5dp</item>
+    </style>
+    <!--政策咨询-->
+    <style name="advisory_search_ll">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@color/black</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="advisory_search_tv">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">#f1f1f1</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+    </style>
+    <style name="advisory_search_rl">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+    </style>
+    <style name="advisory_search_img">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:src">@mipmap/ic_search</item>
+    </style>
+    <style name="advisory_search_edt">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">#9e9e9e</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+    <style name="advisory_menu">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">23dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginLeft">10dp</item>
+    </style>
+    <!--在线预约-时间标题-->
+    <style name="activity_appointment_details_time_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <!--在线预约-时间-->
+    <style name="activity_appointment_details_time">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:textColor">#063ede</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:paddingLeft">3dp</item>
+    </style>
+
+</resources>
