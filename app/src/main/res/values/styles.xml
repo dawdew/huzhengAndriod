@@ -78,9 +78,9 @@
         <item name="android:orientation">horizontal</item>
     </style>
     <style name="synopsis_img">
-        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:padding">20dp</item>
+        <item name="android:padding">30dp</item>
     </style>
     <style name="synopsis_tv">
         <item name="android:layout_width">match_parent</item>
@@ -115,13 +115,13 @@
         <item name="android:layout_width">wrap_content</item>
         <item name=" android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">40dp</item>
     </style>
     <!--大厅简介-意见建议-录入框-->
     <style name="suggestion_edt">
         <item name="android:layout_width">match_parent</item>
         <item name=" android:layout_height">wrap_content</item>
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">40dp</item>
         <item name="android:background">@color/white</item>
         <item name="android:padding">5dp</item>
     </style>
@@ -129,7 +129,7 @@
     <style name="suggestion_radioButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">40dp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:button">@null</item>
         <item name="android:drawableLeft">@drawable/image_radiobutton</item>
