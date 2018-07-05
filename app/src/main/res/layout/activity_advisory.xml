@@ -19,10 +19,11 @@
                 android:id="@+id/imgSearch"
                 style="@style/advisory_search_img" />
 
-            <TextView
+            <EditText
+                android:id="@+id/editSearch"
                 style="@style/advisory_search_edt"
                 android:layout_toLeftOf="@+id/imgSearch"
-                android:text="请输入您想要搜索的内容" />
+                android:hint="请输入您想要搜索的内容" />
         </RelativeLayout>
     </LinearLayout>
         <LinearLayout
@@ -45,10 +46,12 @@
                     android:background="@color/download_birthr_egistration_bg"
                     android:id="@+id/tv_birthr_egistration"/>
                 <TextView
+                    android:id="@+id/tv_zxhk"
                     style="@style/advisory_menu"
                     android:text="注销户口"
                     android:background="@color/download_cancel_account_bg"/>
                 <TextView
+                    android:id="@+id/tv_hkqy"
                     style="@style/advisory_menu"
                     android:text="户口迁移"
                     android:background="@color/download_migration_account_bg"/>
@@ -60,15 +63,18 @@
                 android:orientation="horizontal"
                 android:layout_weight="1">
                 <TextView
+                    android:id="@+id/tv_sxbg"
                     style="@style/advisory_menu"
                     android:text="事项变更"
                     android:layout_marginLeft="0dp"
                     android:background="@color/download_things_change_bg"/>
                 <TextView
+                    android:id="@+id/tv_zjbf"
                     style="@style/advisory_menu"
                     android:text="证件补发"
                     android:background="@color/download_certificates_reissue_bg"/>
                 <TextView
+                    android:id="@+id/tv_hfhk"
                     style="@style/advisory_menu"
                     android:text="恢复户口"
                     android:background="@color/download_recover_account_bg"/>

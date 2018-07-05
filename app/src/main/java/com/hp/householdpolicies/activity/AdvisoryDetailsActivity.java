@@ -12,6 +12,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hp.householdpolicies.R;
@@ -22,6 +23,8 @@ import com.hp.householdpolicies.model.Honor;
 import com.hp.householdpolicies.utils.Api;
 import com.hp.householdpolicies.utils.ApiCallBack;
 import com.hp.householdpolicies.utils.OkhttpUtil;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +38,6 @@ import butterknife.OnClick;
 public class AdvisoryDetailsActivity extends BaseActivity {
     //便签打印
     @BindView(R.id.llPrint)
-    @Nullable
     LinearLayout llPrint;
     //一年内
 //    @BindView(R.id.btnYear)
@@ -45,6 +47,8 @@ public class AdvisoryDetailsActivity extends BaseActivity {
 //    Button btnMoreYear;
     Context mContext;
     //列表
+    @BindView(R.id.adCategory)
+    RelativeLayout adCategory;
     @BindView(R.id.rcv)
     RecyclerView recyclerView;
     @BindView(R.id.title)
@@ -87,25 +91,40 @@ public class AdvisoryDetailsActivity extends BaseActivity {
     private void getData(){
         Intent intent = getIntent();
         String category = intent.getStringExtra("category");
-        HashMap<String, String> map = new HashMap<>();
-        map.put("cpid",category);
-        OkhttpUtil.okHttpGet(Api.articleList, map, new ApiCallBack() {
-          @Override
-          public void onResponse(Object response) {
-              List<Map<String, String>> list = (List<Map<String, String>>) response;
-              for(Map<String, String> m:list){
-                  Article article = new Article();
-                  article.setTitle(m.get("title"));
-                  article.setCname(m.get("cname"));
-                  article.setContent(m.get("content"));
-                  listArticle.add(article);
-              }
-              if(list!=null && list.size()>0){
-                title.setText(list.get(0).get("title"));
-                  webView.loadDataWithBaseURL(null,list.get(0).get("content"), "text/html" , "utf-8", null);
-              }
-              adapter.notifyDataSetChanged();
-          }
-      });
+        if(StringUtils.isNotBlank(category)){
+            HashMap<String, String> map = new HashMap<>();
+            map.put("cpid",category);
+            OkhttpUtil.okHttpGet(Api.articleList, map, new ApiCallBack() {
+                @Override
+                public void onResponse(Object response) {
+                    List<Map<String, String>> list = (List<Map<String, String>>) response;
+                    for(Map<String, String> m:list){
+                        Article article = new Article();
+                        article.setTitle(m.get("title"));
+                        article.setCname(m.get("cname"));
+                        article.setContent(m.get("content"));
+                        listArticle.add(article);
+                    }
+                    if(list!=null && list.size()>0){
+                        title.setText(list.get(0).get("title"));
+                        webView.loadDataWithBaseURL(null,list.get(0).get("content"), "text/html" , "utf-8", null);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }else {
+            adCategory.setVisibility(View.GONE);
+            String titleStr = intent.getStringExtra("title");
+            String contentStr = intent.getStringExtra("content");
+            Article article = new Article();
+            article.setTitle(titleStr);
+            article.setCname(titleStr);
+            article.setContent(contentStr);
+            listArticle.add(article);
+            title.setText(titleStr);
+            webView.loadDataWithBaseURL(null,contentStr, "text/html" , "utf-8", null);
+            adapter.notifyDataSetChanged();
+        }
+
   }
 }

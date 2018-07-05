@@ -18,7 +18,7 @@ import java.util.List;
 public class AdvisorySearchAdapter extends BaseRecyclerAdapter<AdvisorySearchAdapter.SimpleAdapterViewHolder> {
     private Context mContext;
     private List<AdvisorySearch> list;
-    private static OptimalPushResultsAdapter.OnItemClickListener mOnItemClickListener;
+    private static AdvisorySearchAdapter.OnItemClickListener mOnItemClickListener;
     private Boolean isDel;//是否需要侧滑删除
 
     /**
@@ -42,7 +42,7 @@ public class AdvisorySearchAdapter extends BaseRecyclerAdapter<AdvisorySearchAda
 
     }
 
-    public static void setOnItemClickListener(OptimalPushResultsAdapter.OnItemClickListener listener) {
+    public static void setOnItemClickListener(AdvisorySearchAdapter.OnItemClickListener listener) {
         mOnItemClickListener = listener;
     }
 
@@ -72,30 +72,14 @@ public class AdvisorySearchAdapter extends BaseRecyclerAdapter<AdvisorySearchAda
         }else{
             holder.imgRecommend.setVisibility(View.INVISIBLE);
         }
-//        if (mOnItemClickListener != null) {
-//            holder.tv_name.setOnClickListener(new View.OnClickListener() { //itemview是holder里的所有控件，可以单独设置比如ImageButton Button等
-//                @Override
-//                public void onClick(View v) {
-//                    mOnItemClickListener.onItemClick(holder.itemView, position);
-//                }
-//            });
-//            holder.tv_name.setOnLongClickListener(new View.OnLongClickListener() { //长按事件
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    mOnItemClickListener.onItemLongClick(holder.itemView, position);
-//                    return false;
-//                }
-//            });
-//            holder.btn_del.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mOnItemClickListener.onItemDel(position);
-//                }
-//            });
-//        }
-
-        //设置是否可以侧滑删除
-//        ((SwipeMenuLayout) holder.itemView).setLeftSwipe(isDel).setSwipeEnable(isDel);
+        if (mOnItemClickListener != null) {
+            holder.tv_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onItemClick(v,position);
+                }
+            });
+        }
     }
 
     @Override
