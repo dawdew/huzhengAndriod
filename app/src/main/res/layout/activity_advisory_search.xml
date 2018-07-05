@@ -6,7 +6,8 @@
     android:paddingBottom="80dp"
     android:paddingTop="80dp">
 
-    <LinearLayout style="@style/advisory_search_ll">
+    <LinearLayout style="@style/advisory_search_ll"
+        >
 
         <TextView
             style="@style/advisory_search_tv"

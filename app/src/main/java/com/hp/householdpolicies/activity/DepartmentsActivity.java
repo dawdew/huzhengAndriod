@@ -8,14 +8,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.MyLocationStyle;
 import com.hp.householdpolicies.R;
 import com.hp.householdpolicies.model.Honor;
 import com.hp.householdpolicies.utils.Api;
 import com.hp.householdpolicies.utils.ApiCallBack;
 import com.hp.householdpolicies.utils.OkhttpUtil;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -82,6 +89,7 @@ public class DepartmentsActivity extends BaseActivity {
             mAMap.moveCamera(CameraUpdateFactory.zoomBy(6));
 //            setUpMap();
         }
+        getData();
     }
     @OnClick({R.id.btnDepartment1, R.id.btnDepartment2, R.id.btnDepartment3, R.id.btnDepartment4})
     void ViewClick(View view) {
@@ -103,6 +111,7 @@ public class DepartmentsActivity extends BaseActivity {
     }
     //修改菜单显示状态，并修改内容显示
     void MenuSelect() {
+        change();
         if (indextSelect != indext) {
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) btns[indextSelect].getLayoutParams();
             layoutParams.topMargin = 0;//将默认的距离底部20dp，改为0，这样底部区域全被listview填满。
@@ -163,14 +172,33 @@ public class DepartmentsActivity extends BaseActivity {
                 btnDepartment2.setText(deptMap1.get("name"));
                 btnDepartment3.setText(deptMap2.get("name"));
                 btnDepartment4.setText(deptMap3.get("name"));
-                tvAddress.setText(deptMap.get("address"));
-                tvPhone.setText(deptMap.get("tel"));
-                tvTransportation.setText(deptMap.get("travel"));
-
+                tvAddress.setText("地址："+deptMap.get("address"));
+                tvPhone.setText("联系电话："+deptMap.get("tel"));
+                tvTransportation.setText("交通出行："+deptMap.get("travel"));
+                change();
             }
         });
     }
-    public void change(View v){
-
+    public void change(){
+        mAMap.clear();
+        Map<String, String> deptMap = deptList.get(indextSelect);
+        tvAddress.setText("地址："+deptMap.get("address"));
+        tvPhone.setText("联系电话："+deptMap.get("tel"));
+        tvTransportation.setText("交通出行："+deptMap.get("travel"));
+        String latlng = deptMap.get("latlng");
+        if(StringUtils.isNotBlank(latlng)){
+            String[] split = StringUtils.split(latlng,",");
+            LatLng latLng = new LatLng(Double.parseDouble(split[1]),Double.parseDouble(split[0]));
+            MarkerOptions markerOption = new MarkerOptions().icon(BitmapDescriptorFactory
+                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                    .position(latLng)
+                    //其中经纬度可以在定位回调成功函数  onLocationChanged中获取
+                    .title(deptMap.get("name"))
+                    .snippet(deptMap.get("address"))
+                    //一般可以显示当前位置的详细信息
+                    .draggable(false);
+            mAMap.addMarker(markerOption);
+            mAMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+        }
     }
 }

@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="100dp"
-    android:paddingLeft="50dp"
-    android:paddingRight="50dp"
+    android:paddingLeft="250dp"
+    android:paddingRight="250dp"
     android:paddingTop="100dp">
 
     <LinearLayout

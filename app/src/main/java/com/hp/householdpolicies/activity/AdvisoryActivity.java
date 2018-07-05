@@ -37,6 +37,7 @@ public class AdvisoryActivity extends BaseActivity {
                 break;
             case R.id.tv_birthr_egistration://出生登记
                 Intent intentBirthrEgistration = new Intent(this, AdvisoryDetailsActivity.class);
+                intentBirthrEgistration.putExtra("category","1");
                 startActivity(intentBirthrEgistration);
                 break;
 

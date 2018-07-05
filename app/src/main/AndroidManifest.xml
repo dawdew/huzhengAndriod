@@ -59,7 +59,7 @@
         <!-- 设置key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="f1eacc56ce05f716a18ed9b6361fc745" />
+            android:value="6c8347de14e413bd800404ba661b7313" />
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService"></service>
         <!--首页-->

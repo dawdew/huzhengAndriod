@@ -17,4 +17,5 @@ public class Api {
     public static String download=base+"download";
     public static String honorList=base+"honorList";
     public static String deptList=base+"deptList";
+    public static String articleList=base+"articleList";
 }

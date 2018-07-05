@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="80dp"
-    android:paddingTop="80dp">
+    android:paddingBottom="120dp"
+    android:paddingTop="120dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:layout_width="150dp"
+            android:layout_width="300dp"
             android:layout_height="match_parent">
 
             <LinearLayout
@@ -35,7 +35,7 @@
                     android:gravity="center"
                     android:text="便签打印"
                     android:textColor="#f4f4f4"
-                    android:textSize="20dp" />
+                    android:textSize="35dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -44,23 +44,10 @@
                 android:layout_above="@+id/llPrint"
                 android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btnYear"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rcv"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/advisory_details_btn_bg"
-                    android:text="一年内"
-                    android:textColor="@color/white"
-                    android:textSize="16dp" />
-
-                <Button
-                    android:id="@+id/btnMoreYear"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/advisory_details_btn_bg"
-                    android:text="一年以上"
-                    android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -75,17 +62,20 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="80dp"
                 android:paddingLeft="20dp"
-                android:text="出生登记（一年内）"
+                android:paddingTop="20dp"
+                android:text=""
                 android:textColor="@color/white"
-                android:textSize="18dp"
+                android:textSize="45dp"
                 android:gravity="center_vertical"/>
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="50dp"
                 android:layout_marginBottom="20dp">
 
                 <LinearLayout
@@ -94,20 +84,10 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:orientation="vertical">
-                    <TextView
+                    <WebView
+                        android:id="@+id/webview"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/YearContent"
-                        android:textSize="15dp"
-                        android:textColor="@color/white"
-                        android:lineSpacingMultiplier="1.2"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/reminder"
-                        android:textSize="15dp"
-                        android:textColor="#d21919"
-                        android:lineSpacingMultiplier="1.2"/>
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
