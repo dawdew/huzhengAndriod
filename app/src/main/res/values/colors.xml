@@ -12,6 +12,7 @@
     <color name="menu5">#b90faf</color>
     <color name="menu6">#cf1b78</color>
     <color name="menu7">#0d2ffd</color>
+    <color name="date">#fdcd75</color>
     <!--信息查询-录入框灰色字体-->
     <color name="gray">#c1c1c1</color>
     <!--信息查询-蓝色按钮-->

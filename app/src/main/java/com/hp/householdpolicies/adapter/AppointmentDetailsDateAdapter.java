@@ -11,20 +11,22 @@ import android.widget.TextView;
 
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.hp.householdpolicies.R;
+import com.hp.householdpolicies.model.AppDate;
 import com.hp.householdpolicies.model.Salesman;
 
 import java.util.List;
 
 public class AppointmentDetailsDateAdapter extends BaseRecyclerAdapter<AppointmentDetailsDateAdapter.SimpleAdapterViewHolder> {
     private Context mContext;
-    private List<String> list;
+    private List<AppDate> list;
+    private int mPosition=-1;
     private static AppointmentDetailsDateAdapter.OnItemClickListener mOnItemClickListener;
 
     /**
      * @param list
      * @param context
      */
-    public AppointmentDetailsDateAdapter(List<String> list, Context context) {
+    public AppointmentDetailsDateAdapter(List<AppDate> list, Context context) {
         this.list = list;
     }
 
@@ -43,22 +45,32 @@ public class AppointmentDetailsDateAdapter extends BaseRecyclerAdapter<Appointme
 
     @Override
     public void onBindViewHolder(final AppointmentDetailsDateAdapter.SimpleAdapterViewHolder holder, final int position, boolean isItem) {
-        String date = list.get(position);
-        holder.tvDate.setText(date);
-        if(position==6||position==7){
+        final AppDate date = list.get(position);
+        holder.tvDate.setText(date.getDateStr());
+        if(mPosition==position){
+            holder.tvDate.setBackgroundResource(R.color.date);
+        }else {
+            holder.tvDate.setBackgroundResource(R.color.white);
+        }
+        if(!date.getAvailable()){
             holder.tvDate.setBackgroundResource(R.mipmap.ic_line_bg);
         }
         if (mOnItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() { //itemview是holder里的所有控件，可以单独设置比如ImageButton Button等
                 @Override
                 public void onClick(View v) {
-                    mOnItemClickListener.onItemClick(holder.itemView, position);
+                    mPosition =position;
+                    notifyDataSetChanged();
+                    holder.tvDate.setBackgroundResource(R.color.date);
+                    if(date.getAvailable()){
+                        mOnItemClickListener.onItemClick(holder.tvDate, position);
+                    }
                 }
             });
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() { //长按事件
                 @Override
                 public boolean onLongClick(View v) {
-                    mOnItemClickListener.onItemLongClick(holder.itemView, position);
+                    mOnItemClickListener.onItemLongClick(holder.tvDate, position);
                     return false;
                 }
             });
@@ -80,7 +92,7 @@ public class AppointmentDetailsDateAdapter extends BaseRecyclerAdapter<Appointme
         return new AppointmentDetailsDateAdapter.SimpleAdapterViewHolder(view, false);
     }
 
-    public void setData(List<String> list) {
+    public void setData(List<AppDate> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -93,7 +105,7 @@ public class AppointmentDetailsDateAdapter extends BaseRecyclerAdapter<Appointme
         return vh;
     }
 
-    public void insert(String str, int position) {
+    public void insert(AppDate str, int position) {
         insert(list, str, position);
     }
 
@@ -117,7 +129,7 @@ public class AppointmentDetailsDateAdapter extends BaseRecyclerAdapter<Appointme
         }
     }
 
-    public String getItem(int position) {
+    public AppDate getItem(int position) {
         if (position < list.size())
             return list.get(position);
         else

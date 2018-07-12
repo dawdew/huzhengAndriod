@@ -3,8 +3,10 @@ package com.hp.householdpolicies.activity;
 import android.app.Activity;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -51,7 +53,6 @@ public class MainActivity extends CheckPermissionsActivity implements AMap.OnMap
         setContentView(R.layout.activity_main);
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
-
         markerOption = new MarkerOptions().draggable(true);
         init();
       
@@ -192,5 +193,4 @@ public class MainActivity extends CheckPermissionsActivity implements AMap.OnMap
             mlocationClient.onDestroy();
         }
     }
-
 }

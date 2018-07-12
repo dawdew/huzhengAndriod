@@ -2,6 +2,8 @@ package com.hp.householdpolicies.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,9 +18,11 @@ import com.hp.householdpolicies.R;
 import com.hp.householdpolicies.adapter.AppointmentDetailsAdapter;
 import com.hp.householdpolicies.adapter.AppointmentDetailsDateAdapter;
 import com.hp.householdpolicies.customView.SpinnerPopupWindown;
+import com.hp.householdpolicies.model.AppDate;
 import com.hp.householdpolicies.model.Salesman;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -63,7 +67,7 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
     private int spIndext = 0;
     private TextView times[];
     private int timesID[];
-    private List<String> listDate = new ArrayList<String>();
+    private List<AppDate> listDate = new ArrayList<AppDate>();
     private AppointmentDetailsDateAdapter dateAdapter;
 
     @Override
@@ -97,6 +101,7 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         dateAdapter.setOnItemClickListener(new AppointmentDetailsDateAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                TextView view1 = (TextView) view;
                 Toast.makeText(mContext, "点击"  + position, Toast.LENGTH_SHORT).show();
             }
 
@@ -106,7 +111,7 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
             }
         });
         AddData();
-
+        hideBottomUIMenu();
     }
 
     @OnClick({R.id.llBack, R.id.llHomePage, R.id.tvBusiness, R.id.tvTime})
@@ -151,14 +156,7 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         listTime.add("14:00~16:00");
         listTime.add("16:00~18:00");
         tvTime.setText(listTime.get(0));
-        for (int i=0;i<14;i++){
-            if(i<1||i>7){
-                listDate.add("");
-            }else{
-                listDate.add(""+(i+3));
-            }
-        }
-        dateAdapter.notifyDataSetChanged();
+        getDate();
     }
 
     //下拉选择窗口显示
@@ -182,5 +180,39 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         }
 
     }
-
+    /**
+     * 隐藏虚拟按键，并且全屏
+     */
+    protected void hideBottomUIMenu() {
+        //隐藏虚拟按键，并且全屏
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+            View v = this.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            //for new api versions.
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+    }
+    void getDate(){
+        Calendar calendar = Calendar.getInstance();
+        Integer day_of_week = calendar.get(calendar.DAY_OF_WEEK);
+        Integer day_of_month = calendar.get(calendar.DAY_OF_MONTH);
+        for (int i=0;i<day_of_week-1;i++){
+            AppDate appDate = new AppDate();
+            appDate.setDateStr("");
+            appDate.setAvailable(false);
+            listDate.add(appDate);
+        }
+        for (int i=0;i<=14-day_of_week;i++){
+            AppDate appDate = new AppDate();
+            appDate.setDateStr(day_of_month.toString());
+            appDate.setAvailable(true);
+            day_of_month++;
+                listDate.add(appDate);
+        }
+        dateAdapter.notifyDataSetChanged();
+    }
 }

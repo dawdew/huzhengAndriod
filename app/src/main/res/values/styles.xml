@@ -1,7 +1,9 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"></style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
         <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
         <!--<item name="colorPrimary">@color/colorPrimary</item>-->
@@ -192,7 +194,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">25dp</item>
         <item name="android:gravity">center</item>
     </style>
     <!--在线预约-时间-->
@@ -200,7 +202,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">100dp</item>
         <item name="android:textColor">#063ede</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">25dp</item>
         <item name="android:paddingLeft">3dp</item>
     </style>
 
