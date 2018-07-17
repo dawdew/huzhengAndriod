@@ -19,5 +19,7 @@ public class Api {
     public static String deptList=base+"deptList";
     public static String articleList=base+"articleList";
     public static String yyStaff=base+"yyStaff";
+    public static String arrange=base+"arrange";
+    public static String postArrange=base+"postArrange";
 }
 

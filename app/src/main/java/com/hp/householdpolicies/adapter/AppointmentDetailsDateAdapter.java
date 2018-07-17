@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.hp.householdpolicies.R;
 import com.hp.householdpolicies.model.AppDate;
-import com.hp.householdpolicies.model.Salesman;
 
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class AppointmentDetailsDateAdapter extends BaseRecyclerAdapter<Appointme
 
     //设置点击和长按事件
     public interface OnItemClickListener {
-        void onItemClick(View view, int position); //设置点击事件
+        void onItemClick(View view, int position,AppDate date); //设置点击事件
 
         void onItemLongClick(View view, int position); //设置长按事件
 
@@ -63,7 +62,7 @@ public class AppointmentDetailsDateAdapter extends BaseRecyclerAdapter<Appointme
                     notifyDataSetChanged();
                     holder.tvDate.setBackgroundResource(R.color.date);
                     if(date.getAvailable()){
-                        mOnItemClickListener.onItemClick(holder.tvDate, position);
+                        mOnItemClickListener.onItemClick(holder.tvDate, position,date);
                     }
                 }
             });
@@ -136,4 +135,11 @@ public class AppointmentDetailsDateAdapter extends BaseRecyclerAdapter<Appointme
             return null;
     }
 
+    public int getmPosition() {
+        return mPosition;
+    }
+
+    public void setmPosition(int mPosition) {
+        this.mPosition = mPosition;
+    }
 }

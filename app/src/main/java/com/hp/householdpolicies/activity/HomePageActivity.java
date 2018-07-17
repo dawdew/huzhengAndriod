@@ -116,7 +116,7 @@ public class HomePageActivity extends Activity {
                 startActivity(intentAdvisory);
                 break;
             case R.id.llAppointment://在线预约
-                Intent intentAppointment = new Intent(this, AppointmentActivity.class);
+                Intent intentAppointment = new Intent(this, InputActivity.class);
                 startActivity(intentAppointment);
                 break;
         }
