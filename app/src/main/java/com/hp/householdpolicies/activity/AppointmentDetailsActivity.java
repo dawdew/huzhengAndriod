@@ -382,10 +382,13 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         rg.removeAllViews();
     }
     public void reset(){
+        day=null;
+        checkedRadio=-1;
         dateAdapter.setmPosition(-1);
         dateAdapter.setData(listDate);
         adapter.setSelected("");
         adapter.notifyDataSetChanged();
+        RadioGroupClean();
         RadioGroupUnVisible();
         tvTime.setVisibility(View.VISIBLE);
     }
@@ -418,7 +421,7 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         OkhttpUtil.okHttpPost(Api.postArrange, map, new ApiCallBack() {
             @Override
             public void onResponse(Object response) {
-                reset();
+                btnAffirm.setEnabled(false);
                 LemonBubble.showRight(AppointmentDetailsActivity.this, "预约成功", 2000);
             }
         });

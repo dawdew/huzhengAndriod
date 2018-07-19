@@ -116,6 +116,11 @@
             android:name=".activity.AcceptRangeActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+        <!--大厅简介-大厅受理范围-取号-->
+        <activity
+            android:name=".activity.AcceptRangeTaskNumberActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
         <!--大厅简介-荣誉展示-->
         <activity
             android:name=".activity.HonorActivity"

@@ -36,6 +36,7 @@ dependencies {
     compile 'com.android.support:support-annotations:27.1.1'
     compile 'com.google.zxing:core:3.2.1'      //zxing核心依赖
     compile 'com.journeyapps:zxing-android-embedded:3.3.0'  //生成二维码依赖
+    compile 'com.youth.banner:banner:1.4.10'
     compile 'org.apache.commons:commons-lang3:3.6'
     compile 'com.squareup.okhttp3:okhttp:3.7.0'
     compile 'com.google.code.gson:gson:2.8.1'

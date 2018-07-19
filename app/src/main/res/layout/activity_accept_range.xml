@@ -2,9 +2,115 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="100dp"
-    android:paddingLeft="50dp"
-    android:paddingRight="50dp"
-    android:paddingTop="100dp">
+    android:paddingBottom="150dp"
+    android:paddingLeft="150dp"
+    android:paddingRight="150dp"
+    android:paddingTop="80dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_translucence"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <RelativeLayout
+            android:id="@+id/RLManagementCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="200dp"
+            android:layout_marginRight="200dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1.3"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/activity_accept_range_image"
+                android:layout_above="@+id/tv1"
+                android:src="@mipmap/ic_population_management_centre" />
+
+            <TextView
+                android:id="@+id/tv1"
+                style="@style/activity_accept_range_text"
+                android:text="公安南开分局人口管理中心" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/RLLobby"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="30dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    style="@style/activity_accept_range_image"
+                    android:layout_above="@+id/tv2"
+                    android:src="@mipmap/ic_lobby" />
+
+                <TextView
+                    android:id="@+id/tv2"
+                    style="@style/activity_accept_range_text"
+                    android:text="大厅" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/RLIDCards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:padding="30dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    style="@style/activity_accept_range_image"
+                    android:layout_above="@+id/tv3"
+                    android:src="@mipmap/ic_id_cards" />
+
+                <TextView
+                    android:id="@+id/tv3"
+                    style="@style/activity_accept_range_text"
+                    android:text="身份证" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/RLWould"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:padding="30dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    style="@style/activity_accept_range_image"
+                    android:layout_above="@+id/tv4"
+                    android:src="@mipmap/ic_would" />
+
+                <TextView
+                    android:id="@+id/tv4"
+                    style="@style/activity_accept_range_text"
+                    android:text="户政" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
