@@ -403,28 +403,11 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         Intent intent = getIntent();
         String phone = intent.getStringExtra("phone");
         String name = intent.getStringExtra("name");
+        String idcard = intent.getStringExtra("idcard");
         HashMap<String, String> map = new HashMap<>();
-        if(StringUtils.isNotBlank(adapter.getSelected()) && adapter.getSelectedPosition()!=-1){
-            map.put("userId",adapter.getSelected());
-            map.put("userName",listPolice.get(adapter.getSelectedPosition()).getName());
-        }else {
-            LemonBubble.showError(AppointmentDetailsActivity.this, "请选择办理人", 2000);
-            return;
-        }
-        if(day!=null){
-            map.put("atime",simpleDateFormat.format(day));
-        }else {
-            LemonBubble.showError(AppointmentDetailsActivity.this, "请选择办理日期", 2000);
-            return;
-        }
-        if(checkedRadio!=-1){
-            map.put("part",String.valueOf(checkedRadio));
-        }else {
-            LemonBubble.showError(AppointmentDetailsActivity.this, "请选择预约时间段", 2000);
-            return;
-        }
         map.put("customerName",name);
         map.put("customerPhone",phone);
+        map.put("customerIdcard",idcard);
         OkhttpUtil.okHttpPost(Api.postArrange, map, new ApiCallBack() {
             @Override
             public void onResponse(Object response) {

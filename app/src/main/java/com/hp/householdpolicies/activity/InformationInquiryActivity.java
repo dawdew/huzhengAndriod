@@ -42,7 +42,7 @@ public class InformationInquiryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_information_inquiry);
         ButterKnife.bind(this);
-        cs = ConnectServer.getInstance(getApplication(), impl);
+//        cs = ConnectServer.getInstance(getApplication(), impl);
     }
     @OnClick({R.id.btnSearch})
     void ViewClick(View view) {

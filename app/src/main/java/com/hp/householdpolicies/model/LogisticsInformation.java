@@ -24,4 +24,5 @@ public class LogisticsInformation {
     public void setTime(String time) {
         this.time = time;
     }
+
 }

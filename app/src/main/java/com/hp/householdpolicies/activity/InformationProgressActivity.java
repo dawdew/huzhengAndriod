@@ -12,14 +12,26 @@ import android.widget.TextView;
 
 import com.hp.householdpolicies.R;
 import com.hp.householdpolicies.customView.PopLogisticsInformation;
+import com.hp.householdpolicies.model.Article;
 import com.hp.householdpolicies.model.LogisticsInformation;
+import com.hp.householdpolicies.utils.Api;
+import com.hp.householdpolicies.utils.ApiCallBack;
+import com.hp.householdpolicies.utils.CallBackUtil;
+import com.hp.householdpolicies.utils.JsonParser;
+import com.hp.householdpolicies.utils.OkhttpUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class InformationProgressActivity extends BaseActivity {
     //业务处理进度
@@ -42,12 +54,41 @@ public class InformationProgressActivity extends BaseActivity {
         pop=new PopLogisticsInformation(mContext);
     }
     private void AddData(){
-        listValue.add(new LogisticsInformation("物流信息1111111111","2018-06-20 19:27:30"));
-        listValue.add(new LogisticsInformation("物流信息2222222222","2018-06-20 18:27:30"));
-        listValue.add(new LogisticsInformation("物流信息3333333333","2018-06-20 17:27:30"));
-        listValue.add(new LogisticsInformation("物流信息4444444444","2018-06-20 16:27:30"));
-        listValue.add(new LogisticsInformation("物流信息5555555555","2018-06-20 15:27:30"));
-        pop.setData(listValue,"1234567890123456");
+        HashMap<String, String> headMap = new HashMap<>();
+        headMap.put("Version","ems_track_cn_1.0");
+        headMap.put("authenticate",Api.emsauth);
+        final String emsNo="123";
+        OkhttpUtil.okHttpGet(Api.ems+emsNo, null,headMap, new CallBackUtil() {
+            @Override
+            public Object onParseResponse(Call call, Response response) {
+                if(response.code()!=200){
+                    return null;
+                }
+                ResponseBody body = response.body();
+                String ddd = null;
+                try {
+                    ddd = body.string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                HashMap result = JsonParser.fromJson(ddd, HashMap.class);
+                return result.get("traces");
+            }
+
+            @Override
+            public void onFailure(Call call, Exception e) {
+
+            }
+
+            @Override
+            public void onResponse(Object response) {
+                List<Map<String,String>> traces = (List) response;
+                for(Map<String,String> m:traces){
+                    listValue.add(new LogisticsInformation(m.get("remark"),m.get("acceptTime")));
+                }
+                pop.setData(listValue,emsNo);
+            }
+        });
     }
 
     @OnClick({R.id.tv_progress, R.id.tv_logistics_information})

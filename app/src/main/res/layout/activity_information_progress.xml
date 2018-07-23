@@ -35,7 +35,7 @@
         android:text="查看物流信息"
         android:textColor="@color/black"
         android:textSize="30dp"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 
 </LinearLayout>

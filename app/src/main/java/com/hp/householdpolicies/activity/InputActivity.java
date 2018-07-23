@@ -43,7 +43,7 @@ public class InputActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_input);
         ButterKnife.bind(this);
-        cs = ConnectServer.getInstance(getApplication(), impl);
+//        cs = ConnectServer.getInstance(getApplication(), impl);
     }
     @OnClick({R.id.btnSearch})
     void ViewClick(View view) {
@@ -52,6 +52,7 @@ public class InputActivity extends BaseActivity {
                 Intent intent = new Intent(this, AppointmentDetailsActivity.class);
                 intent.putExtra("phone",textPhone.getText().toString());
                 intent.putExtra("name",textName.getText().toString());
+                intent.putExtra("idcard",edtIDNumber.getText().toString());
                 startActivity(intent);
                 break;
         }
