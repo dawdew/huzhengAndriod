@@ -173,6 +173,28 @@
             android:name=".activity.InputActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <!--大厅简介-人员介绍新-->
+        <activity
+            android:name=".activity.StaffFacultyNewActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+        <activity
+            android:name=".activity.department.DepartmentsOneActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
+        <!--大厅简介-相关部门信息查询-->
+        <activity
+            android:name=".activity.department.DepartmentsSearchActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
+        <!--大厅简介-相关部门信息详情-->
+        <activity
+            android:name=".activity.department.DepartmentsDetailActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
     </application>
 
 </manifest>

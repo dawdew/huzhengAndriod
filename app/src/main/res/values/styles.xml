@@ -223,4 +223,17 @@
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_marginTop">10dp</item>
     </style>
+    <!--人员介绍-->
+    <style name="activity_staff_faculty_new_btn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/white</item>
+        <item name=" android:textSize">30dp</item>
+        <item name="android:layout_marginLeft">@dimen/activity_staff_faculty_new_btn</item>
+    </style>
+    <!--大厅简介-相关部门信息-->
+    <style name="activity_departments_one_title" parent="activity_departments_title">
+        <item name="android:layout_marginLeft">0dp</item>
+    </style>
 </resources>

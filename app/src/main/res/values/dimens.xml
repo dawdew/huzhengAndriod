@@ -1,6 +1,7 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="download_btn_margin">20dp</dimen>
+    <dimen name="activity_staff_faculty_new_btn">25dp</dimen>
 
 
 </resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingTop="50dp"
+    android:paddingBottom="50dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="140dp"
+        android:layout_marginLeft="140dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="100dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                style="@style/activity_staff_faculty_new_btn"
+                android:background="#00a0e9"
+                android:text="@string/constable"
+                android:id="@+id/BtnConstable"/>
+            <Button
+                style="@style/activity_staff_faculty_new_btn"
+                android:background="#a04be9"
+                android:text="@string/secretary"
+                android:id="@+id/BtnSecretary"/>
+            <Button
+                style="@style/activity_staff_faculty_new_btn"
+                android:background="#2acf87"
+                android:text="@string/auxiliaryPolice"
+                android:id="@+id/BtnAuxiliaryPolice"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvPersonnel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black_translucence"
+            android:padding="20dp" />
+    </LinearLayout>
+</LinearLayout>

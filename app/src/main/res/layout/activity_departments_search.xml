@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="80dp"
+    android:paddingTop="80dp">
+
+    <LinearLayout style="@style/advisory_search_ll">
+
+        <TextView
+            style="@style/advisory_search_tv"
+            android:text="搜索" />
+
+        <RelativeLayout
+            android:id="@+id/rlSearch"
+            style="@style/advisory_search_rl">
+
+            <ImageView
+                android:id="@+id/imgSearch"
+                style="@style/advisory_search_img" />
+
+            <EditText
+                android:id="@+id/edtSearch"
+                style="@style/advisory_search_edt"
+                android:layout_toLeftOf="@+id/imgSearch"
+                android:hint="请输入您想要搜索的部门" />
+        </RelativeLayout>
+    </LinearLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="250dp"
+        android:layout_marginLeft="250dp"
+        android:layout_marginBottom="120dp"
+        android:layout_marginTop="80dp"
+        android:layout_toLeftOf="@+id/LLRight"
+        android:layout_toRightOf="@+id/LLLeft"
+        android:background="@color/black_translucence"
+        android:paddingBottom="50dp"
+        android:paddingLeft="100dp"
+        android:paddingRight="100dp"
+        android:paddingTop="20dp" />
+
+
+</LinearLayout>

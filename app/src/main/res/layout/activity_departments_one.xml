@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="80dp"
+    android:paddingTop="80dp">
+
+    <LinearLayout style="@style/advisory_search_ll">
+
+        <TextView
+            style="@style/advisory_search_tv"
+            android:text="搜索" />
+
+        <RelativeLayout
+            android:id="@+id/rlSearch"
+            style="@style/advisory_search_rl">
+
+            <ImageView
+                android:id="@+id/imgSearch"
+                style="@style/advisory_search_img" />
+
+            <EditText
+                android:id="@+id/tvSearch"
+                style="@style/advisory_search_edt"
+                android:layout_toLeftOf="@+id/imgSearch"
+                android:hint="请输入您想要搜索的部门" />
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="130dp"
+        android:layout_marginRight="130dp"
+        android:orientation="horizontal">
+
+        <Button
+            style="@style/activity_departments_one_title"
+            android:layout_marginLeft="0dp"
+            android:background="@drawable/departments_title1"
+            android:text="相关部门"
+            android:id="@+id/btnDepartment1"/>
+
+        <Button
+            style="@style/activity_departments_one_title"
+            android:background="@drawable/departments_title2"
+            android:text="行政服务中心"
+            android:id="@+id/btnDepartment2"/>
+
+        <Button
+            style="@style/activity_departments_one_title"
+            android:background="@drawable/departments_title3"
+            android:text="北方人才市场"
+            android:id="@+id/btnDepartment3"/>
+
+        <Button
+            style="@style/activity_departments_one_title"
+            android:background="@drawable/departments_title4"
+            android:text="人才集体户口"
+            android:id="@+id/btnDepartment4"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="130dp"
+        android:layout_marginRight="130dp"
+        android:layout_marginBottom="100dp"
+        android:background="@color/black_translucence">
+        <LinearLayout
+            android:id="@+id/LLLeft"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imgBtnLeft"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@mipmap/ic_arrow_left" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LLRight"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imgBtnRight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@mipmap/ic_arrow_right" />
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_toLeftOf="@+id/LLRight"
+            android:layout_toRightOf="@+id/LLLeft"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

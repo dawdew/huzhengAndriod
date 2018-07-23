@@ -155,7 +155,8 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
                     dateAdapter.notifyDataSetChanged();
                     RadioGroupUnVisible();
                     tvTime.setVisibility(View.VISIBLE);
-
+                btnAffirm.setBackgroundResource(R.mipmap.ic_gray_bg);
+                btnAffirm.setEnabled(false);
             }
 
             @Override
@@ -177,6 +178,8 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
 
                 day = appDate.getDay();
                 getAppointment(id,day);
+                btnAffirm.setBackgroundResource(R.mipmap.ic_gray_bg);
+                btnAffirm.setEnabled(false);
             }
 
             @Override
@@ -189,6 +192,8 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 checkedRadio =checkedId;
+                btnAffirm.setBackgroundResource(R.mipmap.ic_blue_bg);
+                btnAffirm.setEnabled(true);
 //                Toast.makeText(mContext, "点击"  + checkedId, Toast.LENGTH_SHORT).show();
             }
         });
@@ -391,6 +396,8 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         RadioGroupClean();
         RadioGroupUnVisible();
         tvTime.setVisibility(View.VISIBLE);
+        btnAffirm.setBackgroundResource(R.mipmap.ic_gray_bg);
+        btnAffirm.setEnabled(false);
     }
     public void submit(View v){
         Intent intent = getIntent();

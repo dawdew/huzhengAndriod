@@ -15,6 +15,7 @@
     <color name="date">#fdcd75</color>
     <!--信息查询-录入框灰色字体-->
     <color name="gray">#c1c1c1</color>
+    <color name="gray_translucence">#99c1c1c1</color>
     <!--信息查询-蓝色按钮-->
     <color name="BlueBtn">#063da3</color>
     <!--信息查询-灰色边框-->

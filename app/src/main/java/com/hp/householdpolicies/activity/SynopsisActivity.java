@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.LinearLayout;
-
+import com.hp.householdpolicies.activity.department.DepartmentsOneActivity;
 import com.hp.householdpolicies.R;
 
 import butterknife.BindView;
@@ -48,11 +48,11 @@ public class SynopsisActivity extends BaseActivity {
                 startActivity(intentHonor);
                 break;
             case R.id.ll_staff_faculty://人员介绍
-                Intent intentStaffFaculty=new Intent(this,StaffFacultyActivity.class);
+                Intent intentStaffFaculty=new Intent(this,StaffFacultyNewActivity.class);
                 startActivity(intentStaffFaculty);
                 break;
             case R.id.ll_departments://相关部门信息
-                Intent intentDepartments=new Intent(this,DepartmentsActivity.class);
+                Intent intentDepartments=new Intent(this,DepartmentsOneActivity.class);
                 startActivity(intentDepartments);
                 break;
             case R.id.ll_suggestion://意见建议

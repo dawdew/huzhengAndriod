@@ -26,6 +26,7 @@ public class AppointmentDetailsAdapter extends BaseRecyclerAdapter<AppointmentDe
     private static OnItemClickListener mOnItemClickListener;
     private String selected = "";
     private int selectedPosition = -1;
+    ImageManager image = x.image();
     /**
      * @param list
      * @param context
@@ -52,7 +53,7 @@ public class AppointmentDetailsAdapter extends BaseRecyclerAdapter<AppointmentDe
         final Police salesman = list.get(position);
         holder.tvName.setText("姓名：" + salesman.getName());
         holder.tvSiren.setText("警号：" + salesman.getSiren());
-        ImageManager image = x.image();
+
         image.bind(holder.imgIcon, salesman.getImg(), new Callback.CacheCallback<Drawable>() {
             @Override
             public boolean onCache(Drawable result) {
