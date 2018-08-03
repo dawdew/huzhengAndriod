@@ -82,7 +82,6 @@
                 android:layout_marginLeft="80dp"
                 android:background="@mipmap/ic_gray_bg"
                 android:clickable="false"
-                android:onClick="submit"
                 android:padding="0dp"
                 android:text="确定预约"
                 android:textColor="@color/white"

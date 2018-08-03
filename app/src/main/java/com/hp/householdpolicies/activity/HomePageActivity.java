@@ -71,7 +71,9 @@ public class HomePageActivity extends Activity {
     //下载申请
     @BindView(R.id.llDownload)
     LinearLayout llDownload;
-
+    //synopsis_tv
+    @BindView(R.id.ll_suggestion)
+    LinearLayout llSuggestion;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,13 +87,13 @@ public class HomePageActivity extends Activity {
     @Override
     protected void onStart() {
         Date date=new Date();
-        SimpleDateFormat sdm = new SimpleDateFormat("yyyy年MM月dd日       EEEE");
+        SimpleDateFormat sdm = new SimpleDateFormat("yyyy年MM月dd日                 EEEE");
         textDate.setText(sdm.format(date));
         weather();
         super.onStart();
     }
 
-    @OnClick({R.id.llTransaction, R.id.llinformation, R.id.llDownload, R.id.llSynopsis, R.id.llAdvisory, R.id.llAppointment})
+    @OnClick({R.id.llTransaction, R.id.llinformation, R.id.llDownload, R.id.llSynopsis, R.id.llAdvisory, R.id.llAppointment,R.id.ll_suggestion})
     void ViewClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -118,6 +120,10 @@ public class HomePageActivity extends Activity {
             case R.id.llAppointment://在线预约
                 Intent intentAppointment = new Intent(this, InputActivity.class);
                 startActivity(intentAppointment);
+                break;
+            case R.id.ll_suggestion://意见建议
+                Intent intentSuggestion=new Intent(this,SuggestionActivity.class);
+                startActivity(intentSuggestion);
                 break;
         }
     }

@@ -26,9 +26,6 @@ public class SynopsisActivity extends BaseActivity {
     @BindView(R.id.ll_departments)
     LinearLayout llDepartments;
     //synopsis_tv
-    @BindView(R.id.ll_suggestion)
-    LinearLayout llSuggestion;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +33,7 @@ public class SynopsisActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.ll_accept_range,R.id.ll_honor,R.id.ll_staff_faculty,R.id.ll_departments,R.id.ll_suggestion})
+    @OnClick({R.id.ll_accept_range,R.id.ll_honor,R.id.ll_staff_faculty,R.id.ll_departments})
     void ViewClick(View view) {
         switch (view.getId()) {
             case R.id.ll_accept_range://大厅受理范围
@@ -54,10 +51,6 @@ public class SynopsisActivity extends BaseActivity {
             case R.id.ll_departments://相关部门信息
                 Intent intentDepartments=new Intent(this,DepartmentsOneActivity.class);
                 startActivity(intentDepartments);
-                break;
-            case R.id.ll_suggestion://意见建议
-                Intent intentSuggestion=new Intent(this,SuggestionActivity.class);
-                startActivity(intentSuggestion);
                 break;
 
         }

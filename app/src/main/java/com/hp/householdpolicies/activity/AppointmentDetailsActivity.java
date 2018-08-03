@@ -125,14 +125,14 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
                 String id = police.getId();
                     for (String day : appDay.keySet()) {
                         String userid = appDay.get(day);
-                        if (userid.equals(id)) {
+                        if (StringUtils.isNotBlank(userid) && userid.equals(id)) {
                             userAppDay.add(day);
                         }
                     }
                     if(appDayNext!=null){
                         for (String day : appDayNext.keySet()) {
                             String userid = appDayNext.get(day);
-                            if (userid.equals(id)) {
+                            if (StringUtils.isNotBlank(userid) && userid.equals(id)) {
                                 userAppDay.add(day);
                             }
                         }
@@ -201,7 +201,7 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         hideBottomUIMenu();
     }
 
-    @OnClick({R.id.llBack, R.id.llHomePage, R.id.tvBusiness, R.id.tvTime,R.id.btnReset})
+    @OnClick({R.id.llBack, R.id.llHomePage, R.id.tvBusiness, R.id.tvTime,R.id.btnReset,R.id.btnAffirm})
     void ViewClick(View view) {
         switch (view.getId()) {
             case R.id.llBack://返回
@@ -217,6 +217,9 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
 //                break;
             case R.id.btnReset:
                 reset();
+                break;
+            case R.id.btnAffirm:
+                submit();
                 break;
         }
     }
@@ -285,7 +288,10 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         int lastday_of_month = calendar.get(calendar.DAY_OF_MONTH);
         if(day_of_month==lastday_of_month){
-            day_of_month=1;
+            calendar.add(Calendar.MONTH, 1);
+            calendar.set(calendar.DAY_OF_MONTH,1);
+            day_of_week=calendar.get(calendar.DAY_OF_WEEK);
+            day_of_month=calendar.get(calendar.DAY_OF_MONTH);
         }else {
             day_of_month++;
         }
@@ -298,12 +304,20 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         for (int i=0;i<7;i++){
             AppDate appDate = new AppDate();
             calendar.set(Calendar.DAY_OF_MONTH, day_of_month);
-            appDate.setDay(calendar.getTime());
-            appDate.setDateStr(day_of_month.toString());
-            appDate.setAvailable(true);
+            Integer dow = calendar.get(calendar.DAY_OF_WEEK);
+            if(dow!=7 && dow!=1){
+                appDate.setDay(calendar.getTime());
+                appDate.setDateStr(day_of_month.toString());
+                appDate.setAvailable(true);
+            }else {
+                appDate.setDateStr("");
+                appDate.setAvailable(false);
+            }
+
             if(day_of_month<lastday_of_month){
                 day_of_month++;
             }else {
+                calendar.add(Calendar.MONTH, 1);
                 day_of_month=1;
             }
                 listDate.add(appDate);
@@ -399,15 +413,20 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         btnAffirm.setBackgroundResource(R.mipmap.ic_gray_bg);
         btnAffirm.setEnabled(false);
     }
-    public void submit(View v){
+    public void submit(){
         Intent intent = getIntent();
         String phone = intent.getStringExtra("phone");
         String name = intent.getStringExtra("name");
-        String idcard = intent.getStringExtra("idcard");
         HashMap<String, String> map = new HashMap<>();
+            map.put("userId",adapter.getSelected());
+            map.put("userName",listPolice.get(adapter.getSelectedPosition()).getName());
+
+            map.put("atime",simpleDateFormat.format(day));
+
+            map.put("part",String.valueOf(checkedRadio));
+
         map.put("customerName",name);
         map.put("customerPhone",phone);
-        map.put("customerIdcard",idcard);
         OkhttpUtil.okHttpPost(Api.postArrange, map, new ApiCallBack() {
             @Override
             public void onResponse(Object response) {

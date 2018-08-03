@@ -1,6 +1,7 @@
 package com.hp.householdpolicies.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -19,6 +20,10 @@ import com.hp.householdpolicies.utils.ApiCallBack;
 import com.hp.householdpolicies.utils.CallBackUtil;
 import com.hp.householdpolicies.utils.JsonParser;
 import com.hp.householdpolicies.utils.OkhttpUtil;
+
+import net.lemonsoft.lemonbubble.LemonBubble;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +47,7 @@ public class InformationProgressActivity extends BaseActivity {
     TextView tvLogisticsInformation;
     PopLogisticsInformation pop;
     Context mContext;
+    String emsNo;
     private List<LogisticsInformation> listValue=new ArrayList<LogisticsInformation>();
 
     @Override
@@ -52,12 +58,12 @@ public class InformationProgressActivity extends BaseActivity {
         tvLogisticsInformation.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         mContext=this;
         pop=new PopLogisticsInformation(mContext);
+        getData();
     }
-    private void AddData(){
+    private void getEms(){
         HashMap<String, String> headMap = new HashMap<>();
         headMap.put("Version","ems_track_cn_1.0");
         headMap.put("authenticate",Api.emsauth);
-        final String emsNo="123";
         OkhttpUtil.okHttpGet(Api.ems+emsNo, null,headMap, new CallBackUtil() {
             @Override
             public Object onParseResponse(Call call, Response response) {
@@ -95,12 +101,9 @@ public class InformationProgressActivity extends BaseActivity {
     void ViewClick(View view) {
         switch (view.getId()) {
             case R.id.tv_progress://进度
-                tvProgress.setText("处理完成");
-                tvProgress.setBackgroundResource(R.color.resolve_bg);
-                tvLogisticsInformation.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_logistics_information://物流
-                AddData();
+                getEms();
                 showLogisticsInformationWindow(tvLogisticsInformation);
                 break;
         }
@@ -112,6 +115,35 @@ public class InformationProgressActivity extends BaseActivity {
         pop.setFocusable(true);
         pop.setBackgroundDrawable(new BitmapDrawable());
         pop.showAtLocation(v, Gravity.CENTER, 0, 0);
-
+    }
+    public void getData(){
+        Intent intent = getIntent();
+        String phone = intent.getStringExtra("phone");
+        String idcard = intent.getStringExtra("idcard");
+        HashMap<String, String> map = new HashMap<>();
+        map.put("phone",phone);
+        map.put("idcard",idcard);
+        OkhttpUtil.okHttpPost(Api.progress, map, new ApiCallBack() {
+            @Override
+            public void onResponse(Object response) {
+                Map<String,Object> resultMap = (Map<String,Object>) response;
+                Double resultCode_d = (Double) resultMap.get("resultCode");
+                int resultCode = resultCode_d.intValue();
+                if(resultCode==0){
+                    tvProgress.setText("未查询到记录");
+                    tvProgress.setBackgroundResource(R.color.logistics_information_circle);
+                }else if(resultCode==2){
+                    tvProgress.setText("您所办理的业务正在处理中");
+                }else {
+                    tvProgress.setText("处理完成");
+                    String ems = (String) resultMap.get("ems");
+                    if(StringUtils.isNotBlank(ems)){
+                        emsNo =ems;
+                        tvLogisticsInformation.setVisibility(View.VISIBLE);
+                    }
+                    tvProgress.setBackgroundResource(R.color.resolve_bg);
+                }
+            }
+        });
     }
 }

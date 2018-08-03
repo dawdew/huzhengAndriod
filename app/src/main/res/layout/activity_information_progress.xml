@@ -23,7 +23,7 @@
         android:height="80dp"
         android:background="@color/blue_line"
         android:gravity="center"
-        android:text="您所办理的业务正在处理中"
+        android:text=""
         android:textColor="@color/white"
         android:textSize="25dp" />
 
@@ -35,7 +35,7 @@
         android:text="查看物流信息"
         android:textColor="@color/black"
         android:textSize="30dp"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
 
 
 </LinearLayout>

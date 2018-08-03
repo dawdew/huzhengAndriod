@@ -25,6 +25,7 @@ public class SpinnerPopupWindown extends PopupWindow implements
 
     private Context mContext;
     private ListView mListView;
+    private TextView textView;
     private List<String> list_valuse=new ArrayList<String>();
     private IOnItemSelectListener mItemSelectListener;
     AbstractSpinerAdapter mAdapter;
@@ -40,6 +41,12 @@ public class SpinnerPopupWindown extends PopupWindow implements
     }
     public void setData(List<String> values){
         list_valuse=values;
+        mAdapter.notifyDataSetChanged();
+
+    }
+    public void setData(List<String> values,TextView textView){
+        list_valuse=values;
+        this.textView=textView;
         mAdapter.notifyDataSetChanged();
 
     }
@@ -69,10 +76,12 @@ public class SpinnerPopupWindown extends PopupWindow implements
     public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                             long arg3) {
         dismiss();
-        if (mItemSelectListener != null) {
-
-            mItemSelectListener.onItemClick(position);
+        if(textView!=null){
+            textView.setText(list_valuse.get(position));
         }
+//        if (mItemSelectListener != null) {
+//            mItemSelectListener.onItemClick(position);
+//        }
     }
 
     private class AbstractSpinerAdapter extends BaseAdapter {
@@ -119,5 +128,13 @@ public class SpinnerPopupWindown extends PopupWindow implements
         private class viewHolder {
             private TextView tv_content;
         }
+    }
+
+    public TextView getTextView() {
+        return textView;
+    }
+
+    public void setTextView(TextView textView) {
+        this.textView = textView;
     }
 }

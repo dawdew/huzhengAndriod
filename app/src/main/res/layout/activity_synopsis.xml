@@ -69,19 +69,19 @@
             android:background="@color/synopsis_departments"
             android:text="相关部门信息" />
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_suggestion"
-        style="@style/synopsis_ll"
-        android:layout_marginTop="10dp">
+    <!--<LinearLayout-->
+        <!--android:id="@+id/ll_suggestion"-->
+        <!--style="@style/synopsis_ll"-->
+        <!--android:layout_marginTop="10dp">-->
 
-        <ImageView
-            style="@style/synopsis_img"
-            android:background="@color/synopsis_suggestion"
-            android:src="@mipmap/ic_suggestion" />
+        <!--<ImageView-->
+            <!--style="@style/synopsis_img"-->
+            <!--android:background="@color/synopsis_suggestion"-->
+            <!--android:src="@mipmap/ic_suggestion" />-->
 
-        <TextView
-            style="@style/synopsis_tv"
-            android:background="@color/synopsis_suggestion"
-            android:text="意见建议" />
-    </LinearLayout>
+        <!--<TextView-->
+            <!--style="@style/synopsis_tv"-->
+            <!--android:background="@color/synopsis_suggestion"-->
+            <!--android:text="意见建议" />-->
+    <!--</LinearLayout>-->
 </LinearLayout>

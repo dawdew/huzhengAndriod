@@ -23,7 +23,7 @@
 
             <TextView
                 style="@style/suggestion_tv"
-                android:text="姓        名：" />
+                android:text="联系姓名：" />
 
             <EditText
                 android:id="@+id/edtName"

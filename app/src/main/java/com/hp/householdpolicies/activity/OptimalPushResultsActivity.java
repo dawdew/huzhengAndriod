@@ -10,15 +10,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.hp.householdpolicies.R;
 import com.hp.householdpolicies.adapter.OptimalPushResultsAdapter;
 import com.hp.householdpolicies.customView.RecyclerViewDivider;
 import com.hp.householdpolicies.model.OptimalPushResult;
+import com.hp.householdpolicies.model.PersonInfo;
 import com.hp.householdpolicies.utils.Api;
 import com.hp.householdpolicies.utils.ApiCallBack;
+import com.hp.householdpolicies.utils.BeanUtil;
 import com.hp.householdpolicies.utils.CallBackUtil;
 import com.hp.householdpolicies.utils.OkhttpUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,15 +76,26 @@ public class OptimalPushResultsActivity extends BaseActivity {
 
     private void AddData(){
         Intent intent = getIntent();
+        PersonInfo info = (PersonInfo)intent.getSerializableExtra("info");
         HashMap<String, String> json_map = new HashMap<>();
-        json_map.put("sex",intent.getStringExtra("sex"));
-        json_map.put("age",intent.getStringExtra("age"));
-        json_map.put("education",intent.getStringExtra("education"));
-        json_map.put("address",intent.getStringExtra("address"));
-        json_map.put("marriage",intent.getStringExtra("marriage"));
-        json_map.put("children",intent.getStringExtra("children"));
-        json_map.put("houseProperty",intent.getStringExtra("houseProperty"));
-        OkhttpUtil.okHttpGet(Api.optimalPush, json_map, new ApiCallBack() {
+        json_map.put("age",info.getAge().toString());
+
+        json_map.put("marriage",BeanUtil.toString(info.getMarriage()));
+        json_map.put("sex",BeanUtil.toString(info.getSex()));
+        json_map.put("special",BeanUtil.toString(info.getSpecial()));
+        json_map.put("housePrice",BeanUtil.toString(info.getHousePrice()));
+
+        json_map.put("house",BeanUtil.BooleanToString(info.getHouse()));
+        json_map.put("adopt",BeanUtil.BooleanToString(info.getAdopt()));
+        json_map.put("marriageThree",BeanUtil.BooleanToString(info.getMarriageThree()));
+        json_map.put("liveFiveYear",BeanUtil.BooleanToString(info.getLiveFiveYear()));
+        json_map.put("houseLoan",BeanUtil.BooleanToString(info.getHouseLoan()));
+        json_map.put("childrensHousehold",BeanUtil.BooleanToString(info.getChildrensHousehold()));
+        json_map.put("adopterHasChild",BeanUtil.BooleanToString(info.getAdopterHasChild()));
+        json_map.put("adoptAge30",BeanUtil.BooleanToString(info.getAdoptAge30()));
+        json_map.put("adoptCard",BeanUtil.BooleanToString(info.getAdoptCard()));
+        json_map.put("householdTj",BeanUtil.BooleanToString(info.getHouseholdTj()));
+        OkhttpUtil.okHttpPost(Api.optimalPush, json_map, new ApiCallBack() {
             @Override
             public void onResponse(Object response) {
                 List<Map<String, String>> list = (List<Map<String, String>>) response;

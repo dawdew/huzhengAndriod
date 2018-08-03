@@ -43,8 +43,8 @@
     </style>
     <!--推优办理——个人信息——图标-->
     <style name="personal_information_menu_img">
-        <item name="android:layout_width">25dp</item>
-        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">35dp</item>
     </style>
     <!--推优办理——个人信息——菜单名称-->
     <style name="personal_information_menu_text">

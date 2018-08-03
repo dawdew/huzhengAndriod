@@ -27,6 +27,7 @@ public class ChosenTimePopupWindown extends PopupWindow implements View.OnClickL
     DatePicker dp_date;
     TextView tv_cancel;//取消
     TextView tv_affirm;//确定
+    TextView item;//
     private String time;
 
     @Override
@@ -34,12 +35,12 @@ public class ChosenTimePopupWindown extends PopupWindow implements View.OnClickL
         dismiss();
         if (mchosenListener != null) {
 
-            mchosenListener.onItemClick(time);
+            mchosenListener.onItemClick(time,item);
         }
     }
 
     public static interface IChosenListener{
-        public void onItemClick(String time);
+        public void onItemClick(String time,TextView view);
     }
 
     public ChosenTimePopupWindown(Context context) {
@@ -47,7 +48,8 @@ public class ChosenTimePopupWindown extends PopupWindow implements View.OnClickL
         mContext = context;
         init();
     }
-    public void setData(String strTime){
+    public void setData(String strTime,TextView view){
+        item=view;
         time=strTime;
         try {
 
@@ -73,7 +75,6 @@ public class ChosenTimePopupWindown extends PopupWindow implements View.OnClickL
         setContentView(view);
 
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-
         setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
 
         setFocusable(true);

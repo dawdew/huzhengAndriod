@@ -164,7 +164,8 @@
         <!--在线预约-->
         <activity android:name=".activity.AppointmentDetailsActivity"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="landscape"

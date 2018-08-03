@@ -69,7 +69,6 @@ public class OkhttpUtil {
     public static void okHttpPost(String url, Map<String, String> paramsMap, CallBackUtil callBack) {
         okHttpPost(url, paramsMap, null, callBack);
     }
-
     /**
      * post请求，可以传递参数
      * @param url：url

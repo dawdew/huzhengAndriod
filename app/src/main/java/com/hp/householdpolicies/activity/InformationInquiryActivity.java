@@ -49,6 +49,8 @@ public class InformationInquiryActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.btnSearch:
                 Intent intent = new Intent(this, InformationProgressActivity.class);
+                intent.putExtra("idcard",edtIDNumber.getText().toString());
+                intent.putExtra("phone",textPhone.getText().toString());
                 startActivity(intent);
                 break;
         }
