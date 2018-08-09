@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="10dp"
+    >
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/personal_information_content_title"
+        android:text="有无子女：" />
+
+    <TextView
+        android:id="@+id/tv_select"
+        style="@style/white_rounded_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/ic_arrow_drop_down"
+        android:textSize="40dp" />
+</LinearLayout>

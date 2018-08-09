@@ -268,9 +268,9 @@ indextSelect：当前选择的菜单
         trProperty.add("否");
         trProperty.add("是");
         //房产信息
-        listHouseProperty.add("其他");
-        listHouseProperty.add("2014年5月31日前购买80万以上一手房");
-        listHouseProperty.add("2007年4月1日前购买30万以上一手房");
+//        listHouseProperty.add("其他");
+//        listHouseProperty.add("2014年5月31日前购买80万以上一手房");
+//        listHouseProperty.add("2007年4月1日前购买30万以上一手房");
         //
         listOther.add("无");
         listOther.add("知青");
@@ -413,19 +413,21 @@ indextSelect：当前选择的菜单
             if(StringUtils.isNotBlank(age)){
                 int age_i = Integer.parseInt(age);
                 personInfo.setAge(age_i);
-                if(age_i>=22){
                     addItem(contentMaritalStatus,"有无南开房产在本人、配偶、父母名下：",yw,"house");
-                    addItem(contentMaritalStatus,"有无子女：",yw,"children");
+                if(age_i>=22){
+                    if(age_i>50){
+                        addItem(contentMaritalStatus,"有无子女：",yw,"children");
+                        addItem(contentMaritalStatus,"其他身份：",listOther,"special");
+                    }
                     addItem(contentMaritalStatus,"婚姻状况：",listMarriage,"marriage");
-                    addItem(contentMaritalStatus,"其他身份：",listOther,"special");
 
                 }else if(age_i<=18){
-                    addItem(contentMaritalStatus,"有无南开房产在本人、配偶、父母名下：",yw,"house");
                     if(age_i<=14){
                         addItem(contentMaritalStatus,"是否被收养人：",trProperty,"adopt");
                     }
                 }else {
-                   // addItem(contentMaritalStatus,"婚姻状况：",listMarriage,"marriage");
+                    //投继父母
+                    addItem(contentMaritalStatus,"父母婚姻状况：",listMarriage,"marriageParent");
                 }
             }
         }else if(indextSelect==1){
@@ -437,8 +439,8 @@ indextSelect：当前选择的菜单
                 return;
             }
             if(personInfo.getChildren()!=null && personInfo.getChildren()){
-                addItem(contentChildren,"有无子女小于18岁：",yw,"childrenInfo1");
-                addItem(contentChildren,"有无子女小于22岁未婚：",yw,"childrenInfo2");
+//                addItem(contentChildren,"有无子女小于18岁：",yw,"childrenInfo1");
+//                addItem(contentChildren,"有无子女小于22岁未婚：",yw,"childrenInfo2");
                 if((personInfo.getAge()>=60 && "男".equals(tvSex.getText().toString())) || (personInfo.getAge()>=55 && "女".equals(tvSex.getText().toString()))){
                     addItem(contentChildren,"子女户籍均在津：",trProperty,"childrensHousehold");
                     addItem(contentChildren,"在津连续居住满五年：",trProperty,"liveFiveYear");
@@ -446,14 +448,19 @@ indextSelect：当前选择的菜单
             }
             if(personInfo.getHouse()!=null && personInfo.getHouse()){
                 addItem(contentChildren,"有无房贷：",yw,"houseLoan");
-                addItem(contentChildren,"房产信息：",listHouseProperty,"housePrice");
+                addItem(contentChildren,"2014年5月31日前购买80万以上一手房：",trProperty,"housePrice_a");
+                addItem(contentChildren,"2007年4月1日前购买30万以上一手房：",trProperty,"housePrice_b");
             }
             if(StringUtils.isNotBlank(personInfo.getMarriage())&&!"未婚".equals(personInfo.getMarriage())){
                 addItem(contentChildren,"婚满三年：",trProperty,"marriageThree");
+            }else {
+                if(StringUtils.isNotBlank(personInfo.getMarriageParent()) && "再婚".equals(personInfo.getMarriageParent())){
+//                addItem(contentChildren,"有子女抚养权：",yw,"custody");
+                    addItem(contentChildren,"再婚时不满18岁：",trProperty,"marriageParentThenLessThan18");
+                    addItem(contentChildren,"父母再婚满三年：",trProperty,"marriageParentThree");
+                }
             }
-            if(StringUtils.isNotBlank(personInfo.getMarriage()) && "再婚".equals(personInfo.getMarriage())){
-                addItem(contentChildren,"有子女抚养权：",yw,"custody");
-            }
+
         }else if(indextSelect==2){
 
         }

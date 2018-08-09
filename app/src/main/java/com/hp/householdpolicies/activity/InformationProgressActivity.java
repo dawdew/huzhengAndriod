@@ -136,11 +136,11 @@ public class InformationProgressActivity extends BaseActivity {
                     tvProgress.setText("您所办理的业务正在处理中");
                 }else {
                     tvProgress.setText("处理完成");
-                    String ems = (String) resultMap.get("ems");
-                    if(StringUtils.isNotBlank(ems)){
-                        emsNo =ems;
-                        tvLogisticsInformation.setVisibility(View.VISIBLE);
-                    }
+//                    String ems = (String) resultMap.get("ems");
+//                    if(StringUtils.isNotBlank(ems)){
+//                        emsNo =ems;
+//                        tvLogisticsInformation.setVisibility(View.VISIBLE);
+//                    }
                     tvProgress.setBackgroundResource(R.color.resolve_bg);
                 }
             }

@@ -12,20 +12,20 @@
         android:layout_height="wrap_content"
         android:text="处理进度"
         android:textColor="@color/ListText"
-        android:textSize="30dp" />
+        android:textSize="35dp" />
 
     <TextView
         android:id="@+id/tv_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:width="350dp"
-        android:height="80dp"
+        android:width="400dp"
+        android:height="100dp"
         android:background="@color/blue_line"
         android:gravity="center"
         android:text=""
         android:textColor="@color/white"
-        android:textSize="25dp" />
+        android:textSize="45dp" />
 
     <TextView
         android:id="@+id/tv_logistics_information"
@@ -34,7 +34,7 @@
         android:layout_marginTop="100dp"
         android:text="查看物流信息"
         android:textColor="@color/black"
-        android:textSize="30dp"
+        android:textSize="35dp"
         android:visibility="invisible"/>
 
 

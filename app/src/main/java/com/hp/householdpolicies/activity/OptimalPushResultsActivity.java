@@ -83,8 +83,10 @@ public class OptimalPushResultsActivity extends BaseActivity {
         json_map.put("marriage",BeanUtil.toString(info.getMarriage()));
         json_map.put("sex",BeanUtil.toString(info.getSex()));
         json_map.put("special",BeanUtil.toString(info.getSpecial()));
-        json_map.put("housePrice",BeanUtil.toString(info.getHousePrice()));
+        json_map.put("marriageParent",BeanUtil.toString(info.getMarriageParent()));
 
+        json_map.put("housePrice_a",BeanUtil.BooleanToString(info.getHousePrice_a()));
+        json_map.put("housePrice_b",BeanUtil.BooleanToString(info.getHousePrice_b()));
         json_map.put("house",BeanUtil.BooleanToString(info.getHouse()));
         json_map.put("adopt",BeanUtil.BooleanToString(info.getAdopt()));
         json_map.put("marriageThree",BeanUtil.BooleanToString(info.getMarriageThree()));
@@ -95,6 +97,8 @@ public class OptimalPushResultsActivity extends BaseActivity {
         json_map.put("adoptAge30",BeanUtil.BooleanToString(info.getAdoptAge30()));
         json_map.put("adoptCard",BeanUtil.BooleanToString(info.getAdoptCard()));
         json_map.put("householdTj",BeanUtil.BooleanToString(info.getHouseholdTj()));
+        json_map.put("marriageParentThenLessThan18",BeanUtil.BooleanToString(info.getMarriageParentThenLessThan18()));
+        json_map.put("marriageParentThree",BeanUtil.BooleanToString(info.getMarriageParentThree()));
         OkhttpUtil.okHttpPost(Api.optimalPush, json_map, new ApiCallBack() {
             @Override
             public void onResponse(Object response) {
