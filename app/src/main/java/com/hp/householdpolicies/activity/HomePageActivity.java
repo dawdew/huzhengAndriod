@@ -21,6 +21,11 @@ import com.hp.householdpolicies.utils.ApiCallBack;
 import com.hp.householdpolicies.utils.CallBackUtil;
 import com.hp.householdpolicies.utils.JsonParser;
 import com.hp.householdpolicies.utils.OkhttpUtil;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.SpeechSynthesizer;
+import com.rsc.impl.OnROSListener;
+import com.rsc.impl.RscServiceConnectionImpl;
+import com.rsc.reemanclient.ConnectServer;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -74,15 +79,69 @@ public class HomePageActivity extends Activity {
     //synopsis_tv
     @BindView(R.id.ll_suggestion)
     LinearLayout llSuggestion;
+    private ConnectServer cs;
+    private SpeechRecognizer mIat;
+    private SpeechSynthesizer mTts;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
         ButterKnife.bind(this);
         MyApp  application = (MyApp) getApplication();
+        SpeechSynthesizer speechSynthesizer = application.getmTts();
+        speechSynthesizer.startSpeaking("测试",null);
         hideBottomUIMenu();
+        init();
 //        application.robotActionProvider.combinedActionTtyS4(9);
     }
+    public void init() {
+        cs = ConnectServer.getInstance(getApplication(), connection);
+        cs.registerROSListener(new RosProcess());
+    }
+    public void uninit () {
+        if (cs != null) {
+            cs.release();
+            cs = null;
+        }
+    }
+    /**
+     * 外设监听回调
+     */
+    public class RosProcess extends OnROSListener {
+        private final String TAG = RosProcess.class.getSimpleName();
+        @Override
+        public void onResult (String result) {
+            Log.e(TAG, "----OnROSListener.onResult()---result:" + result);
+            if (result != null) {
+                if (result.startsWith("od:")) {
+                    //物体识别
+                } else if (result.startsWith("laser:[")) {
+                    //激光测距
+                } else if (result.startsWith("pt:[")) {
+                    //人体检测（3d摄像头）
+                } else if (result.startsWith("move_status:")) {
+                   //导航信息
+                } else if (result.equals("bat:reached")) {
+                    //充电信息
+                } else if (result.equals("sys:uwb:0")) {
+                    //导航uwb错误
+                }
+            }
+        }
+    }
+    private RscServiceConnectionImpl connection = new RscServiceConnectionImpl() {
+        public void onServiceConnected (int name) {
+            if (cs == null)
+                return;
+            if (name == ConnectServer.Connect_Pr_Id) {
+
+            }
+        }
+    public void onServiceDisconnected (int name) {
+        System.out.println("onServiceDisconnected......");
+    }
+};
+
 
     @Override
     protected void onStart() {
