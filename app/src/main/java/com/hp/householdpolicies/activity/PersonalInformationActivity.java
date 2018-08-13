@@ -165,7 +165,7 @@ indextSelect：当前选择的菜单
     }
     @Override
     protected void onStart() {
-//        cs = ConnectServer.getInstance(getApplication(), impl);
+        cs = ConnectServer.getInstance(getApplication(), impl);
         super.onStart();
     }
     private RscServiceConnectionImpl impl = new RscServiceConnectionImpl() {

@@ -33,6 +33,8 @@ public class MyApp extends Application{
     public void onCreate() {
         x.Ext.init(this);
         SpeechUtility.createUtility(MyApp.this, "appid=" + "5b70ef31");
+        mIat = SpeechRecognizer.createRecognizer(MyApp.this, null);
+        mTts = SpeechSynthesizer.createSynthesizer(MyApp.this, null);
         setParam();
 //        robotActionProvider = RobotActionProvider.getInstance();
         super.onCreate();
@@ -83,7 +85,7 @@ public class MyApp extends Application{
         mIat.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
         mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory()+"/msc/iat.wav");
         //2.合成参数设置，详见《科大讯飞MSC API手册(Android)》SpeechSynthesizer 类
-        mTts.setParameter(SpeechConstant.VOICE_NAME, "xiaoyan");//设置发音人
+        mTts.setParameter(SpeechConstant.VOICE_NAME, "xiaoqi");//设置发音人
         mTts.setParameter(SpeechConstant.SPEED, "50");//设置语速
         mTts.setParameter(SpeechConstant.VOLUME, "80");//设置音量，范围0~100
         mTts.setParameter(SpeechConstant.ENGINE_TYPE,mEngineType); //设置云端

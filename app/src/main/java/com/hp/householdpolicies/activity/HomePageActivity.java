@@ -21,8 +21,10 @@ import com.hp.householdpolicies.utils.ApiCallBack;
 import com.hp.householdpolicies.utils.CallBackUtil;
 import com.hp.householdpolicies.utils.JsonParser;
 import com.hp.householdpolicies.utils.OkhttpUtil;
+import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.SynthesizerListener;
 import com.rsc.impl.OnROSListener;
 import com.rsc.impl.RscServiceConnectionImpl;
 import com.rsc.reemanclient.ConnectServer;
@@ -82,14 +84,15 @@ public class HomePageActivity extends Activity {
     private ConnectServer cs;
     private SpeechRecognizer mIat;
     private SpeechSynthesizer mTts;
+    private boolean isSpeaked=false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
         ButterKnife.bind(this);
         MyApp  application = (MyApp) getApplication();
-        SpeechSynthesizer speechSynthesizer = application.getmTts();
-        speechSynthesizer.startSpeaking("测试",null);
+        mTts = application.getmTts();
+
         hideBottomUIMenu();
         init();
 //        application.robotActionProvider.combinedActionTtyS4(9);
@@ -108,17 +111,59 @@ public class HomePageActivity extends Activity {
      * 外设监听回调
      */
     public class RosProcess extends OnROSListener {
-        private final String TAG = RosProcess.class.getSimpleName();
         @Override
         public void onResult (String result) {
-            Log.e(TAG, "----OnROSListener.onResult()---result:" + result);
+            //Log.e(TAG, "----OnROSListener.onResult()---result:" + result);
             if (result != null) {
                 if (result.startsWith("od:")) {
                     //物体识别
                 } else if (result.startsWith("laser:[")) {
                     //激光测距
+                    String substring = result.substring(result.indexOf("[")+1, result.length() - 1);
+                    double v = Double.parseDouble(substring);
+                    if(v>0.8){
+                        isSpeaked=false;
+                    }
+                    if(v<=0.8 && !isSpeaked){
+                        mTts.startSpeaking(String.valueOf(v), new SynthesizerListener() {
+                            @Override
+                            public void onSpeakBegin() {
+                                isSpeaked=true;
+                            }
+
+                            @Override
+                            public void onBufferProgress(int i, int i1, int i2, String s) {
+
+                            }
+
+                            @Override
+                            public void onSpeakPaused() {
+
+                            }
+
+                            @Override
+                            public void onSpeakResumed() {
+
+                            }
+
+                            @Override
+                            public void onSpeakProgress(int i, int i1, int i2) {
+
+                            }
+
+                            @Override
+                            public void onCompleted(SpeechError speechError) {
+                            }
+
+                            @Override
+                            public void onEvent(int i, int i1, int i2, Bundle bundle) {
+
+                            }
+                        });
+                    }
                 } else if (result.startsWith("pt:[")) {
                     //人体检测（3d摄像头）
+                    System.out.println(result);
                 } else if (result.startsWith("move_status:")) {
                    //导航信息
                 } else if (result.equals("bat:reached")) {
