@@ -2,11 +2,13 @@ package com.hp.householdpolicies.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import com.hp.householdpolicies.R;
 import com.hp.householdpolicies.adapter.ArticleAdapter;
 import com.hp.householdpolicies.adapter.HonorAdapter;
+import com.hp.householdpolicies.customView.DownloadPopupWindown;
 import com.hp.householdpolicies.model.Article;
 import com.hp.householdpolicies.model.Honor;
 import com.hp.householdpolicies.utils.Api;
@@ -26,6 +29,8 @@ import com.hp.householdpolicies.utils.OkhttpUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +62,7 @@ public class AdvisoryDetailsActivity extends BaseActivity {
     WebView webView;
     private List<Article> listArticle = new ArrayList<Article>();
     private ArticleAdapter adapter;
+    private DownloadPopupWindown popupWindown;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +72,7 @@ public class AdvisoryDetailsActivity extends BaseActivity {
         WebSettings settings=webView.getSettings();
         settings.setTextSize(WebSettings.TextSize.LARGER);
         webView.setBackgroundColor(0);
+        popupWindown=new DownloadPopupWindown(mContext);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 //        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -87,7 +94,12 @@ public class AdvisoryDetailsActivity extends BaseActivity {
 //        btnYear.setSelected(true);
     }
 
+    @OnClick({R.id.llPrint})
+    void click(View view) {
+        String s = title.getText().toString();
 
+        showLogisticsInformationWindow(view,s+".docx");
+    }
     private void getData(){
         Intent intent = getIntent();
         String category = intent.getStringExtra("category");
@@ -125,6 +137,15 @@ public class AdvisoryDetailsActivity extends BaseActivity {
             webView.loadDataWithBaseURL(null,contentStr, "text/html" , "utf-8", null);
             adapter.notifyDataSetChanged();
         }
-
   }
+    //扫一扫下载窗口
+    private void showLogisticsInformationWindow(View v,String url) {
+        popupWindown.setData(Api.downurl+url);
+        popupWindown.setTouchable(true);
+        popupWindown.setOutsideTouchable(true);
+        popupWindown.setFocusable(true);
+        popupWindown.setBackgroundDrawable(new BitmapDrawable());
+        popupWindown.showAtLocation(v, Gravity.CENTER, 0, 0);
+
+    }
 }

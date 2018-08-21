@@ -49,10 +49,12 @@ public interface OnItemClickListener {
     public void onBindViewHolder(final StaffFacultyNewAdapter.SimpleAdapterViewHolder holder, final int position, boolean isItem) {
         Map staffFaculty = list.get(position);
         String roleName = (String) staffFaculty.get("roleName");
-        if("user".equals(roleName)){
+        if("clerk".equals(roleName)){
             holder.tvSiren.setText("编号："+staffFaculty.get("pno"));
-        }else {
+        }else if("police".equals(roleName)){
             holder.tvSiren.setText("警号："+staffFaculty.get("pno"));
+        }else {
+            holder.tvSiren.setText("");
         }
         holder.tvName.setText("姓名："+staffFaculty.get("realName"));
         image.bind(holder.imgIcon, Api.downurl+staffFaculty.get("photo"));

@@ -93,6 +93,7 @@
                 <RadioButton
                     android:id="@+id/rbPraise"
                     style="@style/suggestion_radioButton"
+                    android:checked="true"
                     android:text="按民警选择" />
 
                 <RadioButton
