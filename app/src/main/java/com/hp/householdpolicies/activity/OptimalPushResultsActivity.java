@@ -53,6 +53,10 @@ public class OptimalPushResultsActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, OptimalPushResult opr) {
                 System.out.println(opr.getId());
+                Intent intent = new Intent(OptimalPushResultsActivity.this, AdvisoryDetailsActivity.class);
+                intent.putExtra("title",opr.getName());
+                intent.putExtra("content",opr.getContent());
+                startActivity(intent);
             }
 
             @Override
@@ -103,8 +107,9 @@ public class OptimalPushResultsActivity extends BaseActivity {
             @Override
             public void onResponse(Object response) {
                 List<Map<String, String>> list = (List<Map<String, String>>) response;
+                listOptimalPushResult.clear();
                 for(Map<String, String> m:list){
-                    listOptimalPushResult.add(new OptimalPushResult(m.get("id"),m.get("title"),false));
+                    listOptimalPushResult.add(new OptimalPushResult(m.get("title"),m.get("id"),m.get("content")));
                 }
                 adapter.notifyDataSetChanged();
             }

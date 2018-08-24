@@ -3,12 +3,21 @@ package com.hp.householdpolicies.model;
 public class OptimalPushResult {
     private String name;//名称
     private String id;
+    private String content;
     private boolean IsRecommend=false;
 
-    public OptimalPushResult(String id,String name, boolean isRecommend) {
+    public OptimalPushResult(String name, String id, String content) {
         this.name = name;
         this.id = id;
-        IsRecommend = isRecommend;
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getName() {
