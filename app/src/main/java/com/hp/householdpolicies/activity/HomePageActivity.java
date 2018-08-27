@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.stuxuhai.jpinyin.PinyinException;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
@@ -21,6 +22,9 @@ import com.hp.householdpolicies.utils.ApiCallBack;
 import com.hp.householdpolicies.utils.CallBackUtil;
 import com.hp.householdpolicies.utils.JsonParser;
 import com.hp.householdpolicies.utils.OkhttpUtil;
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.RecognizerListener;
+import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechSynthesizer;
@@ -29,11 +33,16 @@ import com.rsc.impl.OnROSListener;
 import com.rsc.impl.RscServiceConnectionImpl;
 import com.rsc.reemanclient.ConnectServer;
 
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -85,6 +94,7 @@ public class HomePageActivity extends Activity {
     private SpeechRecognizer mIat;
     private SpeechSynthesizer mTts;
     private boolean isSpeaked=false;
+    private Boolean isListening=false;//是否开启录音监听
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,16 +102,21 @@ public class HomePageActivity extends Activity {
         ButterKnife.bind(this);
         MyApp  application = (MyApp) getApplication();
         mTts = application.getmTts();
-
+        mIat = application.getmIat();
+        Date date=new Date();
+        SimpleDateFormat sdm = new SimpleDateFormat("yyyy年MM月dd日                 EEEE");
+        textDate.setText(sdm.format(date));
+        weather();
         hideBottomUIMenu();
-        init();
+
+       // init();
 //        application.robotActionProvider.combinedActionTtyS4(9);
     }
     public void init() {
         cs = ConnectServer.getInstance(getApplication(), connection);
         cs.registerROSListener(new RosProcess());
     }
-    public void uninit () {
+    public void release () {
         if (cs != null) {
             cs.release();
             cs = null;
@@ -153,6 +168,7 @@ public class HomePageActivity extends Activity {
 
                             @Override
                             public void onCompleted(SpeechError speechError) {
+                                //startListening();
                             }
 
                             @Override
@@ -190,46 +206,16 @@ public class HomePageActivity extends Activity {
 
     @Override
     protected void onStart() {
-        Date date=new Date();
-        SimpleDateFormat sdm = new SimpleDateFormat("yyyy年MM月dd日                 EEEE");
-        textDate.setText(sdm.format(date));
-        weather();
+
+
+        //
+        startListening();
         super.onStart();
     }
 
     @OnClick({R.id.llTransaction, R.id.llinformation, R.id.llDownload, R.id.llSynopsis, R.id.llAdvisory, R.id.llAppointment,R.id.ll_suggestion})
     void ViewClick(View view) {
-        Intent intent;
-        switch (view.getId()) {
-            case R.id.llTransaction://推优办理
-                Intent intentTransaction= new Intent(this, OptimalPushActivity.class);
-                startActivity(intentTransaction);
-                break;
-            case R.id.llinformation://信息查询
-                Intent intentInformation = new Intent(this, InformationInquiryActivity.class);
-                startActivity(intentInformation);
-                break;
-            case R.id.llDownload://下载申请
-                Intent da = new Intent(this, DownloadActivity.class);
-                startActivity(da);
-                break;
-            case R.id.llSynopsis://大厅简介
-                Intent intentSynopsis = new Intent(this, SynopsisActivity.class);
-                startActivity(intentSynopsis);
-                break;
-            case R.id.llAdvisory://政策咨询
-                Intent intentAdvisory = new Intent(this, AdvisoryActivity.class);
-                startActivity(intentAdvisory);
-                break;
-            case R.id.llAppointment://在线预约
-                Intent intentAppointment = new Intent(this, InputActivity.class);
-                startActivity(intentAppointment);
-                break;
-            case R.id.ll_suggestion://意见建议
-                Intent intentSuggestion=new Intent(this,SuggestionActivity.class);
-                startActivity(intentSuggestion);
-                break;
-        }
+        switchActivity(view.getId());
     }
     public void weather(){
         HashMap<String, String> json_map = new HashMap<>();
@@ -290,6 +276,116 @@ public class HomePageActivity extends Activity {
             int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
             decorView.setSystemUiVisibility(uiOptions);
+        }
+    }
+
+    private void startListening(){
+        int ret = mIat.startListening(mRecognizerListener);
+        if (ret == ErrorCode.SUCCESS) {
+            isListening=true;
+        }
+    }
+    private void stopListening(){
+        mIat.cancel();
+        isListening=false;
+    }
+    /**
+     * 听写监听器。
+     */
+    private RecognizerListener mRecognizerListener = new RecognizerListener() {
+
+        @Override
+        public void onVolumeChanged(int i, byte[] bytes) {
+        }
+        @Override
+        public void onBeginOfSpeech() {
+        }
+        @Override
+        public void onEndOfSpeech() {
+        }
+        @Override
+        public void onEvent(int i, int i1, int i2, Bundle bundle) {
+        }
+        @Override
+        public void onResult(RecognizerResult results, boolean isLast) {
+            StringBuffer resultBuffer = new StringBuffer();
+            String RecResult = JsonParser.parseIatResult(results.getResultString());
+            String sn = null;
+//             读取json结果中的sn字段
+            try {
+                JSONObject resultJson = new JSONObject(results.getResultString());
+                sn = resultJson.optString("sn");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            HashMap<String, String> mIatResults = new LinkedHashMap<String, String>();
+            mIatResults.put(sn, RecResult);
+            for (String key : mIatResults.keySet()) {
+                resultBuffer.append(mIatResults.get(key));
+            }
+            String result_str = resultBuffer.toString();
+            if(StringUtils.isNotBlank(result_str)){
+                Integer viewId = null;
+                if ("意见建议".contains(result_str)) {
+                    viewId = R.id.ll_suggestion;
+                }else if("推优办理".contains(result_str)){
+                    viewId = R.id.llTransaction;
+                }else if("进度查询".contains(result_str)){
+                    viewId = R.id.llinformation;
+                }else if("下载申请".contains(result_str)){
+                    viewId = R.id.llDownload;
+                }else if("大厅简介".contains(result_str)){
+                    viewId = R.id.llSynopsis;
+                }else if("政策咨询".contains(result_str)){
+                    viewId = R.id.llAdvisory;
+                }else if("在线预约".contains(result_str)){
+                    viewId = R.id.llAppointment;
+                }
+                if(viewId!=null){
+                    switchActivity(viewId);
+                }
+            }
+        }
+
+        @Override
+        public void onError(SpeechError speechError) {
+            if(isListening){
+                int ret = mIat.startListening(mRecognizerListener);
+                System.out.println(ret);
+            }
+        }
+    };
+
+    private void switchActivity(Integer viewId){
+        switch (viewId) {
+            case R.id.llTransaction://推优办理
+                Intent intentTransaction= new Intent(this, OptimalPushActivity.class);
+                startActivity(intentTransaction);
+                break;
+            case R.id.llinformation://进度查询
+                Intent intentInformation = new Intent(this, InformationInquiryActivity.class);
+                startActivity(intentInformation);
+                break;
+            case R.id.llDownload://下载申请
+                Intent da = new Intent(this, DownloadActivity.class);
+                startActivity(da);
+                break;
+            case R.id.llSynopsis://大厅简介
+                Intent intentSynopsis = new Intent(this, SynopsisActivity.class);
+                startActivity(intentSynopsis);
+                break;
+            case R.id.llAdvisory://政策咨询
+                Intent intentAdvisory = new Intent(this, AdvisoryActivity.class);
+                startActivity(intentAdvisory);
+                break;
+            case R.id.llAppointment://在线预约
+                Intent intentAppointment = new Intent(this, InputActivity.class);
+                startActivity(intentAppointment);
+                break;
+            case R.id.ll_suggestion://意见建议
+                Intent intentSuggestion=new Intent(this,SuggestionActivity.class);
+                startActivity(intentSuggestion);
+                break;
         }
     }
 }
