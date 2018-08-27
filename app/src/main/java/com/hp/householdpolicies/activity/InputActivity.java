@@ -14,6 +14,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.hp.householdpolicies.R;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.SynthesizerListener;
 import com.rsc.impl.RscServiceConnectionImpl;
 import com.rsc.reemanclient.ConnectServer;
 import com.synjones.idcard.IDCardInfo;
@@ -41,6 +44,9 @@ public class InputActivity extends BaseActivity {
     Button btnSearch;
     private ConnectServer cs;
 
+    private SpeechSynthesizer mTts;
+    private boolean isSpeaked=false;
+
     @BindView(R.id.rg)
     RadioGroup rg;
     @Override
@@ -48,8 +54,17 @@ public class InputActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_input);
         ButterKnife.bind(this);
+        MyApp  application = (MyApp) getApplication();
+        mTts = application.getmTts();
 //        cs = ConnectServer.getInstance(getApplication(), impl);
     }
+
+    @Override
+    protected void onStart() {
+        mTts.startSpeaking("请扫描或输入身份证,姓名,手机号码",null);
+        super.onStart();
+    }
+
     @OnClick({R.id.btnSearch})
     void ViewClick(View view) {
         switch (view.getId()) {

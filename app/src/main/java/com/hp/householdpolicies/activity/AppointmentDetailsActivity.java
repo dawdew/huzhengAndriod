@@ -433,6 +433,7 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         Intent intent = getIntent();
         String phone = intent.getStringExtra("phone");
         String name = intent.getStringExtra("name");
+        String idcard = intent.getStringExtra("idcard");
         HashMap<String, String> map = new HashMap<>();
             map.put("userId",adapter.getSelected());
             map.put("userName",listPolice.get(adapter.getSelectedPosition()).getName());
@@ -443,6 +444,7 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
 
         map.put("customerName",name);
         map.put("customerPhone",phone);
+        map.put("customerIdcard",idcard);
         OkhttpUtil.okHttpPost(Api.postArrange, map, new ApiCallBack() {
             @Override
             public void onResponse(Object response) {
