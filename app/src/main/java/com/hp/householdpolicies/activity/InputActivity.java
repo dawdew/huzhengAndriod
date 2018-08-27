@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.hp.householdpolicies.R;
 import com.rsc.impl.RscServiceConnectionImpl;
@@ -38,6 +40,9 @@ public class InputActivity extends BaseActivity {
     @BindView(R.id.btnSearch)
     Button btnSearch;
     private ConnectServer cs;
+
+    @BindView(R.id.rg)
+    RadioGroup rg;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,9 @@ public class InputActivity extends BaseActivity {
                 intent.putExtra("phone",textPhone.getText().toString());
                 intent.putExtra("name",textName.getText().toString());
                 intent.putExtra("idcard",edtIDNumber.getText().toString());
+                int radioButtonId = rg.getCheckedRadioButtonId();
+                RadioButton rb = (RadioButton) InputActivity.this.findViewById(radioButtonId);
+                intent.putExtra("type",rb.getText().toString());
                 startActivity(intent);
                 break;
         }

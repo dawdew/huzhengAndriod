@@ -88,8 +88,6 @@ public class HomePageActivity extends Activity {
         setContentView(R.layout.activity_homepage);
         ButterKnife.bind(this);
         MyApp  application = (MyApp) getApplication();
-        SpeechSynthesizer speechSynthesizer = application.getmTts();
-        speechSynthesizer.startSpeaking("测试",null);
         hideBottomUIMenu();
         init();
 //        application.robotActionProvider.combinedActionTtyS4(9);

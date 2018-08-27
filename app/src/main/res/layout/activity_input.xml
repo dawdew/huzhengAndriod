@@ -91,13 +91,13 @@
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/rbPraise"
+                    android:id="@+id/rbMj"
                     style="@style/suggestion_radioButton"
                     android:checked="true"
                     android:text="按民警选择" />
 
                 <RadioButton
-                    android:id="@+id/rbOpinion"
+                    android:id="@+id/rbRq"
                     style="@style/suggestion_radioButton"
                     android:layout_marginLeft="20dp"
                     android:text="按日期选择" />
