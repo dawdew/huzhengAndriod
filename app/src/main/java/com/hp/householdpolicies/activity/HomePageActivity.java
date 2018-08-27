@@ -125,7 +125,7 @@ public class HomePageActivity extends Activity {
                         isSpeaked=false;
                     }
                     if(v<=0.8 && !isSpeaked){
-                        mTts.startSpeaking("您好，请问您需要什么帮助", new SynthesizerListener() {
+                        mTts.startSpeaking("您好，请问您需要什么帮助？", new SynthesizerListener() {
                             @Override
                             public void onSpeakBegin() {
                                 isSpeaked=true;
