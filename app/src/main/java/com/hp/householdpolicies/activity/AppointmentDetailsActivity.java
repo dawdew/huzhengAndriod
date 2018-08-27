@@ -89,6 +89,7 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
     private List<Police> listPolice = new ArrayList<Police>();
     private Context mContext;
     private AppointmentDetailsAdapter adapter;
+    private String type;
     /*
      *spIndext：0-选择业务
      *spIndext：1-选择时间
@@ -115,14 +116,21 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
         rvDate.setLayoutManager(new GridLayoutManager(mContext, 7));
         dateAdapter = new AppointmentDetailsDateAdapter(listDate, mContext);
         rvDate.setAdapter(dateAdapter);
-        adapter.setOnItemClickListener(new AppointmentDetailsAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                //点击人员事件
+        Intent intent = getIntent();
+        type = intent.getStringExtra("type");
+        if("按民警选择".equals(type)){
+            adapter.setEnable(true);//启动点击事件
+        }else {
+            dateAdapter.setEnable(true);//启动点击事件
+        }
+            adapter.setOnItemClickListener(new AppointmentDetailsAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    //点击人员事件
 //                Toast.makeText(mContext, "点击" + listPolice.get(position).getName() + position, Toast.LENGTH_SHORT).show();
-                Police police = listPolice.get(position);
-                userAppDay.clear();
-                String id = police.getId();
+                    Police police = listPolice.get(position);
+                    userAppDay.clear();
+                    String id = police.getId();
                     for (String day : appDay.keySet()) {
                         String userid = appDay.get(day);
                         if (StringUtils.isNotBlank(userid) && userid.equals(id)) {
@@ -151,42 +159,45 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
                             }
                         }
                     }
+                    dateAdapter.setEnable(true);
                     dateAdapter.setData(dest);
                     dateAdapter.notifyDataSetChanged();
                     RadioGroupUnVisible();
                     tvTime.setVisibility(View.VISIBLE);
-                btnAffirm.setBackgroundResource(R.mipmap.ic_gray_bg);
-                btnAffirm.setEnabled(false);
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-            }
-        });
-        dateAdapter.setOnItemClickListener(new AppointmentDetailsDateAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position,AppDate appDate) {
-                TextView view1 = (TextView) view;
-                String selectedDate = view1.getText().toString();
-                String id = appDay.get(selectedDate);
-                if(StringUtils.isBlank(id)){
-                    id = appDayNext.get(selectedDate);
+                    btnAffirm.setBackgroundResource(R.mipmap.ic_gray_bg);
+                    btnAffirm.setEnabled(false);
                 }
-                adapter.setSelected(id);
-                adapter.notifyDataSetChanged();
 
-                day = appDate.getDay();
-                getAppointment(id,day);
-                btnAffirm.setBackgroundResource(R.mipmap.ic_gray_bg);
-                btnAffirm.setEnabled(false);
-            }
+                @Override
+                public void onItemLongClick(View view, int position) {
 
-            @Override
-            public void onItemLongClick(View view, int position) {
+                }
+            });
 
-            }
-        });
+            dateAdapter.setOnItemClickListener(new AppointmentDetailsDateAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position,AppDate appDate) {
+                    TextView view1 = (TextView) view;
+                    String selectedDate = view1.getText().toString();
+                    String id = appDay.get(selectedDate);
+                    if(StringUtils.isBlank(id)){
+                        id = appDayNext.get(selectedDate);
+                    }
+                    adapter.setSelected(id);
+                    adapter.notifyDataSetChanged();
+
+                    day = appDate.getDay();
+                    getAppointment(id,day);
+                    btnAffirm.setBackgroundResource(R.mipmap.ic_gray_bg);
+                    btnAffirm.setEnabled(false);
+                }
+
+                @Override
+                public void onItemLongClick(View view, int position) {
+
+                }
+            });
+
 
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -403,6 +414,11 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
     public void reset(){
         day=null;
         checkedRadio=-1;
+        if("按民警选择".equals(type)){
+            dateAdapter.setEnable(false);
+        }else {
+            adapter.setEnable(false);
+        }
         dateAdapter.setmPosition(-1);
         dateAdapter.setData(listDate);
         adapter.setSelected("");

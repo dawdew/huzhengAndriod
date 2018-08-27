@@ -26,6 +26,7 @@ public class AppointmentDetailsAdapter extends BaseRecyclerAdapter<AppointmentDe
     private static OnItemClickListener mOnItemClickListener;
     private String selected = "";
     private int selectedPosition = -1;
+    private boolean enable = false;
     ImageManager image = x.image();
     /**
      * @param list
@@ -90,10 +91,13 @@ public class AppointmentDetailsAdapter extends BaseRecyclerAdapter<AppointmentDe
             holder.itemView.setOnClickListener(new View.OnClickListener() { //itemview是holder里的所有控件，可以单独设置比如ImageButton Button等
                 @Override
                 public void onClick(View v) {
-                    AppointmentDetailsAdapter.this.selected=salesman.getId();
-                    AppointmentDetailsAdapter.this.selectedPosition=position;
-                    notifyDataSetChanged();
-                    mOnItemClickListener.onItemClick(holder.itemView, position);
+                    if(enable){
+                        AppointmentDetailsAdapter.this.selected=salesman.getId();
+                        AppointmentDetailsAdapter.this.selectedPosition=position;
+                        notifyDataSetChanged();
+                        mOnItemClickListener.onItemClick(holder.itemView, position);
+                    }
+
                 }
             });
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() { //长按事件
@@ -185,5 +189,9 @@ public class AppointmentDetailsAdapter extends BaseRecyclerAdapter<AppointmentDe
 
     public void setSelectedPosition(int selectedPosition) {
         this.selectedPosition = selectedPosition;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }

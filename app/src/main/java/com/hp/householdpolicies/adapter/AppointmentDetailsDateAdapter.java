@@ -19,6 +19,7 @@ public class AppointmentDetailsDateAdapter extends BaseRecyclerAdapter<Appointme
     private Context mContext;
     private List<AppDate> list;
     private int mPosition=-1;
+    private boolean enable=false;
     private static AppointmentDetailsDateAdapter.OnItemClickListener mOnItemClickListener;
 
     /**
@@ -58,11 +59,13 @@ public class AppointmentDetailsDateAdapter extends BaseRecyclerAdapter<Appointme
             holder.itemView.setOnClickListener(new View.OnClickListener() { //itemview是holder里的所有控件，可以单独设置比如ImageButton Button等
                 @Override
                 public void onClick(View v) {
-                    mPosition =position;
-                    notifyDataSetChanged();
-                    holder.tvDate.setBackgroundResource(R.color.date);
-                    if(date.getAvailable()){
-                        mOnItemClickListener.onItemClick(holder.tvDate, position,date);
+                    if(enable){
+                        mPosition =position;
+                        notifyDataSetChanged();
+                        holder.tvDate.setBackgroundResource(R.color.date);
+                        if(date.getAvailable()){
+                            mOnItemClickListener.onItemClick(holder.tvDate, position,date);
+                        }
                     }
                 }
             });
@@ -141,5 +144,9 @@ public class AppointmentDetailsDateAdapter extends BaseRecyclerAdapter<Appointme
 
     public void setmPosition(int mPosition) {
         this.mPosition = mPosition;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }
