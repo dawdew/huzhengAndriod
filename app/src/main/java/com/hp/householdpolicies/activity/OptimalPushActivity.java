@@ -7,7 +7,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.hp.householdpolicies.R;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.SynthesizerListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,8 +45,14 @@ public class OptimalPushActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStart() {
+    protected void onResume() {
+        super.onResume();
         mTts.startSpeaking("填写申请人信息即可由系统推送适合您的最优落户业务",null);
-        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mTts.stopSpeaking();
+        super.onStop();
     }
 }

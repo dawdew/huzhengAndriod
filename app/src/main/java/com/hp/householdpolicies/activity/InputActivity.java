@@ -56,13 +56,19 @@ public class InputActivity extends BaseActivity {
         ButterKnife.bind(this);
         MyApp  application = (MyApp) getApplication();
         mTts = application.getmTts();
-//        cs = ConnectServer.getInstance(getApplication(), impl);
+        cs = ConnectServer.getInstance(getApplication(), impl);
     }
 
     @Override
     protected void onStart() {
         mTts.startSpeaking("请扫描或输入身份证,姓名,手机号码",null);
         super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mTts.stopSpeaking();
+        super.onStop();
     }
 
     @OnClick({R.id.btnSearch})

@@ -2,12 +2,14 @@ package com.hp.householdpolicies.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hp.householdpolicies.R;
 import com.hp.householdpolicies.model.Article;
@@ -16,11 +18,14 @@ import com.hp.householdpolicies.utils.ApiCallBack;
 import com.hp.householdpolicies.utils.JsonParser;
 import com.hp.householdpolicies.utils.OkhttpUtil;
 import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.RecognizerListener;
 import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.SynthesizerListener;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -59,12 +64,48 @@ public class AdvisoryActivity extends BaseActivity {
         ButterKnife.bind(this);
         MyApp  application = (MyApp) getApplication();
         mTts = application.getmTts();
-        mIat = application.getmIat();
     }
 
     @Override
     protected void onStart() {
-        startListening();
+        mTts.startSpeaking("政策咨询", new SynthesizerListener() {
+            @Override
+            public void onSpeakBegin() {
+
+            }
+
+            @Override
+            public void onBufferProgress(int i, int i1, int i2, String s) {
+
+            }
+
+            @Override
+            public void onSpeakPaused() {
+
+            }
+
+            @Override
+            public void onSpeakResumed() {
+
+            }
+
+            @Override
+            public void onSpeakProgress(int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onCompleted(SpeechError speechError) {
+                mIat = SpeechRecognizer.createRecognizer(AdvisoryActivity.this, null);
+                setParam();
+                 mIat.startListening(mRecognizerListener);
+            }
+
+            @Override
+            public void onEvent(int i, int i1, int i2, Bundle bundle) {
+
+            }
+        });
         super.onStart();
     }
 
@@ -114,17 +155,16 @@ public class AdvisoryActivity extends BaseActivity {
         }
     }
 
-
-    private void startListening(){
-        int ret = mIat.startListening(mRecognizerListener);
-        if (ret == ErrorCode.SUCCESS) {
-            isListening=true;
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if( null != mIat ){
+            // 退出时释放连接
+            mIat.cancel();
+            mIat.destroy();
         }
     }
-    private void stopListening(){
-        mIat.cancel();
-        isListening=false;
-    }
+
     /**
      * 听写监听器。
      */
@@ -174,13 +214,15 @@ public class AdvisoryActivity extends BaseActivity {
                     viewId = R.id.tv_zjbf;
                 }else if(result_str.contains("恢复")){
                     viewId = R.id.tv_hfhk;
-                }else {
+                }else if(!result_str.contains("。")){
                     Intent intentSearch = new Intent(AdvisoryActivity.this, AdvisorySearchActivity.class);
                     intentSearch.putExtra("keyword",result_str);
                     startActivity(intentSearch);
                 }
                 if(viewId!=null){
                     switchActivity(viewId);
+                }else {
+                    int ret = mIat.startListening(mRecognizerListener);
                 }
             }
         }
@@ -193,4 +235,54 @@ public class AdvisoryActivity extends BaseActivity {
             }
         }
     };
+    /**
+     * 参数设置
+     *
+     * @return
+     */
+    public void setParam() {
+
+        // 设置听写引擎
+        mIat.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
+        // 设置返回结果格式
+        mIat.setParameter(SpeechConstant.RESULT_TYPE, "json");
+        // 设置语言
+        mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+        // 设置语言区域
+        mIat.setParameter(SpeechConstant.ACCENT, "mandarin");
+        // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
+        mIat.setParameter(SpeechConstant.VAD_BOS, "5000");
+
+        // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
+        mIat.setParameter(SpeechConstant.VAD_EOS, "2000");
+        // 设置标点符号,设置为"0"返回结果无标点,设置为"1"返回结果有标点
+        mIat.setParameter(SpeechConstant.ASR_PTT, "1");
+        // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
+        // 注：AUDIO_FORMAT参数语记需要更新版本才能生效
+        mIat.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
+        mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory()+"/msc/iat.wav");
+    }
+    /**
+     * 初始化监听器。
+     */
+    private InitListener mInitListener = new InitListener() {
+
+        @Override
+        public void onInit(int code) {
+            if (code != ErrorCode.SUCCESS) {
+                showTip("初始化失败，错误码：" + code);
+            }
+        }
+    };
+    private Toast mToast;
+    private void showTip(final String str)
+    {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mToast.setText(str);
+                mToast.show();
+            }
+        });
+    }
 }

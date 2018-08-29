@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -21,10 +22,12 @@ import com.hp.householdpolicies.utils.Api;
 import com.hp.householdpolicies.utils.ApiCallBack;
 import com.hp.householdpolicies.utils.CallBackUtil;
 import com.hp.householdpolicies.utils.JsonParser;
+import com.hp.householdpolicies.utils.MsynthesizerListener;
 import com.hp.householdpolicies.utils.OkhttpUtil;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.RecognizerListener;
 import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechSynthesizer;
@@ -102,14 +105,13 @@ public class HomePageActivity extends Activity {
         ButterKnife.bind(this);
         MyApp  application = (MyApp) getApplication();
         mTts = application.getmTts();
-        mIat = application.getmIat();
+        mIat = SpeechRecognizer.createRecognizer(HomePageActivity.this, null);
+        setParam();
         Date date=new Date();
         SimpleDateFormat sdm = new SimpleDateFormat("yyyy年MM月dd日                 EEEE");
         textDate.setText(sdm.format(date));
         weather();
         hideBottomUIMenu();
-
-       // init();
 //        application.robotActionProvider.combinedActionTtyS4(9);
     }
     public void init() {
@@ -121,6 +123,8 @@ public class HomePageActivity extends Activity {
             cs.release();
             cs = null;
         }
+        mIat.cancel();
+        mIat.destroy();
     }
     /**
      * 外设监听回调
@@ -138,42 +142,23 @@ public class HomePageActivity extends Activity {
                     double v = Double.parseDouble(substring);
                     if(v>0.8){
                         isSpeaked=false;
+                        if(isListening){
+                            stopListening();
+                        }
                     }
                     if(v<=0.8 && !isSpeaked){
-                        mTts.startSpeaking("您好，请问您需要什么帮助？", new SynthesizerListener() {
+                        mTts.startSpeaking("您好，请问您需要什么帮助？", new MsynthesizerListener() {
                             @Override
                             public void onSpeakBegin() {
                                 isSpeaked=true;
-                            }
-
-                            @Override
-                            public void onBufferProgress(int i, int i1, int i2, String s) {
-
-                            }
-
-                            @Override
-                            public void onSpeakPaused() {
-
-                            }
-
-                            @Override
-                            public void onSpeakResumed() {
-
-                            }
-
-                            @Override
-                            public void onSpeakProgress(int i, int i1, int i2) {
-
+                                super.onSpeakBegin();
                             }
 
                             @Override
                             public void onCompleted(SpeechError speechError) {
-                                //startListening();
-                            }
-
-                            @Override
-                            public void onEvent(int i, int i1, int i2, Bundle bundle) {
-
+                                if(!isListening){
+                                    startListening();
+                                }
                             }
                         });
                     }
@@ -206,11 +191,19 @@ public class HomePageActivity extends Activity {
 
     @Override
     protected void onStart() {
-
-
-        //
-        startListening();
+//        mIat =   SpeechRecognizer.createRecognizer(HomePageActivity.this, null);
+//        setParam();
+        init();
+        if(isSpeaked){
+            startListening();
+        }
         super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        release ();
     }
 
     @OnClick({R.id.llTransaction, R.id.llinformation, R.id.llDownload, R.id.llSynopsis, R.id.llAdvisory, R.id.llAppointment,R.id.ll_suggestion})
@@ -286,7 +279,7 @@ public class HomePageActivity extends Activity {
         }
     }
     private void stopListening(){
-        mIat.cancel();
+        mIat.stopListening();
         isListening=false;
     }
     /**
@@ -343,6 +336,8 @@ public class HomePageActivity extends Activity {
                 }
                 if(viewId!=null){
                     switchActivity(viewId);
+                }else {
+                    int ret = mIat.startListening(mRecognizerListener);
                 }
             }
         }
@@ -357,6 +352,7 @@ public class HomePageActivity extends Activity {
     };
 
     private void switchActivity(Integer viewId){
+
         switch (viewId) {
             case R.id.llTransaction://推优办理
                 Intent intentTransaction= new Intent(this, OptimalPushActivity.class);
@@ -387,5 +383,32 @@ public class HomePageActivity extends Activity {
                 startActivity(intentSuggestion);
                 break;
         }
+    }
+    /**
+     * 参数设置
+     *
+     * @return
+     */
+    public void setParam() {
+
+        // 设置听写引擎
+        mIat.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
+        // 设置返回结果格式
+        mIat.setParameter(SpeechConstant.RESULT_TYPE, "json");
+        // 设置语言
+        mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+        // 设置语言区域
+        mIat.setParameter(SpeechConstant.ACCENT, "mandarin");
+        // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
+        mIat.setParameter(SpeechConstant.VAD_BOS, "5000");
+
+        // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
+        mIat.setParameter(SpeechConstant.VAD_EOS, "2000");
+        // 设置标点符号,设置为"0"返回结果无标点,设置为"1"返回结果有标点
+        mIat.setParameter(SpeechConstant.ASR_PTT, "1");
+        // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
+        // 注：AUDIO_FORMAT参数语记需要更新版本才能生效
+        mIat.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
+        mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory()+"/msc/iat.wav");
     }
 }
