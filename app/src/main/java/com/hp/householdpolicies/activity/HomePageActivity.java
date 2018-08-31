@@ -363,7 +363,8 @@ public class HomePageActivity extends Activity {
                 startActivity(intentInformation);
                 break;
             case R.id.llDownload://下载申请
-                Intent da = new Intent(this, DownloadActivity.class);
+//                Intent da = new Intent(this, DownloadActivity.class);
+                Intent da = new Intent(this, PrintTemplateActivity.class);
                 startActivity(da);
                 break;
             case R.id.llSynopsis://大厅简介

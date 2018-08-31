@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="100dp"
+    android:paddingTop="100dp">
+
+    <TextView
+        android:id="@+id/llScan"
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="180dp"
+        android:background="@color/black_translucence"
+        android:gravity="center"
+        android:text="可\n扫\n描\n身\n份\n证"
+        android:textColor="@color/white"
+        android:textSize="40dp" />
+
+    <LinearLayout
+        android:id="@+id/llList"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="130dp"
+        android:layout_marginTop="70dp"
+        android:background="@color/black_translucence"
+        android:orientation="vertical"
+        android:paddingBottom="50dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="50dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="320dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/blue_line" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+
+                        android:id="@+id/ll_basic_information"
+                        style="@style/personal_information_menu_ll">
+
+                        <ImageView
+                            style="@style/personal_information_menu_img"
+                            android:src="@drawable/basic_information" />
+
+                        <TextView
+                            style="@style/personal_information_menu_text"
+                            android:text="基础信息" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_marital_status"
+                        style="@style/personal_information_menu_ll"
+                        android:layout_marginTop="60dp">
+
+                        <ImageView
+                            style="@style/personal_information_menu_img"
+                            android:src="@drawable/marital_status" />
+
+                        <TextView
+                            style="@style/personal_information_menu_text"
+                            android:text="申请详情" />
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@+id/llList"
+        android:layout_toRightOf="@id/llScan"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/BlueBtn"
+            android:gravity="center"
+            android:text="个人信息"
+            android:textColor="@color/white"
+            android:textSize="40dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:background="@color/BlueBtn">
+
+            <TextView
+                android:id="@+id/textNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:padding="20dp"
+                android:paddingLeft="100dp"
+                android:paddingBottom="100dp"
+                android:text="下一步"
+                android:textColor="@color/white"
+                android:textSize="40dp" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/textNext"
+                android:padding="10dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <!--基础信息-->
+                    <LinearLayout
+                        android:id="@+id/content_basic_information"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/personal_information_content_title"
+                                android:text="办理业务：" />
+
+                            <TextView
+                                style="@style/white_rounded_bg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="40dp"
+                                android:drawableRight="@mipmap/ic_arrow_drop_down"
+                                android:id="@+id/edtworkUnit"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    style="@style/personal_information_content_title"
+                                    android:text=" 姓       名 ：" />
+
+                                <EditText
+                                    style="@style/white_rounded_bg"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="40dp"
+                                    android:id="@+id/edtName"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    style="@style/personal_information_content_title"
+                                    android:text="出生日期：" />
+
+                                <EditText
+                                    style="@style/white_rounded_bg"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="40dp"
+                                    android:inputType="number"
+                                    android:id="@+id/edtAge"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    style="@style/personal_information_content_title"
+                                    android:text=" 性       别 ：" />
+
+                                <TextView
+                                    android:id="@+id/tvSex"
+                                    style="@style/white_rounded_bg"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableRight="@mipmap/ic_arrow_drop_down"
+                                    android:textSize="40dp" />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                style="@style/personal_information_content_title"
+                                android:text="联系电话：" />
+
+                                <EditText
+                                    android:id="@+id/tvEducation"
+                                    style="@style/white_rounded_bg"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="40dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/personal_information_content_title"
+                                android:text="身份证号：" />
+
+                            <EditText
+                                style="@style/white_rounded_bg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="40dp"
+                                android:id="@+id/edtIDNumber"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/personal_information_content_title"
+                                android:text="户  籍  地：" />
+
+                            <EditText
+                                style="@style/white_rounded_bg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="40dp"
+                                android:id="@+id/edtAddress"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/personal_information_content_title"
+                                android:text="现  住  地：" />
+
+                            <EditText
+                                style="@style/white_rounded_bg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="40dp"
+                                android:id="@+id/edtResidence"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/content_base"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            >
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--婚姻-->
+                <LinearLayout
+                    android:id="@+id/content_marital"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <TextView
+                        style="@style/personal_information_content_title"
+                        android:layout_marginBottom="20dp"
+                        android:text="请根据您的个人情况将红色的内容进行修改：" />
+
+                    <EditText
+                        style="@style/white_rounded_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="40dp"
+                        android:minLines="10"
+                        android:id="@+id/reqContent"/>
+                </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

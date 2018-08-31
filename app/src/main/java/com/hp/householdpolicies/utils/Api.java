@@ -8,8 +8,8 @@ public class Api {
     public static String weather="http://restapi.amap.com/v3/weather/weatherInfo";
     public static String ems="http://211.156.193.140:8000/cotrackapi/api/track/mail/";
     public static String emsauth="7025357B89E04B9BE053D2C2020A6229";
-    public static String downurl="http://192.168.18.8:8080/file/";
-    private static String base="http://192.168.18.8:8080/api/";
+    public static String downurl="http://192.168.18.7:8080/file/";
+    private static String base="http://192.168.18.7:8080/api/";
 //    public static String downurl="http://192.168.1.235:8080/file/";
 //    private static String base="http://192.168.1.235:8080/api/";
 //    public static String downurl="http://hz.robot.jyxin.com/file/";
@@ -29,5 +29,7 @@ public class Api {
     public static String postArrange=base+"postArrange";
     public static String hall=base+"hall";
     public static String progress=base+"progress";
+    public static String getDocTemplateItem=base+"getDocTemplateItem";
+    public static String print=base+"print";
 }
 

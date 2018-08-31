@@ -20,7 +20,7 @@
         <TextView
             style="@style/synopsis_tv"
             android:background="@color/synopsis_accept_range"
-            android:text="大厅受理范围" />
+            android:text="大厅展示" />
     </LinearLayout>
 
     <LinearLayout
