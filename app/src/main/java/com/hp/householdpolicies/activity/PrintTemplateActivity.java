@@ -258,6 +258,7 @@ indextSelect：当前选择的菜单
         switch (view.getId()) {
             case R.id.ll_basic_information://基础信息
                 llScan.setText("可扫描身份证");
+                textNext.setText("下一步");
                 indextSelect=0;
                 MenuSelect();
                 break;
@@ -277,6 +278,7 @@ indextSelect：当前选择的菜单
                 validator.validate();
                if(verify){
                    if(indextSelect==0){
+                       textNext.setText("开始打印");
                        llScan.setText("");
                        getTemplateItem();
                        indextSelect++;

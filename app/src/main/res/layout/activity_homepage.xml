@@ -148,7 +148,7 @@
 
                 <TextView
                     style="@style/MenuText"
-                    android:text="下载申请" />
+                    android:text="打印申请" />
             </LinearLayout>
 
             <LinearLayout
