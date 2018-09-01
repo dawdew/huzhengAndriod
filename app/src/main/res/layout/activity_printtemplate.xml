@@ -150,17 +150,20 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
                             android:orientation="horizontal">
 
                             <TextView
                                 style="@style/personal_information_content_title"
                                 android:text="办理业务：" />
 
-                            <TextView
+                            <EditText
                                 style="@style/white_rounded_bg"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="40dp"
+                                android:editable="false"
                                 android:drawableRight="@mipmap/ic_arrow_drop_down"
                                 android:id="@+id/edtworkUnit"/>
                         </LinearLayout>
@@ -194,6 +197,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
                                 android:layout_weight="1"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -205,7 +210,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="40dp"
-                                    android:inputType="number"
+                                    android:editable="false"
                                     android:id="@+id/edtAge"/>
                             </LinearLayout>
                         </LinearLayout>
@@ -220,17 +225,20 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:orientation="horizontal">
 
                                 <TextView
                                     style="@style/personal_information_content_title"
                                     android:text=" 性       别 ：" />
 
-                                <TextView
+                                <EditText
                                     android:id="@+id/tvSex"
                                     style="@style/white_rounded_bg"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:editable="false"
                                     android:drawableRight="@mipmap/ic_arrow_drop_down"
                                     android:textSize="40dp" />
                             </LinearLayout>
@@ -250,6 +258,7 @@
                                 <EditText
                                     android:id="@+id/tvEducation"
                                     style="@style/white_rounded_bg"
+                                    android:inputType="number"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="40dp" />

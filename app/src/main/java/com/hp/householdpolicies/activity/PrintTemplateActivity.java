@@ -26,6 +26,7 @@ import com.hp.householdpolicies.model.Download;
 import com.hp.householdpolicies.model.PersonInfo;
 import com.hp.householdpolicies.utils.Api;
 import com.hp.householdpolicies.utils.ApiCallBack;
+import com.hp.householdpolicies.utils.BaseMethod;
 import com.hp.householdpolicies.utils.BeanUtil;
 import com.hp.householdpolicies.utils.DateUtils;
 import com.hp.householdpolicies.utils.OkhttpUtil;
@@ -92,27 +93,35 @@ indextSelect：当前选择的菜单
 //    ChosenTimePopupWindown timePopupWindown2;
     //性别
     @BindView(R.id.tvSex)
-    TextView tvSex;
+    @NotEmpty(messageResId = R.string.errorMessage)
+    EditText tvSex;
     //学历
     @BindView(R.id.reqContent)
+    @NotEmpty(messageResId = R.string.errorMessage)
     EditText reqContent;
     //姓名
     @BindView(R.id.edtName)
+    @NotEmpty(messageResId = R.string.errorMessage)
     EditText edtName;
     //身份证号
     @BindView(R.id.edtIDNumber)
+    @NotEmpty(messageResId = R.string.errorMessage)
     EditText edtIDNumber;
     //户籍地
     @BindView(R.id.edtAddress)
+    @NotEmpty(messageResId = R.string.errorMessage)
     EditText edtAddress;
     //现住地
     @BindView(R.id.edtResidence)
+    @NotEmpty(messageResId = R.string.errorMessage)
     EditText edtResidence;
     @BindView(R.id.tvEducation)
+    @NotEmpty(messageResId = R.string.errorMessage)
     EditText tvEducation;
     //业务类型
     @BindView(R.id.edtworkUnit)
-    TextView edtworkUnit;
+    @NotEmpty(messageResId = R.string.errorMessage)
+    EditText edtworkUnit;
     //年龄
     @BindView(R.id.edtAge)
     @NotEmpty(messageResId = R.string.errorMessage)
@@ -153,6 +162,7 @@ indextSelect：当前选择的菜单
         timePopupWindown.setItemListener(this);
         validator = new Validator(this);
         validator.setValidationListener(this);
+        edtAge.setText(BaseMethod.getDateNoW());
     }
     @Override
     protected void onStart() {
@@ -243,31 +253,46 @@ indextSelect：当前选择的菜单
         tvSex.setText(listSex.get(0));
     }
 
-    @OnClick({R.id.ll_basic_information, R.id.ll_marital_status, R.id.textNext, R.id.tvSex,R.id.edtworkUnit})
+    @OnClick({R.id.ll_basic_information, R.id.ll_marital_status, R.id.textNext, R.id.tvSex,R.id.edtworkUnit,R.id.edtAge})
     void ViewClick(View view) {
         switch (view.getId()) {
             case R.id.ll_basic_information://基础信息
+                llScan.setText("可扫描身份证");
+                indextSelect=0;
+                MenuSelect();
                 break;
             case R.id.ll_marital_status://婚姻状况
+//                if(indextSelect==0){
+//                    llScan.setText("");
+//                    getTemplateItem();
+//                    indextSelect++;
+//                    MenuSelect();
+//                }
                 break;
             case R.id.tvSex://性别
                 mSpinerPopWindow.setData(listSex,tvSex);
                 showSpinWindow(tvSex);
                 break;
             case R.id.textNext://下一步
-                if(indextSelect==0){
-                    llScan.setText("");
-                    getTemplateItem();
-                    indextSelect++;
-                    MenuSelect();
-                }else {
-                    submit();
-                }
-
+                validator.validate();
+               if(verify){
+                   if(indextSelect==0){
+                       llScan.setText("");
+                       getTemplateItem();
+                       indextSelect++;
+                       MenuSelect();
+                   }else {
+                       submit();
+                   }
+               }
                 break;
             case R.id.edtworkUnit://
                 mSpinerPopWindow.setData(listValue,edtworkUnit);
                 showSpinWindow(edtworkUnit);
+                break;
+            case  R.id.edtAge:
+                timePopupWindown.setData(edtAge.getText().toString(),edtAge);
+                showChosenTimeWindow(edtAge);
                 break;
         }
     }
