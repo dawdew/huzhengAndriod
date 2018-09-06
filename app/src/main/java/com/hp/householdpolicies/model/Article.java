@@ -8,7 +8,7 @@ public class Article {
     private String cname;
     private String title;
     private String content;
-
+    private String select;
     public String getCname() {
         return cname;
     }
@@ -31,5 +31,13 @@ public class Article {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getSelect() {
+        return select;
+    }
+
+    public void setSelect(String select) {
+        this.select = select;
     }
 }

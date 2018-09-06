@@ -29,7 +29,7 @@
             <ImageView
                 style="@style/activity_accept_range_image"
                 android:layout_above="@+id/tv1"
-                android:src="@mipmap/ic_population_management_centre" />
+                android:src="@mipmap/hzbg" />
 
             <TextView
                 android:id="@+id/tv1"
@@ -57,12 +57,12 @@
                 <ImageView
                     style="@style/activity_accept_range_image"
                     android:layout_above="@+id/tv2"
-                    android:src="@mipmap/ic_lobby" />
+                    android:src="@mipmap/nkj_3955" />
 
                 <TextView
                     android:id="@+id/tv2"
                     style="@style/activity_accept_range_text"
-                    android:text="大厅" />
+                    android:text="户口受理厅" />
 
             </RelativeLayout>
 
@@ -79,12 +79,12 @@
                 <ImageView
                     style="@style/activity_accept_range_image"
                     android:layout_above="@+id/tv3"
-                    android:src="@mipmap/ic_id_cards" />
+                    android:src="@mipmap/nkj_3985" />
 
                 <TextView
                     android:id="@+id/tv3"
                     style="@style/activity_accept_range_text"
-                    android:text="身份证" />
+                    android:text="身份证受理厅" />
 
             </RelativeLayout>
 
@@ -101,13 +101,12 @@
                 <ImageView
                     style="@style/activity_accept_range_image"
                     android:layout_above="@+id/tv4"
-                    android:src="@mipmap/ic_would" />
+                    android:src="@mipmap/nkj_3972" />
 
                 <TextView
                     android:id="@+id/tv4"
                     style="@style/activity_accept_range_text"
-                    android:text="户政" />
-
+                    android:text="户限受理厅" />
             </RelativeLayout>
         </LinearLayout>
 

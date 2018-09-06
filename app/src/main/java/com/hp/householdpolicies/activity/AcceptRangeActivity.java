@@ -48,7 +48,6 @@ public class AcceptRangeActivity extends BaseActivity {
             case R.id.RLWould://户政
                 type="户政";
                 break;
-
         }
         Intent intent=new Intent(this,AcceptRangeTaskNumberActivity.class);
         intent.putExtra("type",type);

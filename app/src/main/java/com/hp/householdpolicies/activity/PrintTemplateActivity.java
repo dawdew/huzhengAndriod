@@ -248,8 +248,15 @@ indextSelect：当前选择的菜单
         listSex.add("男");
         listSex.add("女");
         listValue.add("投配偶申请");
-        listValue.add("18岁以上改名");
-        listValue.add("离婚给孩子改名");
+        listValue.add("18岁以上变更姓名");
+        listValue.add("变更18岁以下孩子姓名");
+        listValue.add("父母离异，孩子变更姓名");
+        listValue.add("补发户口本");
+        listValue.add("子女投父母");
+        listValue.add("老人投子女(外省市人写)");
+        listValue.add("老人投子女(本市人写)");
+        listValue.add("知青回津落户(本市人写)");
+        listValue.add("知青回津落户(外省市人写)");
         tvSex.setText(listSex.get(0));
     }
 
@@ -263,12 +270,12 @@ indextSelect：当前选择的菜单
                 MenuSelect();
                 break;
             case R.id.ll_marital_status://婚姻状况
-//                if(indextSelect==0){
-//                    llScan.setText("");
-//                    getTemplateItem();
-//                    indextSelect++;
-//                    MenuSelect();
-//                }
+                if(indextSelect==0){
+                    llScan.setText("");
+                    getTemplateItem();
+                    indextSelect++;
+                    MenuSelect();
+                }
                 break;
             case R.id.tvSex://性别
                 mSpinerPopWindow.setData(listSex,tvSex);
@@ -363,7 +370,8 @@ indextSelect：当前选择的菜单
     }
     private void submit() {
         HashMap<String, String> json_map = new HashMap<>();
-        json_map.put("title",edtworkUnit.getText().toString());
+        String title = edtworkUnit.getText().toString();
+        json_map.put("title",title.substring(0,title.indexOf("(")));
         json_map.put("yewu",edtworkUnit.getText().toString());
         json_map.put("content",reqContent.getText().toString());
         json_map.put("name",edtName.getText().toString());

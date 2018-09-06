@@ -50,6 +50,11 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleAdapter.SimpleAda
     public void onBindViewHolder(final ArticleAdapter.SimpleAdapterViewHolder holder, final int position, boolean isItem) {
         final Article task = list.get(position);
         holder.btName.setText(task.getCname());
+
+        if("1".equals(task.getSelect())){
+            task.setSelect(null);
+            selectedPos = position;
+        }
         if(selectedPos == position){
             holder.btName.setSelected(true);
         }else{
@@ -125,5 +130,9 @@ public class ArticleAdapter extends BaseRecyclerAdapter<ArticleAdapter.SimpleAda
             return list.get(position);
         else
             return null;
+    }
+
+    public void setSelectedPos(int selectedPos) {
+        this.selectedPos = selectedPos;
     }
 }

@@ -101,7 +101,7 @@ public class AdvisoryDetailsActivity extends BaseActivity {
         showLogisticsInformationWindow(view,s+".docx");
     }
     private void getData(){
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         String category = intent.getStringExtra("category");
         if(StringUtils.isNotBlank(category)){
             HashMap<String, String> map = new HashMap<>();
@@ -110,17 +110,29 @@ public class AdvisoryDetailsActivity extends BaseActivity {
                 @Override
                 public void onResponse(Object response) {
                     List<Map<String, String>> list = (List<Map<String, String>>) response;
+                    String word = getIntent().getStringExtra("word");
+                    boolean show_flag=false;
+                    int pos=0;
                     for(Map<String, String> m:list){
                         Article article = new Article();
                         article.setTitle(m.get("title"));
                         article.setCname(m.get("cname"));
                         article.setContent(m.get("content"));
+                        if(StringUtils.isNotBlank(word)){
+                            if(m.get("cname").contains(word)){
+                                show_flag=true;
+                                pos = listArticle.size();
+                                title.setText(article.getTitle());
+                                webView.loadDataWithBaseURL(null,article.getContent(), "text/html" , "utf-8", null);
+                            }
+                        }
                         listArticle.add(article);
                     }
-                    if(list!=null && list.size()>0){
+                    if(!show_flag && list!=null && list.size()>0){
                         title.setText(list.get(0).get("title"));
                         webView.loadDataWithBaseURL(null,list.get(0).get("content"), "text/html" , "utf-8", null);
                     }
+                    adapter.setSelectedPos(pos);
                     adapter.notifyDataSetChanged();
                 }
             });
