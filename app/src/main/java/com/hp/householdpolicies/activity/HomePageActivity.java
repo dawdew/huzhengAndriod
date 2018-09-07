@@ -145,6 +145,7 @@ public class HomePageActivity extends Activity {
         }
         mIat.cancel();
         mIat.destroy();
+        mAgent.destroy();
     }
 
     /**
@@ -226,9 +227,9 @@ public class HomePageActivity extends Activity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
         release();
+        super.onDestroy();
     }
 
     @OnClick({R.id.llTransaction, R.id.llinformation, R.id.llDownload, R.id.llSynopsis, R.id.llAdvisory, R.id.llAppointment, R.id.ll_suggestion})
