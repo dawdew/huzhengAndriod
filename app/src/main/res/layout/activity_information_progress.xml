@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:width="400dp"
-        android:height="100dp"
+        android:height="150dp"
         android:background="@color/blue_line"
         android:gravity="center"
         android:text=""

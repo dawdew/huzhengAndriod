@@ -39,6 +39,8 @@ import com.rsc.reemanclient.ConnectServer;
 import com.synjones.idcard.IDCardInfo;
 import com.synjones.idcard.OnIDListener;
 
+import net.lemonsoft.lemonbubble.LemonBubble;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -224,7 +226,7 @@ indextSelect：当前选择的菜单
                     tvSex.setText(info.getSex());
                     edtIDNumber.setText(info.getIdcardno());
                     edtAddress.setText(info.getAddress());
-                    Date yyyyMMdd = DateUtils.parse(info.getBirthday(), "yyyyMMdd");
+                    Date yyyyMMdd = DateUtils.parse(info.getBirthday(), "yyyy-MM-dd");
                     //tvDateBirth.setText(DateUtils.format(yyyyMMdd,"yyyy-MM-dd"));
                     int age = DateUtils.getAge(yyyyMMdd);
                     edtAge.setText(String.valueOf(age));
@@ -270,12 +272,12 @@ indextSelect：当前选择的菜单
                 MenuSelect();
                 break;
             case R.id.ll_marital_status://婚姻状况
-                if(indextSelect==0){
-                    llScan.setText("");
-                    getTemplateItem();
-                    indextSelect++;
-                    MenuSelect();
-                }
+//                if(indextSelect==0){
+//                    llScan.setText("");
+//                    getTemplateItem();
+//                    indextSelect++;
+//                    MenuSelect();
+//                }
                 break;
             case R.id.tvSex://性别
                 mSpinerPopWindow.setData(listSex,tvSex);
@@ -384,7 +386,11 @@ indextSelect：当前选择的菜单
         OkhttpUtil.okHttpGet(Api.print, json_map, new ApiCallBack() {
             @Override
             public void onResponse(Object response) {
-
+                if(response!=null){
+                    LemonBubble.showRight(PrintTemplateActivity.this, "打印成功", 2000);
+                }else {
+                    LemonBubble.showError(PrintTemplateActivity.this,"打印失败");
+                }
             }
         });
     }

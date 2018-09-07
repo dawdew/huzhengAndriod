@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hp.householdpolicies.R;
+import com.hp.householdpolicies.model.AdvisorySearch;
 import com.hp.householdpolicies.model.Article;
 import com.hp.householdpolicies.utils.Api;
 import com.hp.householdpolicies.utils.ApiCallBack;
@@ -214,10 +215,8 @@ public class AdvisoryActivity extends BaseActivity {
                     viewId = R.id.tv_zjbf;
                 }else if(result_str.contains("恢复")){
                     viewId = R.id.tv_hfhk;
-                }else if(!result_str.contains("。")){
-                    Intent intentSearch = new Intent(AdvisoryActivity.this, AdvisorySearchActivity.class);
-                    intentSearch.putExtra("keyword",result_str);
-                    startActivity(intentSearch);
+                }else {
+                    AddData(result_str);
                 }
                 if(viewId!=null){
                     switchActivity(viewId);
@@ -282,6 +281,23 @@ public class AdvisoryActivity extends BaseActivity {
             public void run() {
                 mToast.setText(str);
                 mToast.show();
+            }
+        });
+    }
+    private void AddData(final String keyword){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("keyword",keyword);
+        OkhttpUtil.okHttpGet(Api.search, map, new ApiCallBack() {
+            @Override
+            public void onResponse(Object response) {
+                if(response!=null){
+                    List<Map<String, String>> list = (List<Map<String, String>>) response;
+                    if(list.size()>0){
+                        Intent intentSearch = new Intent(AdvisoryActivity.this, AdvisorySearchActivity.class);
+                        intentSearch.putExtra("keyword",keyword);
+                        startActivity(intentSearch);
+                    }
+                }
             }
         });
     }
