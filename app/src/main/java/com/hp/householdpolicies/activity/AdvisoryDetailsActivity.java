@@ -26,6 +26,7 @@ import com.hp.householdpolicies.model.Honor;
 import com.hp.householdpolicies.utils.Api;
 import com.hp.householdpolicies.utils.ApiCallBack;
 import com.hp.householdpolicies.utils.OkhttpUtil;
+import com.iflytek.cloud.SpeechSynthesizer;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -63,6 +64,7 @@ public class AdvisoryDetailsActivity extends BaseActivity {
     private List<Article> listArticle = new ArrayList<Article>();
     private ArticleAdapter adapter;
     private DownloadPopupWindown popupWindown;
+    private SpeechSynthesizer mTts;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,8 @@ public class AdvisoryDetailsActivity extends BaseActivity {
         settings.setTextSize(WebSettings.TextSize.LARGER);
         webView.setBackgroundColor(0);
         popupWindown=new DownloadPopupWindown(mContext);
+        MyApp application = (MyApp) getApplication();
+        mTts = application.getmTts();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 //        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -131,6 +135,7 @@ public class AdvisoryDetailsActivity extends BaseActivity {
                     if(!show_flag && list!=null && list.size()>0){
                         title.setText(list.get(0).get("title"));
                         webView.loadDataWithBaseURL(null,list.get(0).get("content"), "text/html" , "utf-8", null);
+                        mTts.startSpeaking("这是我为您找到的相关户籍政策，请根据需要选择适合的类别",null);
                     }
                     adapter.setSelectedPos(pos);
                     adapter.notifyDataSetChanged();
