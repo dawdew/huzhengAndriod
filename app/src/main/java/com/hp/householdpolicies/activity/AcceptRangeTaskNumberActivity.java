@@ -57,7 +57,6 @@ public class AcceptRangeTaskNumberActivity extends BaseActivity {
     boolean isScroll=false;
     Timer timer;
     AutoScrollTask autoTask;
-    private SpeechSynthesizer mTts;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +64,38 @@ public class AcceptRangeTaskNumberActivity extends BaseActivity {
         ButterKnife.bind(this);
         banner.setImageLoader(new GlideImageLoader());
 //        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
-        MyApp application = (MyApp) getApplication();
-        mTts = application.getmTts();
-        mediaPlayer = MediaPlayer.create(this,R.raw.xxx);
+
+        AddData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = getIntent();
+        String type = intent.getStringExtra("type");
+
+        int stringInt = 0;
+        int rawType = 0;
+        switch (type){
+            case "公安南开分局人口管理中心":
+                rawType = R.raw.zxjj;
+                stringInt=R.string.hall;
+                break;
+            case "大厅":
+                rawType =  R.raw.dating;
+                stringInt=R.string.hukou;
+                break;
+            case "身份证":
+                rawType = R.raw.sfz;
+                stringInt=R.string.shenfenzheng;
+                break;
+            case "户政":
+                rawType = R.raw.huxian;
+                stringInt=R.string.huxian;
+                break;
+        }
+
+        mediaPlayer = MediaPlayer.create(this,rawType);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
             mediaPlayer.prepareAsync();
@@ -80,42 +108,18 @@ public class AcceptRangeTaskNumberActivity extends BaseActivity {
                 mediaPlayer.start();
             }
         });
-        AddData();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Intent intent = getIntent();
-        String type = intent.getStringExtra("type");
-        int stringInt = 0;
-        switch (type){
-            case "公安南开分局人口管理中心":
-                stringInt=R.string.hall;
-                break;
-            case "大厅":
-                stringInt=R.string.hukou;
-                break;
-            case "身份证":
-                stringInt=R.string.shenfenzheng;
-                break;
-            case "户政":
-                stringInt=R.string.huxian;
-                break;
-        }
         timer=new Timer();
         isScroll=true;
         autoTask=new AutoScrollTask();
         timer.schedule(autoTask, 3, 100);
         tv_content.setText(stringInt);
-        mTts.startSpeaking(this.getString(stringInt),null);
     }
 
     @Override
     protected void onStop() {
         mediaPlayer.stop();
         mediaPlayer.release();
-        mTts.stopSpeaking();
         super.onStop();
     }
 
