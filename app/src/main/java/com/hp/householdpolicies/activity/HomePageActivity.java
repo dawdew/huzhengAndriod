@@ -573,6 +573,12 @@ public class HomePageActivity extends Activity {
                                 intent_zxhk.putExtra("word",normValue);
                                 startActivity(intent_zxhk);
                                 break;
+                            case "bu":
+                                Intent intent_bu = new Intent(this, AdvisoryDetailsActivity.class);
+                                intent_bu.putExtra("category","5");
+                                intent_bu.putExtra("word",normValue);
+                                startActivity(intent_bu);
+                                break;
                         }
                     }
                 }
