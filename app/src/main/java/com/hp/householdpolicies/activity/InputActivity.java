@@ -17,10 +17,15 @@ import com.hp.householdpolicies.R;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SynthesizerListener;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.rsc.impl.RscServiceConnectionImpl;
 import com.rsc.reemanclient.ConnectServer;
 import com.synjones.idcard.IDCardInfo;
 import com.synjones.idcard.OnIDListener;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,14 +35,17 @@ import butterknife.OnClick;
  * Created by Administrator on 2018/6/14 0014.
  */
 
-public class InputActivity extends BaseActivity {
+public class InputActivity extends BaseActivity implements Validator.ValidationListener{
     //    身份证号
     @BindView(R.id.edtIDNumber)
+    @NotEmpty(messageResId = R.string.errorMessage)
     EditText edtIDNumber;
     //    手机号
     @BindView(R.id.textPhone)
+    @NotEmpty(messageResId = R.string.errorMessage)
     EditText textPhone;
     @BindView(R.id.textName)
+    @NotEmpty(messageResId = R.string.errorMessage)
     EditText textName;
     //    查询按钮
     @BindView(R.id.btnSearch)
@@ -49,6 +57,8 @@ public class InputActivity extends BaseActivity {
 
     @BindView(R.id.rg)
     RadioGroup rg;
+    Validator validator;
+    Boolean verify=false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +67,8 @@ public class InputActivity extends BaseActivity {
         MyApp  application = (MyApp) getApplication();
         mTts = application.getmTts();
         cs = ConnectServer.getInstance(getApplication(), impl);
+        validator = new Validator(this);
+        validator.setValidationListener(this);
     }
 
     @Override
@@ -73,17 +85,20 @@ public class InputActivity extends BaseActivity {
 
     @OnClick({R.id.btnSearch})
     void ViewClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnSearch:
-                Intent intent = new Intent(this, AppointmentDetailsActivity.class);
-                intent.putExtra("phone",textPhone.getText().toString());
-                intent.putExtra("name",textName.getText().toString());
-                intent.putExtra("idcard",edtIDNumber.getText().toString());
-                int radioButtonId = rg.getCheckedRadioButtonId();
-                RadioButton rb = (RadioButton) InputActivity.this.findViewById(radioButtonId);
-                intent.putExtra("type",rb.getText().toString());
-                startActivity(intent);
-                break;
+        validator.validate();
+        if(verify){
+            switch (view.getId()) {
+                case R.id.btnSearch:
+                    Intent intent = new Intent(this, AppointmentDetailsActivity.class);
+                    intent.putExtra("phone",textPhone.getText().toString());
+                    intent.putExtra("name",textName.getText().toString());
+                    intent.putExtra("idcard",edtIDNumber.getText().toString());
+                    int radioButtonId = rg.getCheckedRadioButtonId();
+                    RadioButton rb = (RadioButton) InputActivity.this.findViewById(radioButtonId);
+                    intent.putExtra("type",rb.getText().toString());
+                    startActivity(intent);
+                    break;
+            }
         }
     }
     private RscServiceConnectionImpl impl = new RscServiceConnectionImpl() {
@@ -145,5 +160,19 @@ public class InputActivity extends BaseActivity {
             return true;
         }
     });
+    @Override
+    public void onValidationSucceeded() {
+        verify=true;
+    }
 
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            }
+        }
+    }
 }

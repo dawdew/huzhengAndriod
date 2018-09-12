@@ -13,10 +13,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.hp.householdpolicies.R;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.rsc.impl.RscServiceConnectionImpl;
 import com.rsc.reemanclient.ConnectServer;
 import com.synjones.idcard.IDCardInfo;
 import com.synjones.idcard.OnIDListener;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,33 +31,42 @@ import butterknife.OnClick;
  * Created by Administrator on 2018/6/14 0014.
  */
 
-public class InformationInquiryActivity extends BaseActivity {
+public class InformationInquiryActivity extends BaseActivity implements Validator.ValidationListener{
     //    身份证号
     @BindView(R.id.edtIDNumber)
+    @NotEmpty(messageResId = R.string.errorMessage)
     EditText edtIDNumber;
     //    手机号
     @BindView(R.id.textPhone)
+    @NotEmpty(messageResId = R.string.errorMessage)
     EditText textPhone;
     //    查询按钮
     @BindView(R.id.btnSearch)
     Button btnSearch;
     private ConnectServer cs;
+    Validator validator;
+    Boolean verify=false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_information_inquiry);
         ButterKnife.bind(this);
         cs = ConnectServer.getInstance(getApplication(), impl);
+        validator = new Validator(this);
+        validator.setValidationListener(this);
     }
     @OnClick({R.id.btnSearch})
     void ViewClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnSearch:
-                Intent intent = new Intent(this, InformationProgressActivity.class);
-                intent.putExtra("idcard",edtIDNumber.getText().toString());
-                intent.putExtra("phone",textPhone.getText().toString());
-                startActivity(intent);
-                break;
+        validator.validate();
+        if(verify){
+            switch (view.getId()) {
+                case R.id.btnSearch:
+                    Intent intent = new Intent(this, InformationProgressActivity.class);
+                    intent.putExtra("idcard",edtIDNumber.getText().toString());
+                    intent.putExtra("phone",textPhone.getText().toString());
+                    startActivity(intent);
+                    break;
+            }
         }
     }
     private RscServiceConnectionImpl impl = new RscServiceConnectionImpl() {
@@ -114,5 +128,19 @@ public class InformationInquiryActivity extends BaseActivity {
             return true;
         }
     });
+    @Override
+    public void onValidationSucceeded() {
+        verify=true;
+    }
 
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            }
+        }
+    }
 }
