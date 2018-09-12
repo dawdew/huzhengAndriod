@@ -115,6 +115,8 @@ public class HomePageActivity extends Activity {
     private AIUIAgent mAgent;
     //当前AIUI使用的配置
     private JSONObject config;
+    private AIUIMessage msgv;
+    private boolean msgSendFlag=false;//是否得到语义识别结果标识
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +126,6 @@ public class HomePageActivity extends Activity {
         mTts = application.getmTts();
         mIat = SpeechRecognizer.createRecognizer(HomePageActivity.this, null);
         setParam();
-        mAgent = AIUIAgent.createAgent(this,config.toString() , mAIUIListener);
         Date date = new Date();
         SimpleDateFormat sdm = new SimpleDateFormat("yyyy年MM月dd日                 EEEE");
         textDate.setText(sdm.format(date));
@@ -170,7 +171,7 @@ public class HomePageActivity extends Activity {
                     }
                     if (v <= 0.8 && !isSpeaked) {
                         //您好，我是公安南开分局人口服务管理中心的小南，请问您需要办理什么户籍业务？
-                        mTts.startSpeaking("您好", new MsynthesizerListener() {
+                        mTts.startSpeaking("您好，我是公安南开分局人口服务管理中心的小南，请问您需要办理什么户籍业务？", new MsynthesizerListener() {
                             @Override
                             public void onSpeakBegin() {
                                 isSpeaked = true;
@@ -222,14 +223,15 @@ public class HomePageActivity extends Activity {
         if (isSpeaked) {
             startListening();
         }
+        mAgent = AIUIAgent.createAgent(this,config.toString() , mAIUIListener);
         super.onStart();
 
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         release();
-        super.onDestroy();
+        super.onStop();
     }
 
     @OnClick({R.id.llTransaction, R.id.llinformation, R.id.llDownload, R.id.llSynopsis, R.id.llAdvisory, R.id.llAppointment, R.id.ll_suggestion})
@@ -376,10 +378,10 @@ public class HomePageActivity extends Activity {
                 } else {
 //                    //写入文本
                     byte[] content= result_str.getBytes();
-                    System.out.println("+++++++++++++++++++"+result_str);
                     String params = "data_type=text";
-                    AIUIMessage msg = new AIUIMessage(AIUIConstant.CMD_WRITE, 0, 0, params, content);
-                    mAgent.sendMessage(msg);
+                    msgv = new AIUIMessage(AIUIConstant.CMD_WRITE, 0, 0, params, content);
+                    msgSendFlag=true;
+                    mAgent.sendMessage(msgv);
                 }
                 if (viewId != null) {
                     switchActivity(viewId);
@@ -508,8 +510,12 @@ public class HomePageActivity extends Activity {
                     break;
                 case AIUIConstant.EVENT_RESULT:
                     processResult(aiuiEvent);
+                    msgSendFlag=false;
                     break;
                 case AIUIConstant.EVENT_WAKEUP:
+                    if(msgSendFlag){
+                        mAgent.sendMessage(msgv);
+                    }
                     break;
                 case AIUIConstant.EVENT_ERROR:
                     AIUIMessage msg1 = new AIUIMessage(AIUIConstant.CMD_WAKEUP, 0, 0, null, null);
@@ -540,6 +546,48 @@ public class HomePageActivity extends Activity {
                     JSONObject semanticResult = cntJson.optJSONObject("intent");
                     if (semanticResult != null && semanticResult.length() != 0) {
                         //解析得到语义结果，将语义结果作为消息插入到消息列表中
+                        if(!semanticResult.has("semantic")){
+                            stopListening();
+                            mTts.startSpeaking("目前我还没有找到适合您的相关政策,请您到1号咨询台进行详细咨询", new SynthesizerListener() {
+                                @Override
+                                public void onSpeakBegin() {
+                                    isSpeaked = true;
+                                }
+
+                                @Override
+                                public void onBufferProgress(int i, int i1, int i2, String s) {
+
+                                }
+
+                                @Override
+                                public void onSpeakPaused() {
+
+                                }
+
+                                @Override
+                                public void onSpeakResumed() {
+
+                                }
+
+                                @Override
+                                public void onSpeakProgress(int i, int i1, int i2) {
+
+                                }
+
+                                @Override
+                                public void onCompleted(SpeechError speechError) {
+                                    if (!isListening) {
+                                        startListening();
+                                    }
+                                }
+
+                                @Override
+                                public void onEvent(int i, int i1, int i2, Bundle bundle) {
+
+                                }
+                            });
+                            return;
+                        }
                         JSONArray semantic = semanticResult.getJSONArray("semantic");
                         if(semantic==null){
                             return;

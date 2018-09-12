@@ -366,7 +366,9 @@ indextSelect：当前选择的菜单
             @Override
             public void onResponse(Object response) {
                 String templateItem = (String) response;
-                reqContent.setText(Html.fromHtml(templateItem));
+                if(StringUtils.isNotBlank(templateItem)){
+                    reqContent.setText(Html.fromHtml(templateItem));
+                }
             }
         });
     }

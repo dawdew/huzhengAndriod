@@ -157,7 +157,7 @@ public class AdvisoryDetailsActivity extends BaseActivity {
   }
     //扫一扫下载窗口
     private void showLogisticsInformationWindow(View v,String url) {
-        popupWindown.setData(Api.downurl+url);
+        popupWindown.setData(Api.downurl2+url);
         popupWindown.setTouchable(true);
         popupWindown.setOutsideTouchable(true);
         popupWindown.setFocusable(true);
