@@ -135,7 +135,9 @@ public class AdvisoryDetailsActivity extends BaseActivity {
                     if(!show_flag && list!=null && list.size()>0){
                         title.setText(list.get(0).get("title"));
                         webView.loadDataWithBaseURL(null,list.get(0).get("content"), "text/html" , "utf-8", null);
-                        mTts.startSpeaking("这是我为您找到的相关户籍政策，请根据需要选择适合的类别",null);
+                        if(StringUtils.isNotBlank(word)){
+                            mTts.startSpeaking("这是我为您找到的相关户籍政策，请根据需要选择适合的类别",null);
+                        }
                     }
                     adapter.setSelectedPos(pos);
                     adapter.notifyDataSetChanged();
