@@ -30,6 +30,9 @@ import com.hp.householdpolicies.utils.BaseMethod;
 import com.hp.householdpolicies.utils.BeanUtil;
 import com.hp.householdpolicies.utils.DateUtils;
 import com.hp.householdpolicies.utils.OkhttpUtil;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.SynthesizerListener;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -147,6 +150,7 @@ indextSelect：当前选择的菜单
 
     Validator validator;
     Boolean verify=false;
+    private SpeechSynthesizer mTts;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +163,8 @@ indextSelect：当前选择的菜单
         llContent[indext].setVisibility(View.VISIBLE);
         textNext.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         AddList();
+        MyApp  application = (MyApp) getApplication();
+        mTts = application.getmTts();
         mSpinerPopWindow = new SpinnerPopupWindown(this, listValue);
         timePopupWindown = new ChosenTimePopupWindown(this);
         timePopupWindown.setItemListener(this);
@@ -167,10 +173,46 @@ indextSelect：当前选择的菜单
         edtAge.setText(BaseMethod.getDateNoW());
     }
     @Override
-    protected void onStart() {
-        cs = ConnectServer.getInstance(getApplication(), impl);
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
+        mTts.startSpeaking("请扫描或输入身份证,姓名,手机号码", new SynthesizerListener() {
+            @Override
+            public void onSpeakBegin() {
+
+            }
+
+            @Override
+            public void onBufferProgress(int i, int i1, int i2, String s) {
+
+            }
+
+            @Override
+            public void onSpeakPaused() {
+
+            }
+
+            @Override
+            public void onSpeakResumed() {
+
+            }
+
+            @Override
+            public void onSpeakProgress(int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onCompleted(SpeechError speechError) {
+                cs = ConnectServer.getInstance(getApplication(), impl);
+            }
+
+            @Override
+            public void onEvent(int i, int i1, int i2, Bundle bundle) {
+
+            }
+        });
     }
+
     private RscServiceConnectionImpl impl = new RscServiceConnectionImpl() {
         public void onServiceConnected(int name) {
             if (cs == null)
@@ -226,10 +268,10 @@ indextSelect：当前选择的菜单
                     tvSex.setText(info.getSex());
                     edtIDNumber.setText(info.getIdcardno());
                     edtAddress.setText(info.getAddress());
-                    Date yyyyMMdd = DateUtils.parse(info.getBirthday(), "yyyy-MM-dd");
+//                    Date yyyyMMdd = DateUtils.parse(info.getBirthday(), "yyyyMMdd");
                     //tvDateBirth.setText(DateUtils.format(yyyyMMdd,"yyyy-MM-dd"));
-                    int age = DateUtils.getAge(yyyyMMdd);
-                    edtAge.setText(String.valueOf(age));
+//                    int age = DateUtils.getAge(yyyyMMdd);
+                    edtAge.setText(info.getBirthday());
                     break;
                 default:
                     break;
