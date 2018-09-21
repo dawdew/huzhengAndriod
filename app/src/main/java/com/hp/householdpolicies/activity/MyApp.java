@@ -3,7 +3,10 @@ package com.hp.householdpolicies.activity;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Environment;
+import android.text.TextUtils;
+import android.util.Log;
 
+import com.hp.householdpolicies.utils.PropUtils;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechSynthesizer;
@@ -12,10 +15,13 @@ import com.iflytek.cloud.util.ResourceUtil;
 import com.reeman.nerves.RobotActionProvider;
 
 import org.xutils.ImageManager;
+import org.xutils.common.util.FileUtil;
 import org.xutils.x;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018/6/13 0013.
@@ -23,6 +29,7 @@ import java.util.List;
 
 public class MyApp extends Application{
     private static List<Activity> lists = new ArrayList<>();
+    private Map<String, String> contactLocations;
 //    public   RobotActionProvider robotActionProvider;
 // 讯飞语音听写对象
     private SpeechRecognizer mIat;
@@ -41,6 +48,7 @@ public class MyApp extends Application{
 //        mIat = SpeechRecognizer.createRecognizer(MyApp.this, null);
         mTts = SpeechSynthesizer.createSynthesizer(MyApp.this, null);
         setParam();
+        initLocation();
 //        robotActionProvider = RobotActionProvider.getInstance();
         super.onCreate();
     }
@@ -111,5 +119,36 @@ public class MyApp extends Application{
 
     public void setmTts(SpeechSynthesizer mTts) {
         this.mTts = mTts;
+    }
+
+    private void initLocation() {
+        String location = PropUtils.readFileFromSDCard("/reeman/data/","locations.cfg");
+        if(!TextUtils.isEmpty(location)) {
+            try {
+                String[] item = location.split(";");
+                Map<String, String> locations = new HashMap();
+                if(item != null && item.length > 0) {
+                    String[] var8 = item;
+                    int var7 = item.length;
+
+                    for(int var6 = 0; var6 < var7; ++var6) {
+                        String s = var8[var6];
+                        String name = s.substring(0, s.indexOf(":"));
+                        String value = s.substring(s.indexOf(":") + 1, s.length());
+                        locations.put(name, value);
+                    }
+                }
+
+                this.contactLocations=locations;
+                Log.d("ReemanSpeechPlugin", "加载导航位置信息完成");
+            } catch (Exception var11) {
+                Log.d("ReemanSpeechPlugin", "加载导航位置信息出错，文件格式错误");
+            }
+
+        }
+    }
+
+    public Map<String, String> getContactLocations() {
+        return contactLocations;
     }
 }
