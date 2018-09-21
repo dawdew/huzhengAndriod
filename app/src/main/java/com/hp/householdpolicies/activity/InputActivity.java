@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.hp.householdpolicies.R;
+import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SynthesizerListener;
@@ -66,20 +67,59 @@ public class InputActivity extends BaseActivity implements Validator.ValidationL
         ButterKnife.bind(this);
         MyApp  application = (MyApp) getApplication();
         mTts = application.getmTts();
-        cs = ConnectServer.getInstance(getApplication(), impl);
+
         validator = new Validator(this);
         validator.setValidationListener(this);
     }
 
     @Override
     protected void onStart() {
-        mTts.startSpeaking("请扫描或输入身份证,姓名,手机号码",null);
+
+        mTts.startSpeaking("请扫描或输入身份证,姓名,手机号码", new SynthesizerListener() {
+            @Override
+            public void onSpeakBegin() {
+
+            }
+
+            @Override
+            public void onBufferProgress(int i, int i1, int i2, String s) {
+
+            }
+
+            @Override
+            public void onSpeakPaused() {
+
+            }
+
+            @Override
+            public void onSpeakResumed() {
+
+            }
+
+            @Override
+            public void onSpeakProgress(int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onCompleted(SpeechError speechError) {
+                cs = ConnectServer.getInstance(getApplication(), impl);
+            }
+
+            @Override
+            public void onEvent(int i, int i1, int i2, Bundle bundle) {
+
+            }
+        });
         super.onStart();
     }
 
     @Override
     protected void onStop() {
         mTts.stopSpeaking();
+        if(cs!=null){
+            cs.release();
+        }
         super.onStop();
     }
 
@@ -153,6 +193,7 @@ public class InputActivity extends BaseActivity implements Validator.ValidationL
                     byte[] photos = bundle0.getByteArray("photo");
                     //TODO
                     edtIDNumber.setText(info.getIdcardno());
+                    textName.setText(info.getName());
                     break;
                 default:
                     break;

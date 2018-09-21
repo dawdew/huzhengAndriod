@@ -51,7 +51,6 @@ public class InformationInquiryActivity extends BaseActivity implements Validato
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_information_inquiry);
         ButterKnife.bind(this);
-        cs = ConnectServer.getInstance(getApplication(), impl);
         validator = new Validator(this);
         validator.setValidationListener(this);
     }
@@ -69,6 +68,13 @@ public class InformationInquiryActivity extends BaseActivity implements Validato
             }
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cs = ConnectServer.getInstance(getApplication(), impl);
+    }
+
     private RscServiceConnectionImpl impl = new RscServiceConnectionImpl() {
         public void onServiceConnected(int name) {
             if (cs == null)
