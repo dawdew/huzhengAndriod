@@ -197,6 +197,7 @@ public class HomePageActivity extends Activity {
                     System.out.println(result);
                 } else if (result.startsWith("move_status:")) {
                     //导航信息
+                    navigationUpdate(result);
 
                 } else if (result.equals("bat:reached")) {
                     //充电信息
@@ -667,4 +668,68 @@ public class HomePageActivity extends Activity {
             }
         }
     };
+    /**
+     * 处理导航回调
+     * @param result move_status:x = ?  0 : 静止待命   1 : 上次目标失败，等待新的导航命令   2 : 上次目标完成，等待新的导航命令  
+     *               3 : 移动中，正在前往目的地   4 : 前方障碍物   5 : 目的地被遮挡 6：用户取消导航 7：收到新的导航
+     */
+    public void navigationUpdate(String result) {
+        switch (result) {
+            case "move_status:0":
+                break;
+            case "move_status:1":
+                mTts.startSpeaking("导航失败",null);
+                break;
+            case "move_status:2":
+                mTts.startSpeaking("这里是", new SynthesizerListener() {
+                    @Override
+                    public void onSpeakBegin() {
+                        stopListening();
+                    }
+
+                    @Override
+                    public void onBufferProgress(int i, int i1, int i2, String s) {
+
+                    }
+
+                    @Override
+                    public void onSpeakPaused() {
+
+                    }
+
+                    @Override
+                    public void onSpeakResumed() {
+
+                    }
+
+                    @Override
+                    public void onSpeakProgress(int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onCompleted(SpeechError speechError) {
+                            startListening();
+                    }
+
+                    @Override
+                    public void onEvent(int i, int i1, int i2, Bundle bundle) {
+
+                    }
+                });
+                break;
+            case "move_status:3":
+                break;
+            case "move_status:4":
+                break;
+            case "move_status:5":
+                break;
+            case "move_status:6":
+                break;
+            case "move_status:7":
+                break;
+            default:
+                break;
+        }
+    }
 }
