@@ -2,7 +2,10 @@ package com.hp.householdpolicies.activity;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,10 +40,12 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.SynthesizerListener;
 import com.iflytek.cloud.TextUnderstander;
 import com.iflytek.cloud.TextUnderstanderListener;
 import com.iflytek.cloud.UnderstanderResult;
+import com.reeman.nerves.RobotActionProvider;
 import com.rsc.impl.OnROSListener;
 import com.rsc.impl.RscServiceConnectionImpl;
 import com.rsc.reemanclient.ConnectServer;
@@ -130,6 +135,7 @@ public class HomePageActivity extends Activity {
         SimpleDateFormat sdm = new SimpleDateFormat("yyyy年MM月dd日                 EEEE");
         textDate.setText(sdm.format(date));
         weather();
+        initFilter ();
         hideBottomUIMenu();
 //        application.robotActionProvider.combinedActionTtyS4(9);
     }
@@ -191,6 +197,7 @@ public class HomePageActivity extends Activity {
                     System.out.println(result);
                 } else if (result.startsWith("move_status:")) {
                     //导航信息
+
                 } else if (result.equals("bat:reached")) {
                     //充电信息
                 } else if (result.equals("sys:uwb:0")) {
@@ -627,6 +634,13 @@ public class HomePageActivity extends Activity {
                                 intent_bu.putExtra("word",normValue);
                                 startActivity(intent_bu);
                                 break;
+                            case "move"://移动意图
+                                MyApp app = (MyApp) getApplication();
+                                String xy = app.getContactLocations().get(normValue);
+                                if(StringUtils.isNotBlank(xy)){
+                                    RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
+                                }
+                                break;
                         }
                     }
                 }
@@ -635,4 +649,22 @@ public class HomePageActivity extends Activity {
             e.printStackTrace();
         }
     }
+    private void initFilter () {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BATTERY_LOW);
+        registerReceiver(receiver, filter);
+    }
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_BATTERY_LOW.equals(action)) {
+                MyApp app = (MyApp) getApplication();
+                String xy = app.getContactLocations().get("充电");
+                if (StringUtils.isNotBlank(xy)) {
+                    RobotActionProvider.getInstance().sendRosCom("goal:charge[" + xy + "]");
+                }
+            }
+        }
+    };
 }
