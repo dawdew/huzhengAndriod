@@ -198,7 +198,6 @@ public class HomePageActivity extends Activity {
                 } else if (result.startsWith("move_status:")) {
                     //导航信息
                     navigationUpdate(result);
-
                 } else if (result.equals("bat:reached")) {
                     //充电信息
                 } else if (result.equals("sys:uwb:0")) {
@@ -676,12 +675,15 @@ public class HomePageActivity extends Activity {
     public void navigationUpdate(String result) {
         switch (result) {
             case "move_status:0":
+                if(!isListening){
+                    startListening();
+                }
                 break;
             case "move_status:1":
                 mTts.startSpeaking("导航失败",null);
                 break;
             case "move_status:2":
-                mTts.startSpeaking("这里是", new SynthesizerListener() {
+                mTts.startSpeaking("到达目的地", new SynthesizerListener() {
                     @Override
                     public void onSpeakBegin() {
                         stopListening();
@@ -709,7 +711,11 @@ public class HomePageActivity extends Activity {
 
                     @Override
                     public void onCompleted(SpeechError speechError) {
-                            startListening();
+                        MyApp app = (MyApp) getApplication();
+                        String xy = app.getContactLocations().get("原点");
+                        if(StringUtils.isNotBlank(xy)){
+                            RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
+                        }
                     }
 
                     @Override
@@ -721,8 +727,10 @@ public class HomePageActivity extends Activity {
             case "move_status:3":
                 break;
             case "move_status:4":
+                mTts.startSpeaking("前方有障碍物",null);
                 break;
             case "move_status:5":
+                mTts.startSpeaking("目的地被遮挡",null);
                 break;
             case "move_status:6":
                 break;
