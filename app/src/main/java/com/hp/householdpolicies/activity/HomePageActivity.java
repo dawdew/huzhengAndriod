@@ -116,6 +116,7 @@ public class HomePageActivity extends Activity {
     private SpeechRecognizer mIat;
     private SpeechSynthesizer mTts;
     private boolean isSpeaked = false;
+    private boolean position =true ;//是否在初始位置
     private Boolean isListening = false;//是否开启录音监听
     private AIUIAgent mAgent;
     //当前AIUI使用的配置
@@ -175,9 +176,9 @@ public class HomePageActivity extends Activity {
                             stopListening();
                         }
                     }
-                    if (v <= 0.8 && !isSpeaked) {
+                    if (v <= 0.8 && !isSpeaked && position) {
                         //您好，我是公安南开分局人口服务管理中心的小南，请问您需要办理什么户籍业务？
-                        mTts.startSpeaking("您好，我是公安南开分局人口服务管理中心的小南，请问您需要办理什么户籍业务？", new MsynthesizerListener() {
+                        mTts.startSpeaking("您好", new MsynthesizerListener() {
                             @Override
                             public void onSpeakBegin() {
                                 isSpeaked = true;
@@ -202,6 +203,14 @@ public class HomePageActivity extends Activity {
                     //充电信息
                 } else if (result.equals("sys:uwb:0")) {
                     //导航uwb错误
+                }else if(result.equals("loc[")){
+                    //和目标点距离和角度信息
+                    String substring = result.substring(result.indexOf("[") + 1, result.length() - 1);
+                    String[] split = substring.split(",");
+                    double abs = Math.abs(Double.parseDouble(split[0]));
+                    if(abs<=0.2){
+                        position=true;
+                    }
                 }
             }
         }
@@ -638,6 +647,7 @@ public class HomePageActivity extends Activity {
                                 MyApp app = (MyApp) getApplication();
                                 String xy = app.getContactLocations().get(normValue);
                                 if(StringUtils.isNotBlank(xy)){
+                                    position=false;
                                     RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
                                 }
                                 break;
@@ -681,48 +691,43 @@ public class HomePageActivity extends Activity {
                 break;
             case "move_status:1":
                 mTts.startSpeaking("导航失败",null);
+                if(!position){
+                    String xy ="5.4,-6.95,3.124";
+                    RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
+                }
                 break;
             case "move_status:2":
-                mTts.startSpeaking("到达目的地", new SynthesizerListener() {
-                    @Override
-                    public void onSpeakBegin() {
-                        stopListening();
-                    }
-
-                    @Override
-                    public void onBufferProgress(int i, int i1, int i2, String s) {
-
-                    }
-
-                    @Override
-                    public void onSpeakPaused() {
-
-                    }
-
-                    @Override
-                    public void onSpeakResumed() {
-
-                    }
-
-                    @Override
-                    public void onSpeakProgress(int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void onCompleted(SpeechError speechError) {
-                        MyApp app = (MyApp) getApplication();
-                        String xy = app.getContactLocations().get("原点");
-                        if(StringUtils.isNotBlank(xy)){
-                            RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
+                RobotActionProvider.getInstance().combinedActionTtyS4(7);
+                if(!position){
+                    mTts.startSpeaking("到达目的地", new SynthesizerListener() {
+                        @Override
+                        public void onSpeakBegin() {
+                            stopListening();
                         }
-                    }
+                        @Override
+                        public void onBufferProgress(int i, int i1, int i2, String s) {
+                        }
+                        @Override
+                        public void onSpeakPaused() {
+                        }
+                        @Override
+                        public void onSpeakResumed() {
+                        }
+                        @Override
+                        public void onSpeakProgress(int i, int i1, int i2) {
+                        }
+                        @Override
+                        public void onCompleted(SpeechError speechError) {
+                            RobotActionProvider.getInstance().sendRosCom("goal:nav[5.4,-6.95,3.124]");
+                        }
+                        @Override
+                        public void onEvent(int i, int i1, int i2, Bundle bundle) {
+                        }
+                    });
+                }else {
+                    RobotActionProvider.getInstance().sendRosCom("goal:loc[5.4,-6.95,3.124]");
+                }
 
-                    @Override
-                    public void onEvent(int i, int i1, int i2, Bundle bundle) {
-
-                    }
-                });
                 break;
             case "move_status:3":
                 break;
