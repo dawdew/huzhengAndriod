@@ -178,7 +178,7 @@ public class HomePageActivity extends Activity {
                     }
                     if (v <= 0.8 && !isSpeaked && !ismoving) {
                         //您好，我是公安南开分局人口服务管理中心的小南，请问您需要办理什么户籍业务？
-                        mTts.startSpeaking("您好，我是公安南开分局人口服务管理中心的小南，请问您需要办理什么户籍业务？", new MsynthesizerListener() {
+                        mTts.startSpeaking("您好", new MsynthesizerListener() {
                             @Override
                             public void onSpeakBegin() {
                                 isSpeaked = true;
@@ -198,7 +198,7 @@ public class HomePageActivity extends Activity {
                     System.out.println(result);
                 } else if (result.startsWith("move_status:")) {
                     //导航信息
-                    //navigationUpdate(result);
+                    navigationUpdate(result);
                 } else if (result.equals("bat:reached")) {
                     //充电信息
                 } else if (result.equals("sys:uwb:0")) {
@@ -634,11 +634,11 @@ public class HomePageActivity extends Activity {
                                 startActivity(intent_bu);
                                 break;
                             case "move"://移动意图
-//                                MyApp app = (MyApp) getApplication();
-//                                String xy = app.getContactLocations().get(normValue);
-//                                if(StringUtils.isNotBlank(xy)){
-//                                    RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
-//                                }
+                                MyApp app = (MyApp) getApplication();
+                                String xy = app.getContactLocations().get(normValue);
+                                if(StringUtils.isNotBlank(xy)){
+                                    RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
+                                }
                                 break;
                         }
                     }
@@ -678,12 +678,12 @@ public class HomePageActivity extends Activity {
                 break;
             case "move_status:1":
                 ismoving=false;
-                RobotActionProvider.getInstance().sendRosCom("goal:nav[0.7,-6.6,-0.052]");
+                RobotActionProvider.getInstance().sendRosCom("goal:nav[2.5,-2.5,-90.0]");
                 break;
             case "move_status:2":
                 ismoving=false;
                 if(!atposition){
-                    RobotActionProvider.getInstance().combinedActionTtyS4(7);
+                   // RobotActionProvider.getInstance().combinedActionTtyS4(5);
                     //        application.robotActionProvider.combinedActionTtyS4(9);
                     mTts.startSpeaking("到达目的地", new SynthesizerListener() {
                         @Override
@@ -704,14 +704,14 @@ public class HomePageActivity extends Activity {
                         @Override
                         public void onCompleted(SpeechError speechError) {
                             atposition=true;
-                            RobotActionProvider.getInstance().sendRosCom("goal:nav[0.7,-6.6,-0.052]");
+                            RobotActionProvider.getInstance().sendRosCom("goal:nav[2.5,-2.5,-90.0]");
                         }
                         @Override
                         public void onEvent(int i, int i1, int i2, Bundle bundle) {
                         }
                     });
                 }else {
-                    RobotActionProvider.getInstance().sendRosCom("goal:loc[0.7,-6.6,-0.052]");
+                   // RobotActionProvider.getInstance().sendRosCom("goal:loc[5.4,-6.5,3]");
                 }
 
                 break;
@@ -729,7 +729,8 @@ public class HomePageActivity extends Activity {
                 ismoving=false;
                 break;
             case "move_status:7":
-                mTts.startSpeaking("收到新的导航",null);
+                atposition = false;
+             //   mTts.startSpeaking("收到新的导航",null);
                 break;
             default:
                 break;
