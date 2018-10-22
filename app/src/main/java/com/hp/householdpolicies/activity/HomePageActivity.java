@@ -683,8 +683,7 @@ public class HomePageActivity extends Activity {
             case "move_status:2":
                 ismoving=false;
                 if(!atposition){
-                   // RobotActionProvider.getInstance().combinedActionTtyS4(5);
-                    //        application.robotActionProvider.combinedActionTtyS4(9);
+                    RobotActionProvider.getInstance().combinedActionTtyS4(33);
                     mTts.startSpeaking("到达目的地", new SynthesizerListener() {
                         @Override
                         public void onSpeakBegin() {
