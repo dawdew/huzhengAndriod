@@ -604,6 +604,7 @@ public class HomePageActivity extends Activity {
                         JSONObject o1 = (JSONObject) slots.get(0);
                         String normValue = (String) o1.get("normValue");
 //                        textName.setText(intent);
+                        MyApp app = (MyApp) getApplication();
                         switch (intent){
                             case "zczx":
                                 Intent intentAdvisory = new Intent(this, AdvisoryActivity.class);
@@ -633,8 +634,13 @@ public class HomePageActivity extends Activity {
                                 intent_bu.putExtra("word",normValue);
                                 startActivity(intent_bu);
                                 break;
+                            case "charge"://充电
+                                String charge_xy = app.getContactLocations().get("充电");
+                                if (StringUtils.isNotBlank(charge_xy)) {
+                                    RobotActionProvider.getInstance().sendRosCom("goal:charge[" + charge_xy + "]");
+                                }
+                                break;
                             case "move"://移动意图
-                                MyApp app = (MyApp) getApplication();
                                 String xy = app.getContactLocations().get(normValue);
                                 if(StringUtils.isNotBlank(xy)){
                                     atposition =false;
@@ -679,7 +685,6 @@ public class HomePageActivity extends Activity {
                 break;
             case "move_status:1":
                 ismoving=false;
-              //  RobotActionProvider.getInstance().sendRosCom("goal:nav[2.5,-2.5,-87.0]");
                 break;
             case "move_status:2":
                 ismoving=false;
@@ -705,14 +710,13 @@ public class HomePageActivity extends Activity {
                         @Override
                         public void onCompleted(SpeechError speechError) {
 
-                            RobotActionProvider.getInstance().sendRosCom("goal:nav[2.5,-2.5,-87.0]");
+                            RobotActionProvider.getInstance().sendRosCom("goal:nav[2.5,-2.5,-90.0]");
                         }
                         @Override
                         public void onEvent(int i, int i1, int i2, Bundle bundle) {
                         }
                     });
                 }else {
-                   // RobotActionProvider.getInstance().sendRosCom("goal:loc[5.4,-6.5,3]");
                 }
 
                 break;

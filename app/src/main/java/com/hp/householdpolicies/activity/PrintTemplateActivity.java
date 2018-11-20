@@ -100,6 +100,8 @@ indextSelect：当前选择的菜单
     @BindView(R.id.tvSex)
     @NotEmpty(messageResId = R.string.errorMessage)
     EditText tvSex;
+    @BindView(R.id.tvName)
+    TextView tvName;
     //学历
     @BindView(R.id.reqContent)
     @NotEmpty(messageResId = R.string.errorMessage)
@@ -171,6 +173,27 @@ indextSelect：当前选择的菜单
         validator = new Validator(this);
         validator.setValidationListener(this);
         edtAge.setText(BaseMethod.getDateNoW());
+        edtworkUnit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int count, int after) {
+                String text = s.toString();
+                if(text.equals("18岁以上变更姓名") || text.equals("父母离异，孩子变更姓名") || text.equals("子女投父母")){
+                    tvName.setText(" 父或母姓名 ：");
+                }else {
+                    tvName.setText(" 姓       名 ：");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
     @Override
     protected void onResume() {
@@ -291,7 +314,8 @@ indextSelect：当前选择的菜单
         //性别
         listSex.add("男");
         listSex.add("女");
-        listValue.add("投配偶申请");
+        listValue.add("投配偶申请(无子女)");
+        listValue.add("投配偶申请(有子女)");
         listValue.add("18岁以上变更姓名");
         listValue.add("变更18岁以下孩子姓名");
         listValue.add("父母离异，孩子变更姓名");
@@ -416,9 +440,11 @@ indextSelect：当前选择的菜单
     }
     private void submit() {
         HashMap<String, String> json_map = new HashMap<>();
-        String title = edtworkUnit.getText().toString();
-        json_map.put("title",title.substring(0,title.indexOf("(")));
-        json_map.put("yewu",edtworkUnit.getText().toString());
+        String yewu = edtworkUnit.getText().toString();
+        if(yewu.contains("(")){
+            yewu = yewu.substring(0,yewu.indexOf("("));
+        }
+        json_map.put("yewu",yewu);
         json_map.put("content",reqContent.getText().toString());
         json_map.put("name",edtName.getText().toString());
         json_map.put("bd",edtAge.getText().toString());
@@ -427,15 +453,18 @@ indextSelect：当前选择的菜单
         json_map.put("idcard",edtIDNumber.getText().toString());
         json_map.put("hujidizhi",edtAddress.getText().toString());
         json_map.put("xiandizhi",edtResidence.getText().toString());
+        LemonBubble.showRoundProgress(this,"等待中...");
         OkhttpUtil.okHttpGet(Api.print, json_map, new ApiCallBack() {
             @Override
             public void onResponse(Object response) {
                 if(response!=null){
                     LemonBubble.showRight(PrintTemplateActivity.this, "打印成功", 2000);
                 }else {
-                    LemonBubble.showError(PrintTemplateActivity.this,"打印失败");
+                    LemonBubble.showError(PrintTemplateActivity.this,"打印失败",2000);
                 }
             }
         });
     }
+
+
 }
