@@ -203,6 +203,12 @@
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
+
+        <receiver android:name=".receiver.AlarmReceiver">
+            <intent-filter android:priority="-1000">
+                <action android:name="alarmReceiver"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

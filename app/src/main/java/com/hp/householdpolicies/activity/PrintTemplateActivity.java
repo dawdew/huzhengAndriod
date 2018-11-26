@@ -182,7 +182,7 @@ indextSelect：当前选择的菜单
             @Override
             public void onTextChanged(CharSequence s, int start, int count, int after) {
                 String text = s.toString();
-                if(text.equals("18岁以上变更姓名") || text.equals("父母离异，孩子变更姓名") || text.equals("子女投父母")){
+                if(text.equals("变更18岁以下孩子姓名") || text.equals("父母离异，孩子变更姓名") || text.equals("子女投父母")){
                     tvName.setText(" 父或母姓名 ：");
                 }else {
                     tvName.setText(" 姓       名 ：");

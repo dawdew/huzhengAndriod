@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -123,6 +124,8 @@ public class HomePageActivity extends Activity {
     //当前AIUI使用的配置
     private JSONObject config;
     private AIUIMessage msgv;
+    long[] mHitsCharge = new long[5];
+    long[] mHitsPoint = new long[5];
     private boolean msgSendFlag=false;//是否得到语义识别结果标识
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -178,7 +181,7 @@ public class HomePageActivity extends Activity {
                     }
                     if (v <= 0.8 && !isSpeaked && !ismoving) {
                         //您好，我是公安南开分局人口服务管理中心的小南，请问您需要办理什么户籍业务？
-                        mTts.startSpeaking("您好，我是公安南开分局人口服务管理中心的小南，请问您需要办理什么户籍业务?", new MsynthesizerListener() {
+                        mTts.startSpeaking("您好，我是公安南开分局人口服务管理中心的小南,取号请到一号窗口,请问您需要办理什么户籍业务？", new MsynthesizerListener() {
                             @Override
                             public void onSpeakBegin() {
                                 isSpeaked = true;
@@ -207,7 +210,29 @@ public class HomePageActivity extends Activity {
             }
         }
     }
+    public class RosProcess2 extends OnROSListener {
+        @Override
+        public void onResult(String result) {
+            //Log.e(TAG, "----OnROSListener.onResult()---result:" + result);
+            if (result != null) {
+                if (result.startsWith("od:")) {
+                    //物体识别
+                } else if (result.startsWith("laser:[")) {
 
+                } else if (result.startsWith("pt:[")) {
+                    //人体检测（3d摄像头）
+                    System.out.println(result);
+                } else if (result.startsWith("move_status:")) {
+                    //导航信息
+                    navigationUpdate(result);
+                } else if (result.equals("bat:reached")) {
+                    //充电信息
+                } else if (result.equals("sys:uwb:0")) {
+                    //导航uwb错误
+                }
+            }
+        }
+    }
     private RscServiceConnectionImpl connection = new RscServiceConnectionImpl() {
         public void onServiceConnected(int name) {
             if (cs == null)
@@ -240,14 +265,26 @@ public class HomePageActivity extends Activity {
         super.onStop();
     }
 
-    @OnClick({R.id.llTransaction, R.id.llinformation, R.id.llDownload, R.id.llSynopsis, R.id.llAdvisory, R.id.llAppointment, R.id.ll_suggestion})
+    @OnClick({R.id.textDate,R.id.llTransaction, R.id.llinformation, R.id.llDownload, R.id.llSynopsis, R.id.llAdvisory, R.id.llAppointment, R.id.ll_suggestion,R.id.textTemperature})
     void ViewClick(View view) {
-//        if(view.getId()==R.id.textDate){
-//                    byte[] content= textName.getText().toString().getBytes();
-//                    String params = "data_type=text";
-//                    AIUIMessage msg = new AIUIMessage(AIUIConstant.CMD_WRITE, 0, 0, params, content);
-//                    mAgent.sendMessage(msg);
-//        }
+        if(view.getId()==R.id.textDate){
+            System.arraycopy(mHitsPoint, 1, mHitsPoint, 0, mHitsPoint.length - 1);
+            mHitsPoint[mHitsPoint.length - 1] = SystemClock.uptimeMillis();
+            //当0出的值大于当前时间-2000时  证明在2000毫秒内点击了5次
+            if(mHitsPoint[0] > SystemClock.uptimeMillis() - 2000){
+                MyApp app = (MyApp) getApplication();
+                String charge_xy = app.getContactLocations().get("充电");
+                if (StringUtils.isNotBlank(charge_xy)) {
+                    RobotActionProvider.getInstance().sendRosCom("goal:charge[" + charge_xy + "]");
+                }
+            }
+        }else if(view.getId()==R.id.textTemperature){
+            System.arraycopy(mHitsCharge, 1, mHitsCharge, 0, mHitsCharge.length - 1);
+            mHitsCharge[mHitsCharge.length - 1] = SystemClock.uptimeMillis();
+            if(mHitsCharge[0] > SystemClock.uptimeMillis() - 2000){
+                RobotActionProvider.getInstance().sendRosCom("goal:nav[2.45,-2.25,-90.0]");
+            }
+        }
         switchActivity(view.getId());
     }
 
@@ -644,6 +681,7 @@ public class HomePageActivity extends Activity {
                                 String xy = app.getContactLocations().get(normValue);
                                 if(StringUtils.isNotBlank(xy)){
                                     atposition =false;
+                                    cs.registerROSListener(new RosProcess2());
                                     RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
                                 }
                                 break;
@@ -710,13 +748,14 @@ public class HomePageActivity extends Activity {
                         @Override
                         public void onCompleted(SpeechError speechError) {
 
-                            RobotActionProvider.getInstance().sendRosCom("goal:nav[2.5,-2.5,-90.0]");
+                            RobotActionProvider.getInstance().sendRosCom("goal:nav[2.45,-2.25,-90.0]");
                         }
                         @Override
                         public void onEvent(int i, int i1, int i2, Bundle bundle) {
                         }
                     });
                 }else {
+                    cs.registerROSListener(new RosProcess());
                 }
 
                 break;
@@ -732,6 +771,7 @@ public class HomePageActivity extends Activity {
             case "move_status:6":
                 mTts.startSpeaking("用户取消导航",null);
                 ismoving=false;
+                cs.registerROSListener(new RosProcess());
                 break;
             case "move_status:7":
               //  atposition = false;
