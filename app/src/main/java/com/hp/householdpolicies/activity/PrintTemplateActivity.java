@@ -459,6 +459,7 @@ indextSelect：当前选择的菜单
             public void onResponse(Object response) {
                 if(response!=null){
                     LemonBubble.showRight(PrintTemplateActivity.this, "打印成功", 2000);
+                    mTts.startSpeaking("打印成功,请去3号窗口打印机领取您的申请表",null);
                 }else {
                     LemonBubble.showError(PrintTemplateActivity.this,"打印失败",2000);
                 }

@@ -56,7 +56,7 @@ public class MyApp extends Application{
         mTts = SpeechSynthesizer.createSynthesizer(MyApp.this, null);
         setParam();
         initLocation();
-        regeditAlarmManager();
+        registerAlarmManager();
 //        robotActionProvider = RobotActionProvider.getInstance();
         super.onCreate();
     }
@@ -155,14 +155,14 @@ public class MyApp extends Application{
 
         }
     }
-private void regeditAlarmManager(){
+private void registerAlarmManager(){
     AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
     Calendar calendar= Calendar.getInstance();
     long firstTime = SystemClock.elapsedRealtime();	//获取系统当前时间
     long systemTime = System.currentTimeMillis();
     calendar.setTimeInMillis(System.currentTimeMillis());
     calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.MINUTE, 10);
     calendar.set(Calendar.HOUR_OF_DAY,17);//设置为17：00点提醒
     calendar.set(Calendar.SECOND, 0);
     calendar.set(Calendar.MILLISECOND, 0);

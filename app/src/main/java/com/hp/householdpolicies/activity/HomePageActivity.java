@@ -126,6 +126,7 @@ public class HomePageActivity extends Activity {
     private AIUIMessage msgv;
     long[] mHitsCharge = new long[5];
     long[] mHitsPoint = new long[5];
+    long[] mHitsLaser = new long[3];
     private boolean msgSendFlag=false;//是否得到语义识别结果标识
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -180,7 +181,13 @@ public class HomePageActivity extends Activity {
                         }
                     }
                     if (v <= 0.8 && !isSpeaked && !ismoving) {
-                        //您好，我是公安南开分局人口服务管理中心的小南，请问您需要办理什么户籍业务？
+                        System.arraycopy(mHitsLaser, 1, mHitsLaser, 0, mHitsLaser.length - 1);
+                        mHitsLaser[mHitsLaser.length - 1] = SystemClock.uptimeMillis();
+                        //是否在2秒内检测到3次
+                        if(mHitsLaser[0] <= SystemClock.uptimeMillis() - 2000){
+                                    return;
+                        }
+                        //您好，我是公安南开分局人口服务管理中心的小南,取号请到一号窗口,请问您需要办理什么户籍业务？
                         mTts.startSpeaking("您好，我是公安南开分局人口服务管理中心的小南,取号请到一号窗口,请问您需要办理什么户籍业务？", new MsynthesizerListener() {
                             @Override
                             public void onSpeakBegin() {
