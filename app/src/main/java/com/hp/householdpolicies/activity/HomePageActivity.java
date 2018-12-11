@@ -176,6 +176,9 @@ public class HomePageActivity extends Activity {
                     double v = Double.parseDouble(substring);
                     if (v > 0.8) {
                         isSpeaked = false;
+                        if(mTts.isSpeaking()){
+                            mTts.stopSpeaking();
+                        }
                         if (isListening) {
                             stopListening();
                         }
@@ -277,8 +280,8 @@ public class HomePageActivity extends Activity {
         if(view.getId()==R.id.textDate){
             System.arraycopy(mHitsPoint, 1, mHitsPoint, 0, mHitsPoint.length - 1);
             mHitsPoint[mHitsPoint.length - 1] = SystemClock.uptimeMillis();
-            //当0出的值大于当前时间-2000时  证明在2000毫秒内点击了5次
-            if(mHitsPoint[0] > SystemClock.uptimeMillis() - 2000){
+            //当0出的值大于当前时间-4000时  证明在4000毫秒内点击了5次
+            if(mHitsPoint[0] > SystemClock.uptimeMillis() - 4000){
                 MyApp app = (MyApp) getApplication();
                 String charge_xy = app.getContactLocations().get("充电");
                 if (StringUtils.isNotBlank(charge_xy)) {
@@ -288,7 +291,7 @@ public class HomePageActivity extends Activity {
         }else if(view.getId()==R.id.textTemperature){
             System.arraycopy(mHitsCharge, 1, mHitsCharge, 0, mHitsCharge.length - 1);
             mHitsCharge[mHitsCharge.length - 1] = SystemClock.uptimeMillis();
-            if(mHitsCharge[0] > SystemClock.uptimeMillis() - 2000){
+            if(mHitsCharge[0] > SystemClock.uptimeMillis() - 4000){
                 RobotActionProvider.getInstance().sendRosCom("goal:nav[2.45,-2.25,-90.0]");
             }
         }
