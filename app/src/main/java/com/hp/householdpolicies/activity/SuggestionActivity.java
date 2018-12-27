@@ -56,7 +56,7 @@ public class SuggestionActivity extends BaseActivity implements Validator.Valida
      * rbOpinion:意见
      * rbSuggest建议
      */
-    private int RbId[]={R.id.rbPraise, R.id.rbOpinion, R.id.rbSuggest};
+    private int RbId[]={R.id.rbPraise, R.id.rbOpinion, R.id.rbSuggest,R.id.rbComplain};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

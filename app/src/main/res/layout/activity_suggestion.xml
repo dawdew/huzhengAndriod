@@ -56,6 +56,12 @@
                     android:text="建议"
                     android:id="@+id/rbSuggest"
                     />
+                <RadioButton
+                    android:layout_marginLeft="20dp"
+                    style="@style/suggestion_radioButton"
+                    android:text="投诉"
+                    android:id="@+id/rbComplain"
+                    />
             </RadioGroup>
         </LinearLayout>
 

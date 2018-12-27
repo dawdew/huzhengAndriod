@@ -117,13 +117,15 @@ public class HomePageActivity extends Activity {
     private SpeechRecognizer mIat;
     private SpeechSynthesizer mTts;
     private boolean isSpeaked = false;
-    private boolean ismoving =false ;//导航移动标识
+//    private boolean ismoving =false ;//导航移动标识
     private boolean atposition =false ;//到达目的地标识
     private Boolean isListening = false;//是否开启录音监听
     private AIUIAgent mAgent;
     //当前AIUI使用的配置
     private JSONObject config;
     private AIUIMessage msgv;
+    private RosProcess rp1=new RosProcess();;//静止状态使用
+    private RosProcess2 rp2=new RosProcess2();;//移动状态使用
     long[] mHitsCharge = new long[5];
     long[] mHitsPoint = new long[5];
     long[] mHitsLaser = new long[3];
@@ -137,17 +139,17 @@ public class HomePageActivity extends Activity {
         mTts = application.getmTts();
         mIat = SpeechRecognizer.createRecognizer(HomePageActivity.this, null);
         setParam();
+        initFilter ();
+    }
+
+    public void init() {
+        hideBottomUIMenu();
         Date date = new Date();
         SimpleDateFormat sdm = new SimpleDateFormat("yyyy年MM月dd日                 EEEE");
         textDate.setText(sdm.format(date));
         weather();
-        initFilter ();
-        hideBottomUIMenu();
-    }
-
-    public void init() {
         cs = ConnectServer.getInstance(getApplication(), connection);
-        cs.registerROSListener(new RosProcess());
+        cs.registerROSListener(rp1);
     }
 
     public void release() {
@@ -183,7 +185,7 @@ public class HomePageActivity extends Activity {
                             stopListening();
                         }
                     }
-                    if (v <= 0.8 && !isSpeaked && !ismoving) {
+                    if (v <= 0.8 && !isSpeaked) {
                         System.arraycopy(mHitsLaser, 1, mHitsLaser, 0, mHitsLaser.length - 1);
                         mHitsLaser[mHitsLaser.length - 1] = SystemClock.uptimeMillis();
                         //是否在2秒内检测到3次
@@ -691,7 +693,7 @@ public class HomePageActivity extends Activity {
                                 String xy = app.getContactLocations().get(normValue);
                                 if(StringUtils.isNotBlank(xy)){
                                     atposition =false;
-                                    cs.registerROSListener(new RosProcess2());
+                                    cs.registerROSListener(rp2);
                                     RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
                                 }
                                 break;
@@ -729,13 +731,15 @@ public class HomePageActivity extends Activity {
     public void navigationUpdate(String result) {
         switch (result) {
             case "move_status:0":
-                ismoving=false;
+//                ismoving=false;
+                cs.registerROSListener(rp1);
                 break;
             case "move_status:1":
-                ismoving=false;
+//                ismoving=false;
+                cs.registerROSListener(rp1);
                 break;
             case "move_status:2":
-                ismoving=false;
+//                ismoving=false;
                 if(!atposition){
                     RobotActionProvider.getInstance().combinedActionTtyS4(3);
                     atposition=true;
@@ -765,12 +769,12 @@ public class HomePageActivity extends Activity {
                         }
                     });
                 }else {
-                    cs.registerROSListener(new RosProcess());
+                    cs.registerROSListener(rp1);
                 }
 
                 break;
             case "move_status:3":
-                ismoving=true;
+//                ismoving=true;
                 break;
             case "move_status:4":
                 mTts.startSpeaking("前方有障碍物",null);
@@ -780,8 +784,8 @@ public class HomePageActivity extends Activity {
                 break;
             case "move_status:6":
                 mTts.startSpeaking("用户取消导航",null);
-                ismoving=false;
-                cs.registerROSListener(new RosProcess());
+//                ismoving=false;
+                cs.registerROSListener(rp1);
                 break;
             case "move_status:7":
               //  atposition = false;
