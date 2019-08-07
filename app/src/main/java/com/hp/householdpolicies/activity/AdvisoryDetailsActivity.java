@@ -77,6 +77,7 @@ public class AdvisoryDetailsActivity extends BaseActivity {
         popupWindown=new DownloadPopupWindown(mContext);
         MyApp application = (MyApp) getApplication();
         mTts = application.getmTts();
+        mTts.startSpeaking("请点击左侧列表选择相应政策",null);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 //        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));

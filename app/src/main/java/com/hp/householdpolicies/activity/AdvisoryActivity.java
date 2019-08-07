@@ -69,7 +69,7 @@ public class AdvisoryActivity extends BaseActivity {
 
     @Override
     protected void onStart() {
-        mTts.startSpeaking("政策咨询", new SynthesizerListener() {
+        mTts.startSpeaking("政策咨询，请点击或说出您想了解的政策", new SynthesizerListener() {
             @Override
             public void onSpeakBegin() {
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import com.hp.householdpolicies.activity.department.DepartmentsOneActivity;
 import com.hp.householdpolicies.R;
+import com.iflytek.cloud.SpeechSynthesizer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,12 +26,20 @@ public class SynopsisActivity extends BaseActivity {
     //相关部门信息
     @BindView(R.id.ll_departments)
     LinearLayout llDepartments;
+    private SpeechSynthesizer mtTs;
     //synopsis_tv
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_synopsis);
         ButterKnife.bind(this);
+        mtTs = ((MyApp)getApplication()).getmTts();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mtTs.startSpeaking("请点击您要了解的内容",null);
     }
 
     @OnClick({R.id.ll_accept_range,R.id.ll_honor,R.id.ll_staff_faculty,R.id.ll_departments})

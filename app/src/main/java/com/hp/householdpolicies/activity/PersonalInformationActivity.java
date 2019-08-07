@@ -25,6 +25,7 @@ import com.hp.householdpolicies.model.PersonInfo;
 import com.hp.householdpolicies.utils.BaseMethod;
 import com.hp.householdpolicies.utils.BeanUtil;
 import com.hp.householdpolicies.utils.DateUtils;
+import com.iflytek.cloud.SpeechSynthesizer;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -142,7 +143,7 @@ indextSelect：当前选择的菜单
      */
     int spIndext = 0;
     private ConnectServer cs;
-
+    private SpeechSynthesizer mtTs;
     Validator validator;
     Boolean verify=false;
     @Override
@@ -150,6 +151,7 @@ indextSelect：当前选择的菜单
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_personal_information);
         ButterKnife.bind(this);
+        mtTs = ((MyApp)getApplication()).getmTts();
         personInfo = new PersonInfo();
         llMenu = new LinearLayout[]{llBasicInformation, llMaritalStatus, llChildren};
         llContent = new LinearLayout[]{contentBasicInformation, contentMaritalStatus, contentChildren, contentHouseInfo};
@@ -166,6 +168,7 @@ indextSelect：当前选择的菜单
     @Override
     protected void onStart() {
         cs = ConnectServer.getInstance(getApplication(), impl);
+        mtTs.startSpeaking("右肩章可扫描身份证",null);
         super.onStart();
     }
     private RscServiceConnectionImpl impl = new RscServiceConnectionImpl() {

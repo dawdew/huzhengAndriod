@@ -736,6 +736,7 @@ public class HomePageActivity extends Activity {
                 break;
             case "move_status:1":
 //                ismoving=false;
+                mTts.startSpeaking("导航失败", null);
                 cs.registerROSListener(rp1);
                 break;
             case "move_status:2":
