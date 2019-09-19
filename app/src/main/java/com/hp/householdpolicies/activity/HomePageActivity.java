@@ -172,7 +172,7 @@ public class HomePageActivity extends Activity {
             if (result != null) {
                 if (result.startsWith("od:")) {
                     //物体识别
-                } else if (result.startsWith("laser:[")) {
+                } else if (result.startsWith("laser[")) {      //"laser:["
                     //激光测距
                     String substring = result.substring(result.indexOf("[") + 1, result.length() - 1);
                     double v = Double.parseDouble(substring);
@@ -192,7 +192,10 @@ public class HomePageActivity extends Activity {
                         if(mHitsLaser[0] <= SystemClock.uptimeMillis() - 2000){
                                     return;
                         }
+
+                        Log.d("RosProcess", "Before Speaking!");
                         //您好，我是公安南开分局人口服务管理中心的小南,取号请到一号窗口,请问您需要办理什么户籍业务？
+                        isSpeaked = true;
                         mTts.startSpeaking("您好，我是公安南开分局人口服务管理中心的小南,取号请到一号窗口,请问您需要办理什么户籍业务？", new MsynthesizerListener() {
                             @Override
                             public void onSpeakBegin() {
