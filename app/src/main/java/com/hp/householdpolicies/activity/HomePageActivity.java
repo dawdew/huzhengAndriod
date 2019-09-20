@@ -165,6 +165,20 @@ public class HomePageActivity extends Activity {
     /**
      * 外设监听回调
      */
+    long mLaserHitLastValidTime = 0;
+    long LASER_CHECK_INTERVAL = 400;    //激光测距检查时间间隔
+
+    //检查是否需要激光测距处理
+    boolean isTimeToLaserCheck(long currentTime)
+    {
+       if  ((currentTime-mLaserHitLastValidTime)>= LASER_CHECK_INTERVAL)
+       {
+           mLaserHitLastValidTime = currentTime;
+           return true;
+       }else
+           return false;
+    }
+
     public class RosProcess extends OnROSListener {
         @Override
         public void onResult(String result) {
@@ -174,6 +188,9 @@ public class HomePageActivity extends Activity {
                     //物体识别
                 } else if (result.startsWith("laser[")) {      //"laser:["
                     //激光测距
+                    long lCurrentTime = SystemClock.uptimeMillis();
+                    if (!isTimeToLaserCheck(lCurrentTime)) return ;     //距离上次激光测距时间太近，不做任何处理
+
                     String substring = result.substring(result.indexOf("[") + 1, result.length() - 1);
                     double v = Double.parseDouble(substring);
                     if (v > 0.8) {
@@ -187,15 +204,17 @@ public class HomePageActivity extends Activity {
                     }
                     if (v <= 0.8 && !isSpeaked) {
                         System.arraycopy(mHitsLaser, 1, mHitsLaser, 0, mHitsLaser.length - 1);
-                        mHitsLaser[mHitsLaser.length - 1] = SystemClock.uptimeMillis();
+                        mHitsLaser[mHitsLaser.length - 1] = lCurrentTime;   //SystemClock.uptimeMillis();
                         //是否在2秒内检测到3次
-                        if(mHitsLaser[0] <= SystemClock.uptimeMillis() - 2000){
-                                    return;
+                        //if(mHitsLaser[0] <= SystemClock.uptimeMillis() - 2000){
+                        if ((lCurrentTime-mHitsLaser[0]) > 2000){
+                            //第一次测距不在2秒以内
+                            return;
                         }
 
                         Log.d("RosProcess", "Before Speaking!");
                         //您好，我是公安南开分局人口服务管理中心的小南,取号请到一号窗口,请问您需要办理什么户籍业务？
-                        isSpeaked = true;
+                        //isSpeaked = true;
                         mTts.startSpeaking("您好，我是公安南开分局人口服务管理中心的小南,取号请到一号窗口,请问您需要办理什么户籍业务？", new MsynthesizerListener() {
                             @Override
                             public void onSpeakBegin() {
@@ -606,6 +625,7 @@ public class HomePageActivity extends Activity {
                         //解析得到语义结果，将语义结果作为消息插入到消息列表中
                         if(!semanticResult.has("semantic")){
                             stopListening();
+                            //isSpeaked = true;
                             mTts.startSpeaking("目前我还没有找到适合您的相关政策,请您到1号咨询台进行详细咨询", new SynthesizerListener() {
                                 @Override
                                 public void onSpeakBegin() {
