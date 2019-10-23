@@ -785,8 +785,13 @@ public class HomePageActivity extends Activity {
                         }
                         @Override
                         public void onCompleted(SpeechError speechError) {
-
-                            RobotActionProvider.getInstance().sendRosCom("goal:nav[2.45,-2.25,-90.0]");
+                            MyApp app = (MyApp) getApplication();
+                            String xy = app.getContactLocations().get("原点");
+                            //xy = app.getContactLocations().get("origin");
+                            if(StringUtils.isNotBlank(xy)){
+                                RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
+                            }
+                            //RobotActionProvider.getInstance().sendRosCom("goal:nav[2.45,-2.25,-90.0]");
                         }
                         @Override
                         public void onEvent(int i, int i1, int i2, Bundle bundle) {
