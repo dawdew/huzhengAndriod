@@ -57,7 +57,7 @@ public interface OnItemClickListener {
             holder.tvSiren.setText("");
         }
         holder.tvName.setText("姓名："+staffFaculty.get("realName"));
-        image.bind(holder.imgIcon, Api.downurl+staffFaculty.get("photo"));
+        image.bind(holder.imgIcon, Api.baseFile+staffFaculty.get("photo"));
 //        holder.tvName.setText("天津市先进集体");
 //        if(task.getShow()){
 //            holder.tvName.setVisibility(View.VISIBLE);

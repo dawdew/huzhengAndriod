@@ -124,6 +124,9 @@ public class JsonParser {
 		map.put("jsonStr",gson.toJson(json_map));
 		return map;
 	}
+	public static String toJson(Object object){
+		return gson.toJson(object);
+	}
 	public static <T> T fromJson(String jsonStr,Class<T> map){
 		return gson.fromJson(jsonStr,map);
 	}

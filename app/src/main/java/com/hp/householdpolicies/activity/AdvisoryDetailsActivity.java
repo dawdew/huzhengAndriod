@@ -77,7 +77,6 @@ public class AdvisoryDetailsActivity extends BaseActivity {
         popupWindown=new DownloadPopupWindown(mContext);
         MyApp application = (MyApp) getApplication();
         mTts = application.getmTts();
-        mTts.startSpeaking("请点击左侧列表选择相应政策",null);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 //        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -109,6 +108,7 @@ public class AdvisoryDetailsActivity extends BaseActivity {
         final Intent intent = getIntent();
         String category = intent.getStringExtra("category");
         if(StringUtils.isNotBlank(category)){
+            mTts.startSpeaking("请点击左侧列表选择相应政策",null);
             HashMap<String, String> map = new HashMap<>();
             map.put("cpid",category);
             OkhttpUtil.okHttpGet(Api.articleList, map, new ApiCallBack() {
@@ -160,7 +160,7 @@ public class AdvisoryDetailsActivity extends BaseActivity {
   }
     //扫一扫下载窗口
     private void showLogisticsInformationWindow(View v,String url) {
-        popupWindown.setData(Api.downurl+url);
+        popupWindown.setData(Api.baseFile+url);
         popupWindown.setTouchable(true);
         popupWindown.setOutsideTouchable(true);
         popupWindown.setFocusable(true);

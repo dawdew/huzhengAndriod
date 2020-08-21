@@ -135,7 +135,7 @@ public class AcceptRangeTaskNumberActivity extends BaseActivity {
                     ArrayList<String> images = new ArrayList<>();
 //                    ArrayList<String> title = new ArrayList<>();
                     for(Map<String, String> m:hallList){
-                        images.add(Api.downurl+m.get("src"));
+                        images.add(Api.baseFile+m.get("src"));
 //                        title.add(m.get("desc"));
                     }
                     banner.setImages(images);

@@ -353,7 +353,7 @@ public class AppointmentDetailsActivity extends Activity implements SpinnerPopup
                 List<Map<String, String>> list = (List<Map<String, String>>) res.get("userList");
                 for(int i=0;i<list.size();i++){
                     Map<String, String> m = list.get(i);
-                    listPolice.add(new Police(m.get("id"),m.get("realName"),Api.downurl+m.get("photo"),m.get("pno"),i+1));
+                    listPolice.add(new Police(m.get("id"),m.get("realName"),Api.baseFile+m.get("photo"),m.get("pno"),i+1));
                 }
                 adapter.notifyDataSetChanged();
             }

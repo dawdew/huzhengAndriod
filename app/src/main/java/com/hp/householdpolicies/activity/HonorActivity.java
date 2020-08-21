@@ -53,7 +53,7 @@ public class HonorActivity extends BaseActivity {
                 for(Map<String, String> m:list){
                     Honor honor = new Honor(true);
                     honor.setTitle(m.get("title"));
-                    honor.setImage(Api.downurl+m.get("image"));
+                    honor.setImage(Api.baseFile+m.get("image"));
                     listHonor.add(honor);
                 }
                 adapter.notifyDataSetChanged();

@@ -82,34 +82,50 @@ public class OptimalPushResultsActivity extends BaseActivity {
         Intent intent = getIntent();
         PersonInfo info = (PersonInfo)intent.getSerializableExtra("info");
         HashMap<String, String> json_map = new HashMap<>();
-        json_map.put("age",info.getAge().toString());
-
-        json_map.put("marriage",BeanUtil.toString(info.getMarriage()));
-        json_map.put("sex",BeanUtil.toString(info.getSex()));
+        json_map.put("householdTj",BeanUtil.BooleanToString(info.getHouseholdTj()));
+        json_map.put("isHaveResidencePermit",BeanUtil.BooleanToString(info.getResidencePermit()));
         json_map.put("special",BeanUtil.toString(info.getSpecial()));
-        json_map.put("marriageParent",BeanUtil.toString(info.getMarriageParent()));
-
-        json_map.put("housePrice_a",BeanUtil.BooleanToString(info.getHousePrice_a()));
-        json_map.put("housePrice_b",BeanUtil.BooleanToString(info.getHousePrice_b()));
         json_map.put("house",BeanUtil.BooleanToString(info.getHouse()));
-        json_map.put("adopt",BeanUtil.BooleanToString(info.getAdopt()));
         json_map.put("marriageThree",BeanUtil.BooleanToString(info.getMarriageThree()));
-        json_map.put("liveFiveYear",BeanUtil.BooleanToString(info.getLiveFiveYear()));
-        json_map.put("houseLoan",BeanUtil.BooleanToString(info.getHouseLoan()));
+        json_map.put("isSpouseIsLocation",BeanUtil.BooleanToString(info.getSpouseIsLocation()));
         json_map.put("childrensHousehold",BeanUtil.BooleanToString(info.getChildrensHousehold()));
+        json_map.put("childrenAgeLe18",BeanUtil.BooleanToString(info.getChildrenInfo1()));
+
+        json_map.put("age",info.getAge().toString());
+        json_map.put("sex",BeanUtil.toString(info.getSex()));
+        json_map.put("isResidencePermitThreeYear",BeanUtil.BooleanToString(info.getResidencePermit3Year()));
+        json_map.put("isMoveToField",BeanUtil.BooleanToString(info.getSpecialReasonRelocate()));
+
+
+        json_map.put("isBuyHouse30In2007",BeanUtil.BooleanToString(info.getHousePrice_a()));
+        json_map.put("isBuyHouse80In2014",BeanUtil.BooleanToString(info.getHousePrice_b()));
+        json_map.put("houseLoan",BeanUtil.BooleanToString(info.getHouseLoan()));
+
+        json_map.put("education",BeanUtil.toString(info.getEducation()));
+        json_map.put("children",BeanUtil.BooleanToString(info.getChildren()));
+    /*    json_map.put("marriage",BeanUtil.toString(info.getMarriage()));
+        json_map.put("marriageParent",BeanUtil.toString(info.getMarriageParent()));
+        json_map.put("adopt",BeanUtil.BooleanToString(info.getAdopt()));
+        json_map.put("liveFiveYear",BeanUtil.BooleanToString(info.getLiveFiveYear()));
+
+
         json_map.put("adopterHasChild",BeanUtil.BooleanToString(info.getAdopterHasChild()));
         json_map.put("adoptAge30",BeanUtil.BooleanToString(info.getAdoptAge30()));
         json_map.put("adoptCard",BeanUtil.BooleanToString(info.getAdoptCard()));
-        json_map.put("householdTj",BeanUtil.BooleanToString(info.getHouseholdTj()));
+
         json_map.put("marriageParentThenLessThan18",BeanUtil.BooleanToString(info.getMarriageParentThenLessThan18()));
-        json_map.put("marriageParentThree",BeanUtil.BooleanToString(info.getMarriageParentThree()));
-        OkhttpUtil.okHttpPost(Api.optimalPush, json_map, new ApiCallBack() {
+        json_map.put("marriageParentThree",BeanUtil.BooleanToString(info.getMarriageParentThree()));*/
+        OkhttpUtil.okHttpPost(Api.optimalPushApp, json_map, new ApiCallBack() {
             @Override
             public void onResponse(Object response) {
                 List<Map<String, String>> list = (List<Map<String, String>>) response;
                 listOptimalPushResult.clear();
                 for(Map<String, String> m:list){
                     listOptimalPushResult.add(new OptimalPushResult(m.get("title"),m.get("id"),m.get("content")));
+                }
+                if(listOptimalPushResult.isEmpty()){
+                    MyApp app = (MyApp) getApplication();
+                    app.getmTts().startSpeaking("没有符合条件的户籍政策，建议咨询积分落户或海河英才相关政策",null);
                 }
                 adapter.notifyDataSetChanged();
             }

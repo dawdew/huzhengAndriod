@@ -306,7 +306,7 @@ indextSelect：当前选择的菜单
     @Override
     protected void onStop() {
         if(cs!=null){
-            cs.release();
+//            cs.release();
         }
         super.onStop();
     }

@@ -1,30 +1,31 @@
 package com.hp.householdpolicies.activity;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.stuxuhai.jpinyin.PinyinException;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
 import com.hp.householdpolicies.R;
+import com.hp.householdpolicies.model.PrintFormat;
 import com.hp.householdpolicies.utils.Api;
-import com.hp.householdpolicies.utils.ApiCallBack;
 import com.hp.householdpolicies.utils.CallBackUtil;
 import com.hp.householdpolicies.utils.JsonParser;
 import com.hp.householdpolicies.utils.MsynthesizerListener;
@@ -41,15 +42,14 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechSynthesizer;
-import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.SynthesizerListener;
-import com.iflytek.cloud.TextUnderstander;
-import com.iflytek.cloud.TextUnderstanderListener;
-import com.iflytek.cloud.UnderstanderResult;
 import com.reeman.nerves.RobotActionProvider;
+import com.rsc.aidl.OnPrintListener;
 import com.rsc.impl.OnROSListener;
 import com.rsc.impl.RscServiceConnectionImpl;
 import com.rsc.reemanclient.ConnectServer;
+import com.synjones.idcard.IDCardInfo;
+import com.synjones.idcard.OnIDListener;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -57,12 +57,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -72,8 +73,6 @@ import okhttp3.Call;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-import static org.xmlpull.v1.XmlPullParser.TEXT;
-
 /**
  * Created by Administrator on 2018/6/13 0013.
  */
@@ -82,7 +81,7 @@ public class HomePageActivity extends Activity {
     //日期
     @BindView(R.id.textDate)
     TextView textDate;
-//    @BindView(R.id.textName)
+    //    @BindView(R.id.textName)
 //    EditText textName;
     //温度
     @BindView(R.id.textTemperature)
@@ -117,19 +116,27 @@ public class HomePageActivity extends Activity {
     private SpeechRecognizer mIat;
     private SpeechSynthesizer mTts;
     private boolean isSpeaked = false;
-//    private boolean ismoving =false ;//导航移动标识
-    private boolean atposition =false ;//到达目的地标识
+    //    private boolean ismoving =false ;//导航移动标识
+    private boolean atposition = false;//到达目的地标识
     private Boolean isListening = false;//是否开启录音监听
     private AIUIAgent mAgent;
     //当前AIUI使用的配置
     private JSONObject config;
     private AIUIMessage msgv;
-    private RosProcess rp1=new RosProcess();;//静止状态使用
-    private RosProcess2 rp2=new RosProcess2();;//移动状态使用
+    private RosProcess rp1 = new RosProcess();
+    ;//静止状态使用
+    private RosProcess2 rp2 = new RosProcess2();
+    ;//移动状态使用
     long[] mHitsCharge = new long[5];
     long[] mHitsPoint = new long[5];
     long[] mHitsLaser = new long[3];
-    private boolean msgSendFlag=false;//是否得到语义识别结果标识
+    private boolean msgSendFlag = false;//是否得到语义识别结果标识
+
+    private AlertDialog guanzhuDialg;
+    private DismissDialogTimer dialogTimer;
+    private TextView dialogCancelTv;
+    private SimpleDateFormat printDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA);
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,7 +146,8 @@ public class HomePageActivity extends Activity {
         mTts = application.getmTts();
         mIat = SpeechRecognizer.createRecognizer(HomePageActivity.this, null);
         setParam();
-        initFilter ();
+        initFilter();
+
     }
 
     public void init() {
@@ -169,14 +177,12 @@ public class HomePageActivity extends Activity {
     long LASER_CHECK_INTERVAL = 400;    //激光测距检查时间间隔
 
     //检查是否需要激光测距处理
-    boolean isTimeToLaserCheck(long currentTime)
-    {
-       if  ((currentTime-mLaserHitLastValidTime)>= LASER_CHECK_INTERVAL)
-       {
-           mLaserHitLastValidTime = currentTime;
-           return true;
-       }else
-           return false;
+    boolean isTimeToLaserCheck(long currentTime) {
+        if ((currentTime - mLaserHitLastValidTime) >= LASER_CHECK_INTERVAL) {
+            mLaserHitLastValidTime = currentTime;
+            return true;
+        } else
+            return false;
     }
 
     public class RosProcess extends OnROSListener {
@@ -189,13 +195,13 @@ public class HomePageActivity extends Activity {
                 } else if (result.startsWith("laser[")) {      //"laser:["
                     //激光测距
                     long lCurrentTime = SystemClock.uptimeMillis();
-                    if (!isTimeToLaserCheck(lCurrentTime)) return ;     //距离上次激光测距时间太近，不做任何处理
+                    if (!isTimeToLaserCheck(lCurrentTime)) return;     //距离上次激光测距时间太近，不做任何处理
 
                     String substring = result.substring(result.indexOf("[") + 1, result.length() - 1);
                     double v = Double.parseDouble(substring);
                     if (v > 0.8) {
                         isSpeaked = false;
-                        if(mTts.isSpeaking()){
+                        if (mTts.isSpeaking()) {
                             mTts.stopSpeaking();
                         }
                         if (isListening) {
@@ -207,7 +213,7 @@ public class HomePageActivity extends Activity {
                         mHitsLaser[mHitsLaser.length - 1] = lCurrentTime;   //SystemClock.uptimeMillis();
                         //是否在2秒内检测到3次
                         //if(mHitsLaser[0] <= SystemClock.uptimeMillis() - 2000){
-                        if ((lCurrentTime-mHitsLaser[0]) > 2000){
+                        if ((lCurrentTime - mHitsLaser[0]) > 2000) {
                             //第一次测距不在2秒以内
                             return;
                         }
@@ -244,6 +250,7 @@ public class HomePageActivity extends Activity {
             }
         }
     }
+
     public class RosProcess2 extends OnROSListener {
         @Override
         public void onResult(String result) {
@@ -267,12 +274,13 @@ public class HomePageActivity extends Activity {
             }
         }
     }
+
     private RscServiceConnectionImpl connection = new RscServiceConnectionImpl() {
         public void onServiceConnected(int name) {
             if (cs == null)
                 return;
             if (name == ConnectServer.Connect_Pr_Id) {
-
+                cs.registerIDListener(Ilistener);
             }
         }
 
@@ -280,7 +288,54 @@ public class HomePageActivity extends Activity {
             System.out.println("onServiceDisconnected......");
         }
     };
+    private OnIDListener Ilistener = new OnIDListener.Stub() {
+        @Override
+        public void onResult(IDCardInfo info, byte[] photo)
+                throws RemoteException {
+            Log.e("ID",
+                    "name: " + info.getName() + ",nation: " + info.getNation()
+                            + ",birthday: " + info.getBirthday() + ",sex: "
+                            + info.getSex() + ",address: " + info.getAddress()
+                            + ",append: " + info.getAppendAddress()
+                            + ",fpname: " + info.getFpName() + ",grantdept: "
+                            + info.getGrantdept() + ",idcardno: "
+                            + info.getIdcardno() + ",lifebegin: "
+                            + info.getUserlifebegin() + ",lifeend: "
+                            + info.getUserlifeend());
+            if (photo != null)
+                Log.e("ID", "photo: " + photo.length);
+            else
+                Log.e("ID", "photo=null");
+            print();
+        }
+    };
 
+    private void print() {
+        PrintFormat.NUMBER++;
+        PrintFormat.PEOPLECOUNT++;
+        final PrintFormat format = new PrintFormat();
+        final List<PrintFormat.DataBean> list = new ArrayList<>();
+        list.add(new PrintFormat.DataBean().setText("您的号码为").setChangerow("1"));
+        list.add(new PrintFormat.DataBean().setText("   " + PrintFormat.NUMBER).setSizetext("2").setAlignmen("1").setChangerow("1"));
+        list.add(new PrintFormat.DataBean().setText("  业务预约").setChangerow("1"));
+        list.add(new PrintFormat.DataBean().setText("在您前面还有   " + PrintFormat.PEOPLECOUNT + "      人等待").setChangerow("1"));
+        list.add(new PrintFormat.DataBean().setText("请您在休息区等候").setChangerow("1"));
+        list.add(new PrintFormat.DataBean().setText("过号无效，请重新取号").setChangerow("1"));
+        list.add(new PrintFormat.DataBean().setText(printDateFormat.format(new Date())).setChangerow("1").setAlignmen("1").setFeedline("1"));
+        list.add(new PrintFormat.DataBean().setText("abc32").setQr("1").setChangerow("1").setAlignmen("1").setSizetext("6").setCutpaper("0"));
+        format.setData(list);
+        new Thread() {
+            @Override
+            public void run() {
+                cs.onPrint(JsonParser.toJson(format), 1, new OnPrintListener.Stub() {
+                    @Override
+                    public void onResult(int i) throws RemoteException {
+
+                    }
+                });
+            }
+        }.start();
+    }
 
     @Override
     protected void onStart() {
@@ -288,7 +343,7 @@ public class HomePageActivity extends Activity {
         if (isSpeaked) {
             startListening();
         }
-        mAgent = AIUIAgent.createAgent(this,config.toString() , mAIUIListener);
+        mAgent = AIUIAgent.createAgent(this, config.toString(), mAIUIListener);
         super.onStart();
 
     }
@@ -299,27 +354,94 @@ public class HomePageActivity extends Activity {
         super.onStop();
     }
 
-    @OnClick({R.id.textDate,R.id.llTransaction, R.id.llinformation, R.id.llDownload, R.id.llSynopsis, R.id.llAdvisory, R.id.llAppointment, R.id.ll_suggestion,R.id.textTemperature})
+    @OnClick({R.id.textDate, R.id.llTransaction, R.id.llinformation, R.id.llDownload, R.id.llSynopsis, R.id.llAdvisory, R.id.llAppointment, R.id.ll_suggestion, R.id.textTemperature, R.id.ah_btn_guanzhu})
     void ViewClick(View view) {
-        if(view.getId()==R.id.textDate){
+        if (view.getId() == R.id.textDate) {
             System.arraycopy(mHitsPoint, 1, mHitsPoint, 0, mHitsPoint.length - 1);
             mHitsPoint[mHitsPoint.length - 1] = SystemClock.uptimeMillis();
             //当0出的值大于当前时间-4000时  证明在4000毫秒内点击了5次
-            if(mHitsPoint[0] > SystemClock.uptimeMillis() - 4000){
+            if (mHitsPoint[0] > SystemClock.uptimeMillis() - 4000) {
                 MyApp app = (MyApp) getApplication();
                 String charge_xy = app.getContactLocations().get("充电");
                 if (StringUtils.isNotBlank(charge_xy)) {
                     RobotActionProvider.getInstance().sendRosCom("goal:charge[" + charge_xy + "]");
                 }
             }
-        }else if(view.getId()==R.id.textTemperature){
+        } else if (view.getId() == R.id.textTemperature) {
             System.arraycopy(mHitsCharge, 1, mHitsCharge, 0, mHitsCharge.length - 1);
             mHitsCharge[mHitsCharge.length - 1] = SystemClock.uptimeMillis();
-            if(mHitsCharge[0] > SystemClock.uptimeMillis() - 4000){
-                RobotActionProvider.getInstance().sendRosCom("goal:nav[2.45,-2.25,-90.0]");
+            if (mHitsCharge[0] > SystemClock.uptimeMillis() - 4000) {
+                MyApp app = (MyApp) getApplication();
+                String xy = app.getContactLocations().get("原点");
+                RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
             }
+        } else if (view.getId() == R.id.ah_btn_guanzhu) {
+            if (guanzhuDialg == null) {
+                initDialog();
+            }
+            guanzhuDialg.show();
+            View decorView = guanzhuDialg.getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+            if (dialogTimer != null) {
+                dialogTimer.cancel();
+                dialogTimer = null;
+            }
+            dialogTimer = new DismissDialogTimer(20 * 1000, 1000);
+            dialogTimer.start();
         }
         switchActivity(view.getId());
+    }
+
+    class DismissDialogTimer extends CountDownTimer {
+
+        public DismissDialogTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long l) {
+            dialogCancelTv.setText("取消(" + (l / 1000) + ")");
+        }
+
+        @Override
+        public void onFinish() {
+            guanzhuDialg.dismiss();
+        }
+    }
+
+
+    private void initDialog() {
+        View view = View.inflate(this, R.layout.dialog_guanzhu, null);
+        dialogCancelTv = view.findViewById(R.id.dg_tv_cancel);
+        dialogCancelTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogTimer.cancel();
+                dialogTimer = null;
+                guanzhuDialg.dismiss();
+            }
+        });
+        guanzhuDialg = new AlertDialog.Builder(this, R.style.DialogTheme).create();
+        guanzhuDialg.setView(view, 0, 0, 0, 0);
+        guanzhuDialg.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                hideBottomUIMenu();
+            }
+        });
+        guanzhuDialg.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (dialogTimer != null) {
+                    hideBottomUIMenu();
+                    dialogTimer.cancel();
+                    dialogTimer = null;
+                }
+            }
+        });
+
     }
 
     public void weather() {
@@ -454,10 +576,10 @@ public class HomePageActivity extends Activity {
                     viewId = R.id.llAppointment;
                 } else {
 //                    //写入文本
-                    byte[] content= result_str.getBytes();
+                    byte[] content = result_str.getBytes();
                     String params = "data_type=text";
                     msgv = new AIUIMessage(AIUIConstant.CMD_WRITE, 0, 0, params, content);
-                    msgSendFlag=true;
+                    msgSendFlag = true;
                     mAgent.sendMessage(msgv);
                 }
                 if (viewId != null) {
@@ -540,57 +662,57 @@ public class HomePageActivity extends Activity {
         mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/iat.wav");
         //设置aiui
         try {
-            config= new JSONObject();
-            config.putOpt("attachparams",null);
-            config.putOpt("tts",new JSONObject().put("play_mode", "user"));
+            config = new JSONObject();
+            config.putOpt("attachparams", null);
+            config.putOpt("tts", new JSONObject().put("play_mode", "user"));
 
-            config.putOpt("speech",new JSONObject().put("interact_mode", "continuous"));
-            config.optJSONObject("speech").put("wakeup_mode","off");
-            config.optJSONObject("speech").put("data_source","sdk");
+            config.putOpt("speech", new JSONObject().put("interact_mode", "continuous"));
+            config.optJSONObject("speech").put("wakeup_mode", "off");
+            config.optJSONObject("speech").put("data_source", "sdk");
 
-            config.putOpt("global",new JSONObject().put("scene", "main"));
-            config.optJSONObject("global").put("clean_dialog_history","auto");
+            config.putOpt("global", new JSONObject().put("scene", "main"));
+            config.optJSONObject("global").put("clean_dialog_history", "auto");
 
-            config.putOpt("interact",new JSONObject().put("result_timeout", "5000"));
-            config.optJSONObject("interact").put("interact_timeout","60000");
+            config.putOpt("interact", new JSONObject().put("result_timeout", "5000"));
+            config.optJSONObject("interact").put("interact_timeout", "60000");
 
-            config.putOpt("login",new JSONObject().put("appid", "5b70ef31"));
-            config.optJSONObject("login").put("key","");
+            config.putOpt("login", new JSONObject().put("appid", "5b70ef31"));
+            config.optJSONObject("login").put("key", "");
 
-            config.putOpt("vad",new JSONObject().put("engine_type", "meta"));
-            config.optJSONObject("vad").put("res_path","vad/meta_vad_16k.jet");
-            config.optJSONObject("vad").put("vad_eos","1000");
-            config.optJSONObject("vad").put("res_type","assets");
-            config.optJSONObject("vad").put("vad_enable","1");
+            config.putOpt("vad", new JSONObject().put("engine_type", "meta"));
+            config.optJSONObject("vad").put("res_path", "vad/meta_vad_16k.jet");
+            config.optJSONObject("vad").put("vad_eos", "1000");
+            config.optJSONObject("vad").put("res_type", "assets");
+            config.optJSONObject("vad").put("vad_enable", "1");
 
-            config.putOpt("log",new JSONObject().put("save_datalog", "0"));
-            config.optJSONObject("log").put("debug_log","1");
-            config.optJSONObject("log").put("raw_audio_path","");
-            config.optJSONObject("log").put("datalog_path","");
-            config.optJSONObject("log").put("datalog_size","1024");
+            config.putOpt("log", new JSONObject().put("save_datalog", "0"));
+            config.optJSONObject("log").put("debug_log", "1");
+            config.optJSONObject("log").put("raw_audio_path", "");
+            config.optJSONObject("log").put("datalog_path", "");
+            config.optJSONObject("log").put("datalog_size", "1024");
 
-            config.putOpt("iat",new JSONObject().put("sample_rate", "16000"));
-            config.putOpt("audioparams",new JSONObject().put("pers_param", "{\\\"appid\\\":\\\"\\\",\\\"uid\\\":\\\"\\\"}"));
+            config.putOpt("iat", new JSONObject().put("sample_rate", "16000"));
+            config.putOpt("audioparams", new JSONObject().put("pers_param", "{\\\"appid\\\":\\\"\\\",\\\"uid\\\":\\\"\\\"}"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private final AIUIListener mAIUIListener=new AIUIListener() {
+    private final AIUIListener mAIUIListener = new AIUIListener() {
         @Override
         public void onEvent(AIUIEvent aiuiEvent) {
             System.out.println(aiuiEvent.eventType);
-            switch (aiuiEvent.eventType){
+            switch (aiuiEvent.eventType) {
                 case AIUIConstant.EVENT_CONNECTED_TO_SERVER:
                     AIUIMessage msg = new AIUIMessage(AIUIConstant.CMD_WAKEUP, 0, 0, null, null);
                     mAgent.sendMessage(msg);
                     break;
                 case AIUIConstant.EVENT_RESULT:
                     processResult(aiuiEvent);
-                    msgSendFlag=false;
+                    msgSendFlag = false;
                     break;
                 case AIUIConstant.EVENT_WAKEUP:
-                    if(msgSendFlag){
+                    if (msgSendFlag) {
                         mAgent.sendMessage(msgv);
                     }
                     break;
@@ -601,8 +723,10 @@ public class HomePageActivity extends Activity {
             }
         }
     };
+
     /**
      * 处理AIUI结果事件（听写结果和语义结果）
+     *
      * @param event 结果事件
      */
     private void processResult(AIUIEvent event) {
@@ -623,7 +747,7 @@ public class HomePageActivity extends Activity {
                     JSONObject semanticResult = cntJson.optJSONObject("intent");
                     if (semanticResult != null && semanticResult.length() != 0) {
                         //解析得到语义结果，将语义结果作为消息插入到消息列表中
-                        if(!semanticResult.has("semantic")){
+                        if (!semanticResult.has("semantic")) {
                             stopListening();
                             //isSpeaked = true;
                             mTts.startSpeaking("目前我还没有找到适合您的相关政策,请您到1号咨询台进行详细咨询", new SynthesizerListener() {
@@ -667,7 +791,7 @@ public class HomePageActivity extends Activity {
                             return;
                         }
                         JSONArray semantic = semanticResult.getJSONArray("semantic");
-                        if(semantic==null){
+                        if (semantic == null) {
                             return;
                         }
                         JSONObject o = (JSONObject) semantic.get(0);
@@ -677,33 +801,33 @@ public class HomePageActivity extends Activity {
                         String normValue = (String) o1.get("normValue");
 //                        textName.setText(intent);
                         MyApp app = (MyApp) getApplication();
-                        switch (intent){
+                        switch (intent) {
                             case "zczx":
                                 Intent intentAdvisory = new Intent(this, AdvisoryActivity.class);
                                 startActivity(intentAdvisory);
                                 break;
                             case "gai":
                                 Intent intent_sxbg = new Intent(this, AdvisoryDetailsActivity.class);
-                                intent_sxbg.putExtra("category","4");
-                                intent_sxbg.putExtra("word",normValue);
+                                intent_sxbg.putExtra("category", "4");
+                                intent_sxbg.putExtra("word", normValue);
                                 startActivity(intent_sxbg);
                                 break;
                             case "csdj":
                                 Intent intentBirthrEgistration = new Intent(this, AdvisoryDetailsActivity.class);
-                                intentBirthrEgistration.putExtra("category","1");
-                                intentBirthrEgistration.putExtra("word",normValue);
+                                intentBirthrEgistration.putExtra("category", "1");
+                                intentBirthrEgistration.putExtra("word", normValue);
                                 startActivity(intentBirthrEgistration);
                                 break;
                             case "zhuxiao":
                                 Intent intent_zxhk = new Intent(this, AdvisoryDetailsActivity.class);
-                                intent_zxhk.putExtra("category","2");
-                                intent_zxhk.putExtra("word",normValue);
+                                intent_zxhk.putExtra("category", "2");
+                                intent_zxhk.putExtra("word", normValue);
                                 startActivity(intent_zxhk);
                                 break;
                             case "bu":
                                 Intent intent_bu = new Intent(this, AdvisoryDetailsActivity.class);
-                                intent_bu.putExtra("category","5");
-                                intent_bu.putExtra("word",normValue);
+                                intent_bu.putExtra("category", "5");
+                                intent_bu.putExtra("word", normValue);
                                 startActivity(intent_bu);
                                 break;
                             case "charge"://充电
@@ -714,10 +838,10 @@ public class HomePageActivity extends Activity {
                                 break;
                             case "move"://移动意图
                                 String xy = app.getContactLocations().get(normValue);
-                                if(StringUtils.isNotBlank(xy)){
-                                    atposition =false;
+                                if (StringUtils.isNotBlank(xy)) {
+                                    atposition = false;
                                     cs.registerROSListener(rp2);
-                                    RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
+                                    RobotActionProvider.getInstance().sendRosCom("goal:nav[" + xy + "]");
                                 }
                                 break;
                         }
@@ -728,11 +852,13 @@ public class HomePageActivity extends Activity {
             e.printStackTrace();
         }
     }
-    private void initFilter () {
+
+    private void initFilter() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_LOW);
         registerReceiver(receiver, filter);
     }
+
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -746,8 +872,10 @@ public class HomePageActivity extends Activity {
             }
         }
     };
+
     /**
      * 处理导航回调
+     *
      * @param result move_status:x = ?  0 : 静止待命   1 : 上次目标失败，等待新的导航命令   2 : 上次目标完成，等待新的导航命令  
      *               3 : 移动中，正在前往目的地   4 : 前方障碍物   5 : 目的地被遮挡 6：用户取消导航 7：收到新的导航
      */
@@ -764,40 +892,46 @@ public class HomePageActivity extends Activity {
                 break;
             case "move_status:2":
 //                ismoving=false;
-                if(!atposition){
+                if (!atposition) {
                     RobotActionProvider.getInstance().combinedActionTtyS4(3);
-                    atposition=true;
+                    atposition = true;
                     mTts.startSpeaking("到达目的地", new SynthesizerListener() {
                         @Override
                         public void onSpeakBegin() {
                         }
+
                         @Override
                         public void onBufferProgress(int i, int i1, int i2, String s) {
                         }
+
                         @Override
                         public void onSpeakPaused() {
                         }
+
                         @Override
                         public void onSpeakResumed() {
                         }
+
                         @Override
                         public void onSpeakProgress(int i, int i1, int i2) {
                         }
+
                         @Override
                         public void onCompleted(SpeechError speechError) {
                             MyApp app = (MyApp) getApplication();
                             String xy = app.getContactLocations().get("原点");
                             //xy = app.getContactLocations().get("origin");
-                            if(StringUtils.isNotBlank(xy)){
-                                RobotActionProvider.getInstance().sendRosCom("goal:nav["+xy+"]");
+                            if (StringUtils.isNotBlank(xy)) {
+                                RobotActionProvider.getInstance().sendRosCom("goal:nav[" + xy + "]");
                             }
                             //RobotActionProvider.getInstance().sendRosCom("goal:nav[2.45,-2.25,-90.0]");
                         }
+
                         @Override
                         public void onEvent(int i, int i1, int i2, Bundle bundle) {
                         }
                     });
-                }else {
+                } else {
                     cs.registerROSListener(rp1);
                 }
 
@@ -806,19 +940,19 @@ public class HomePageActivity extends Activity {
 //                ismoving=true;
                 break;
             case "move_status:4":
-                mTts.startSpeaking("前方有障碍物",null);
+                mTts.startSpeaking("前方有障碍物", null);
                 break;
             case "move_status:5":
-                mTts.startSpeaking("目的地被遮挡",null);
+                mTts.startSpeaking("目的地被遮挡", null);
                 break;
             case "move_status:6":
-                mTts.startSpeaking("用户取消导航",null);
+                mTts.startSpeaking("用户取消导航", null);
 //                ismoving=false;
                 cs.registerROSListener(rp1);
                 break;
             case "move_status:7":
-              //  atposition = false;
-             //   mTts.startSpeaking("收到新的导航",null);
+                //  atposition = false;
+                //   mTts.startSpeaking("收到新的导航",null);
                 break;
             default:
                 break;

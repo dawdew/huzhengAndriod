@@ -1,5 +1,6 @@
 package com.hp.householdpolicies.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
@@ -99,18 +100,12 @@ indextSelect：当前选择的菜单
     //学历
     @BindView(R.id.tvEducation)
     TextView tvEducation;
-    //姓名
-    @BindView(R.id.edtName)
-    EditText edtName;
-    //身份证号
-    @BindView(R.id.edtIDNumber)
-    EditText edtIDNumber;
-    //户籍地
-    @BindView(R.id.edtAddress)
-    EditText edtAddress;
-    //现住地
-    @BindView(R.id.edtResidence)
-    EditText edtResidence;
+    //本市户籍
+    @BindView(R.id.tvCurrentCity)
+    TextView tvCurrentCity;
+    //南开住房
+    @BindView(R.id.tvHasNankaiHouse)
+    TextView tvHasNankaiHouse;
     //年龄
     @BindView(R.id.edtAge)
     @NotEmpty(messageResId = R.string.errorMessage)
@@ -134,7 +129,7 @@ indextSelect：当前选择的菜单
     private List<String> listValue = new ArrayList<String>();
     private PersonInfo personInfo;
     /*
-    下拉菜单
+    下拉菜单listValue
     0：性别
     1：学历
     2：婚姻状况
@@ -146,6 +141,7 @@ indextSelect：当前选择的菜单
     private SpeechSynthesizer mtTs;
     Validator validator;
     Boolean verify=false;
+    private boolean hasQuestion = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,10 +149,12 @@ indextSelect：当前选择的菜单
         ButterKnife.bind(this);
         mtTs = ((MyApp)getApplication()).getmTts();
         personInfo = new PersonInfo();
+
         llMenu = new LinearLayout[]{llBasicInformation, llMaritalStatus, llChildren};
         llContent = new LinearLayout[]{contentBasicInformation, contentMaritalStatus, contentChildren, contentHouseInfo};
         llMenu[indext].setSelected(true);
         llContent[indext].setVisibility(View.VISIBLE);
+
         textNext.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         AddList();
         mSpinerPopWindow = new SpinnerPopupWindown(this, listValue);
@@ -222,14 +220,18 @@ indextSelect：当前选择的菜单
                     IDCardInfo info = (IDCardInfo) bundle0.get("info");
                     byte[] photos = bundle0.getByteArray("photo");
                     //TODO
-                    edtName.setText(info.getName());
                     tvSex.setText(info.getSex());
+                    Date yyyyMMdd = DateUtils.parse(info.getBirthday(), "yyyyMMdd");
+                    //tvDateBirth.setText(DateUtils.format(yyyyMMdd,"yyyy-MM-dd"));
+                    int age = DateUtils.getAge(yyyyMMdd);
+                    edtAge.setText(String.valueOf(age));
+                   /* edtName.setText(info.getName());
                     edtIDNumber.setText(info.getIdcardno());
                     edtAddress.setText(info.getAddress());
                     Date yyyyMMdd = DateUtils.parse(info.getBirthday(), "yyyyMMdd");
                     //tvDateBirth.setText(DateUtils.format(yyyyMMdd,"yyyy-MM-dd"));
                     int age = DateUtils.getAge(yyyyMMdd);
-                    edtAge.setText(String.valueOf(age));
+                    edtAge.setText(String.valueOf(age));*/
                     break;
                 default:
                     break;
@@ -251,10 +253,10 @@ indextSelect：当前选择的菜单
         listSex.add("女");
         tvSex.setText(listSex.get(0));
         //学历
-        listEducation.add("大专");
-        listEducation.add("本科");
-        listEducation.add("硕士");
-        listEducation.add("博士");
+        listEducation.add("（全日制）大专");
+        listEducation.add("（全日制）本科");
+        listEducation.add("（全日制）硕士");
+        listEducation.add("（全日制）博士");
         listEducation.add("其他");
         tvEducation.setText(listEducation.get(0));
         //婚姻状况
@@ -267,25 +269,29 @@ indextSelect：当前选择的菜单
         //有无
         yw.add("无");
         yw.add("有");
+        tvHasNankaiHouse.setText(yw.get(0));
         //是否
         trProperty.add("否");
         trProperty.add("是");
+        tvCurrentCity.setText(trProperty.get(0));
         //房产信息
 //        listHouseProperty.add("其他");
 //        listHouseProperty.add("2014年5月31日前购买80万以上一手房");
 //        listHouseProperty.add("2007年4月1日前购买30万以上一手房");
         //
         listOther.add("无");
-        listOther.add("知青");
-        listOther.add("支边");
-        listOther.add("支农");
-        listOther.add("支援三线");
-        listOther.add("四保");
+        listOther.add("知青上山下乡");
+        listOther.add("支援边疆建设");
+        listOther.add("支援农业建设");
+        listOther.add("支援三线建设");
+        listOther.add("四年保留户口");
         listOther.add("垦荒");
         listOther.add("遣送回原籍");
+        listOther.add("其他");
     }
 
-    @OnClick({R.id.ll_basic_information, R.id.ll_marital_status, R.id.ll_children, R.id.textNext, R.id.tvSex, R.id.tvEducation})
+    @OnClick({R.id.ll_basic_information, R.id.ll_marital_status, R.id.ll_children, R.id.textNext,
+            R.id.tvSex, R.id.tvEducation,R.id.tvCurrentCity,R.id.tvHasNankaiHouse})
     void ViewClick(View view) {
         switch (view.getId()) {
             case R.id.ll_basic_information://基础信息
@@ -301,21 +307,22 @@ indextSelect：当前选择的菜单
              //   MenuSelect();
                 break;
             case R.id.textNext://下一步
-                if (indextSelect == 2) {
-//                    indextSelect = 0;
-                    Intent intent=new Intent(this,OptimalPushResultsActivity.class);
-                    putExtra(intent);
-                    startActivity(intent);
-                } else if(indextSelect == 0){
+                if(indextSelect == 0){
                     validator.validate();
                     if(verify){
-                        personInfo.setSex(tvSex.getText().toString());
                         showSelectItem();
                         indextSelect++;
                     }
                 }else {
                     showSelectItem();
                     indextSelect++;
+                }
+                if (!hasQuestion) {
+//                    indextSelect = 0;
+                    Intent intent=new Intent(this,OptimalPushResultsActivity.class);
+                    putExtra(intent);
+                    startActivity(intent);
+                    return;
                 }
                 MenuSelect();
                 break;
@@ -327,14 +334,24 @@ indextSelect：当前选择的菜单
                 mSpinerPopWindow.setData(listEducation,tvEducation);
                 showSpinWindow(tvEducation);
                 break;
+            case R.id.tvCurrentCity:
+                mSpinerPopWindow.setData(trProperty,tvCurrentCity);
+                showSpinWindow(tvCurrentCity);
+                break;
+            case R.id.tvHasNankaiHouse:
+                mSpinerPopWindow.setData(yw,tvHasNankaiHouse);
+                showSpinWindow(tvHasNankaiHouse);
+                break;
         }
     }
 
     //修改菜单显示状态，并修改内容显示
     void MenuSelect() {
         if (indextSelect != indext) {
-            llMenu[indextSelect].setSelected(true);
-            llMenu[indext].setSelected(false);
+            if(indextSelect<llMenu.length&&indext<llMenu.length){
+                llMenu[indextSelect].setSelected(true);
+                llMenu[indext].setSelected(false);
+            }
             llContent[indextSelect].setVisibility(View.VISIBLE);
             llContent[indext].setVisibility(View.GONE);
             indext = indextSelect;
@@ -368,12 +385,12 @@ indextSelect：当前选择的菜单
         intent.putExtra("info",personInfo);
     }
     private void addItem(LinearLayout parent, String name, List<String> selectList, final String fieldName){
+        hasQuestion = true;
         final List<String> list=selectList;
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.select_item, parent, false);
         TextView title = (TextView)v.findViewById(R.id.tv_title);
         title.setText(name);
         final TextView select = (TextView)v.findViewById(R.id.tv_select);
-        select.setText(selectList.get(0));
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -385,7 +402,7 @@ indextSelect：当前选择的菜单
         select.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                
+
             }
 
             @Override
@@ -407,65 +424,59 @@ indextSelect：当前选择的菜单
                 BeanUtil.setFieldValue(personInfo,fieldName,value);
             }
         });
+        select.setText(selectList.get(0));
         parent.addView(v);
     }
     void showSelectItem(){
+        hasQuestion = false;
         if(indextSelect==0){
             Editable text = edtAge.getText();
             String age = text.toString();
+            String sex = tvSex.getText().toString();
+            String isCurrentCity = tvCurrentCity.getText().toString();
+            String hasNankaiHose = tvHasNankaiHouse.getText().toString();
+            boolean currentCity = isCurrentCity.equals("是");
+            boolean hasNankaiHoseB = hasNankaiHose.equals("是");
+            personInfo.setSex(sex);
+            personInfo.setEducation(tvEducation.getText().toString());
+            personInfo.setHouseholdTj(currentCity);
+            personInfo.setHouse(hasNankaiHoseB);
             if(StringUtils.isNotBlank(age)){
                 int age_i = Integer.parseInt(age);
                 personInfo.setAge(age_i);
-                    addItem(contentMaritalStatus,"有无南开房产在本人、配偶、父母名下：",yw,"house");
-                if(age_i>=22){
-                    if(age_i>50){
-                        addItem(contentMaritalStatus,"有无子女：",yw,"children");
-                        addItem(contentMaritalStatus,"其他身份：",listOther,"special");
-                    }
+                if(("男".equals(sex)&&age_i>=22)||"女".equals(sex)&&age_i>=20){
                     addItem(contentMaritalStatus,"婚姻状况：",listMarriage,"marriage");
-
-                }else if(age_i<=18){
-                    if(age_i<=14){
-                        addItem(contentMaritalStatus,"是否被收养人：",trProperty,"adopt");
-                    }
-                }else {
-                    //投继父母
-                    addItem(contentMaritalStatus,"父母婚姻状况：",listMarriage,"marriageParent");
+                }
+                if("否".equals(isCurrentCity)){
+                    addItem(contentMaritalStatus,"有无居住证：",yw,"residencePermit");
+                }
+                if("有".equals(hasNankaiHose)){
+                    addItem(contentMaritalStatus,"2007年4月1日前购买30万以上一手房：",trProperty,"housePrice_a");
+                    addItem(contentMaritalStatus,"2014年5月31日前购买80万以上一手房：",trProperty,"housePrice_b");
+                    addItem(contentMaritalStatus,"有无房贷：",yw,"houseLoan");
+                }
+                if("是".equals(isCurrentCity)){
+                    addItem(contentMaritalStatus,"特殊身份：",listOther,"special");
+                    addItem(contentMaritalStatus,"是否由于特殊原因迁往外地：",trProperty,"specialReasonRelocate");
                 }
             }
         }else if(indextSelect==1){
-            if(personInfo.getAdopt()!=null && personInfo.getAdopt()){
-                addItem(contentChildren,"收养人具有天津户籍：",yw,"householdTj");
-                addItem(contentChildren,"收养人年满30周岁：",trProperty,"adoptAge30");
-                addItem(contentChildren,"收养人有无子女：",yw,"adopterHasChild");
-                addItem(contentChildren,"收养人有无收养证：",yw,"adoptCard");
-                return;
-            }
-            if(personInfo.getChildren()!=null && personInfo.getChildren()){
-//                addItem(contentChildren,"有无子女小于18岁：",yw,"childrenInfo1");
-//                addItem(contentChildren,"有无子女小于22岁未婚：",yw,"childrenInfo2");
-                if((personInfo.getAge()>=60 && "男".equals(tvSex.getText().toString())) || (personInfo.getAge()>=55 && "女".equals(tvSex.getText().toString()))){
-                    addItem(contentChildren,"子女户籍均在津：",trProperty,"childrensHousehold");
-                    addItem(contentChildren,"在津连续居住满五年：",trProperty,"liveFiveYear");
-                }
-            }
-            if(personInfo.getHouse()!=null && personInfo.getHouse()){
-                addItem(contentChildren,"有无房贷：",yw,"houseLoan");
-                addItem(contentChildren,"2014年5月31日前购买80万以上一手房：",trProperty,"housePrice_a");
-                addItem(contentChildren,"2007年4月1日前购买30万以上一手房：",trProperty,"housePrice_b");
-            }
             if(StringUtils.isNotBlank(personInfo.getMarriage())&&!"未婚".equals(personInfo.getMarriage())){
-                addItem(contentChildren,"婚满三年：",trProperty,"marriageThree");
-            }else {
-                if(StringUtils.isNotBlank(personInfo.getMarriageParent()) && "再婚".equals(personInfo.getMarriageParent())){
-//                addItem(contentChildren,"有子女抚养权：",yw,"custody");
-                    addItem(contentChildren,"再婚时不满18岁：",trProperty,"marriageParentThenLessThan18");
-                    addItem(contentChildren,"父母再婚满三年：",trProperty,"marriageParentThree");
-                }
+                addItem(contentChildren,"是否本市户口：",trProperty,"householdTj");
+                addItem(contentChildren,"是否结婚三年：",trProperty,"marriageThree");
+                addItem(contentChildren,"有无子女：",yw,"children");
             }
-
+            if(personInfo.getResidencePermit()!=null&&personInfo.getResidencePermit()){
+                addItem(contentChildren,"居住证签注是否满三年：",trProperty,"residencePermit3Year");
+            }
         }else if(indextSelect==2){
-
+            if(personInfo.getChildren()!=null&&personInfo.getChildren()){
+                addItem(contentHouseInfo,"子女是否为天津户口：",trProperty,"childrensHousehold");
+                addItem(contentHouseInfo,"子女年龄是否小于18岁：",trProperty,"childrenInfo1");
+            }
+            if(personInfo.getChildren()!=null&&personInfo.getHouseholdTj()){
+                addItem(contentHouseInfo,"配偶是否为本地户口：",trProperty,"isSpouseIsLocation");
+            }
         }
     }
 

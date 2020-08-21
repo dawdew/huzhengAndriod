@@ -174,14 +174,15 @@
 
                                 <TextView
                                     style="@style/personal_information_content_title"
-                                    android:text=" 姓       名 ：" />
+                                    android:text=" 年龄 ：" />
 
                                 <EditText
                                     style="@style/white_rounded_bg"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="40dp"
-                                    android:id="@+id/edtName"/>
+                                    android:inputType="number"
+                                    android:id="@+id/edtAge"/>
 
                             </LinearLayout>
 
@@ -194,15 +195,15 @@
 
                                 <TextView
                                     style="@style/personal_information_content_title"
-                                    android:text="年龄：" />
+                                    android:text="性别：" />
 
-                                <EditText
+                                <TextView
                                     style="@style/white_rounded_bg"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="40dp"
-                                    android:inputType="number"
-                                    android:id="@+id/edtAge"/>
+                                    android:drawableRight="@mipmap/ic_arrow_drop_down"
+                                    android:id="@+id/tvSex"/>
                             </LinearLayout>
                         </LinearLayout>
 
@@ -220,28 +221,7 @@
 
                                 <TextView
                                     style="@style/personal_information_content_title"
-                                    android:text=" 性       别 ：" />
-
-                                <TextView
-                                    android:id="@+id/tvSex"
-                                    style="@style/white_rounded_bg"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:drawableRight="@mipmap/ic_arrow_drop_down"
-                                    android:textSize="40dp" />
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_weight="1"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    style="@style/personal_information_content_title"
-                                    android:text="学历：" />
+                                    android:text=" 学历 ：" />
 
                                 <TextView
                                     android:id="@+id/tvEducation"
@@ -251,6 +231,7 @@
                                     android:drawableRight="@mipmap/ic_arrow_drop_down"
                                     android:textSize="40dp" />
                             </LinearLayout>
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -261,14 +242,15 @@
 
                             <TextView
                                 style="@style/personal_information_content_title"
-                                android:text="身份证号：" />
+                                android:text="是否本市户籍：" />
 
-                            <EditText
+                            <TextView
                                 style="@style/white_rounded_bg"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="40dp"
-                                android:id="@+id/edtIDNumber"/>
+                                android:drawableRight="@mipmap/ic_arrow_drop_down"
+                                android:id="@+id/tvCurrentCity"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -279,32 +261,15 @@
 
                             <TextView
                                 style="@style/personal_information_content_title"
-                                android:text="户  籍  地：" />
-
-                            <EditText
-                                style="@style/white_rounded_bg"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="40dp"
-                                android:id="@+id/edtAddress"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:orientation="horizontal">
+                                android:text="是否有南开住房：" />
 
                             <TextView
-                                style="@style/personal_information_content_title"
-                                android:text="现  住  地：" />
-
-                            <EditText
                                 style="@style/white_rounded_bg"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textSize="40dp"
-                                android:id="@+id/edtResidence"/>
+                                android:textSize="40sp"
+                                android:drawableRight="@mipmap/ic_arrow_drop_down"
+                                android:id="@+id/tvHasNankaiHouse"/>
                         </LinearLayout>
                         <LinearLayout
                             android:id="@+id/content_base"

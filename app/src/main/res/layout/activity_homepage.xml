@@ -5,200 +5,222 @@
     android:background="@mipmap/bg"
     android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="200dp"
-        android:layout_marginLeft="220dp"
-        android:layout_marginRight="220dp"
-        android:layout_marginTop="200dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
+            android:layout_marginLeft="220dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginRight="220dp"
+            android:layout_marginBottom="200dp"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal">
+
+
                 <LinearLayout
-                    style="@style/MuenBg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/menu1"
-                    android:gravity="center_vertical"
-                    android:padding="15dp">
-
-                    <TextView
-                        android:id="@+id/textDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="2018年5月16号            星期三"
-                        android:textColor="#FFF"
-                        android:textSize="40dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/textTemperature"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="今天天气:  29°~16°C"
-                        android:textColor="#FFF"
-                        android:textSize="40dp"
-                        android:textStyle="bold" />
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:gravity="right|center_vertical"
-                        android:orientation="horizontal">
+                        style="@style/MuenBg"
+                        android:layout_weight="1"
+                        android:background="@color/menu1"
+                        android:gravity="center_vertical"
+                        android:padding="15dp">
 
                         <TextView
-                            android:id="@+id/textState"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/textDate"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="晴"
+                            android:text="2018年5月16号            星期三"
                             android:textColor="#FFF"
-                            android:textSize="45dp"
+                            android:textSize="40dp"
                             android:textStyle="bold" />
 
-                        <ImageView
-                            android:id="@+id/imgState"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
-                            android:layout_marginLeft="10dp"
-                            android:src="@mipmap/ic_fine" />
+                        <TextView
+                            android:id="@+id/textTemperature"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="今天天气:  29°~16°C"
+                            android:textColor="#FFF"
+                            android:textSize="40dp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:gravity="right|center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textState"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="晴"
+                                android:textColor="#FFF"
+                                android:textSize="45dp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/imgState"
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:layout_marginLeft="10dp"
+                                android:src="@mipmap/ic_fine" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/ll_suggestion"
-                    style="@style/MuenBg"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:background="@color/menu8">
+                    <LinearLayout
+                        android:id="@+id/ll_suggestion"
+                        style="@style/MuenBg"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/menu8">
 
-                    <ImageView
-                        style="@style/MenuImg"
-                        android:src="@mipmap/ic_suggestion" />
+                        <ImageView
+                            style="@style/MenuImg"
+                            android:src="@mipmap/ic_suggestion" />
 
-                    <TextView
-                        style="@style/MenuText"
-                        android:text="意见建议" />
+                        <TextView
+                            style="@style/MenuText"
+                            android:text="意见建议" />
 
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/llTransaction"
-                    style="@style/MuenBg"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:background="@color/menu2">
+                    </LinearLayout>
 
-                    <ImageView
-                        style="@style/MenuImg"
-                        android:src="@mipmap/ic_transaction" />
+                    <LinearLayout
+                        android:id="@+id/llTransaction"
+                        style="@style/MuenBg"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/menu2">
 
-                    <TextView
-                        style="@style/MenuText"
-                        android:text="推优办理" />
+                        <ImageView
+                            style="@style/MenuImg"
+                            android:src="@mipmap/ic_transaction" />
 
-                </LinearLayout>
+                        <TextView
+                            style="@style/MenuText"
+                            android:text="推优办理" />
 
-                <LinearLayout
-                    android:id="@+id/llinformation"
-                    style="@style/MuenBg"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:background="@color/menu3">
+                    </LinearLayout>
 
-                    <ImageView
-                        style="@style/MenuImg"
-                        android:src="@mipmap/ic_information_inquiry" />
+                    <LinearLayout
+                        android:id="@+id/llinformation"
+                        style="@style/MuenBg"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/menu3">
 
-                    <TextView
-                        style="@style/MenuText"
-                        android:text="进度查询" />
+                        <ImageView
+                            style="@style/MenuImg"
+                            android:src="@mipmap/ic_information_inquiry" />
+
+                        <TextView
+                            style="@style/MenuText"
+                            android:text="进度查询" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/llDownload"
+                    style="@style/MuenBg"
+                    android:layout_weight="1"
+                    android:background="@color/menu4">
+
+                    <ImageView
+                        style="@style/MenuImg"
+                        android:src="@mipmap/ic_download" />
+
+                    <TextView
+                        style="@style/MenuText"
+                        android:text="打印申请" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llSynopsis"
+                    style="@style/MuenBg"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@color/menu5">
+
+                    <ImageView
+                        style="@style/MenuImg"
+                        android:src="@mipmap/ic_synopsis" />
+
+                    <TextView
+                        style="@style/MenuText"
+                        android:text="大厅简介" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/llAdvisory"
+                    style="@style/MuenBg"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@color/menu6">
+
+                    <ImageView
+                        style="@style/MenuImg"
+                        android:src="@mipmap/ic_advisory" />
+
+                    <TextView
+                        style="@style/MenuText"
+                        android:text="政策咨询" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llAppointment"
+                    style="@style/MuenBg"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@color/menu7">
+
+                    <ImageView
+                        style="@style/MenuImg"
+                        android:src="@mipmap/ic_appointment" />
+
+                    <TextView
+                        style="@style/MenuText"
+                        android:text="在线预约" />
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+        <Button
+            android:id="@+id/ah_btn_guanzhu"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="end|bottom"
+            android:text="关注我们"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_wx"
+            android:visibility="visible"
+            android:textSize="30sp" />
 
-            <LinearLayout
-                android:id="@+id/llDownload"
-                style="@style/MuenBg"
-                android:layout_weight="1"
-                android:background="@color/menu4">
-
-                <ImageView
-                    style="@style/MenuImg"
-                    android:src="@mipmap/ic_download" />
-
-                <TextView
-                    style="@style/MenuText"
-                    android:text="打印申请" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llSynopsis"
-                style="@style/MuenBg"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@color/menu5">
-
-                <ImageView
-                    style="@style/MenuImg"
-                    android:src="@mipmap/ic_synopsis" />
-
-                <TextView
-                    style="@style/MenuText"
-                    android:text="大厅简介" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/llAdvisory"
-                style="@style/MuenBg"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@color/menu6">
-
-                <ImageView
-                    style="@style/MenuImg"
-                    android:src="@mipmap/ic_advisory" />
-
-                <TextView
-                    style="@style/MenuText"
-                    android:text="政策咨询" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llAppointment"
-                style="@style/MuenBg"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@color/menu7">
-
-                <ImageView
-                    style="@style/MenuImg"
-                    android:src="@mipmap/ic_appointment" />
-
-                <TextView
-                    style="@style/MenuText"
-                    android:text="在线预约" />
-            </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

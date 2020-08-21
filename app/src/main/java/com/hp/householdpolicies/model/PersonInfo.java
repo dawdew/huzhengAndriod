@@ -20,6 +20,10 @@ public class PersonInfo implements Serializable {
     private String education;
     private String household;//户籍地
     private Boolean householdTj;//户籍地是否天津
+    private Boolean residencePermit;//居住证
+    private Boolean residencePermit3Year;//居住证
+    private Boolean specialReasonRelocate;//特殊原因迁往外地
+
 
     private Boolean house;
     private Boolean housePrice_a;//房价
@@ -31,6 +35,7 @@ public class PersonInfo implements Serializable {
     private Boolean marriageThree;//结婚时间是否满3年
     private Boolean marriageParentThree;//再婚时间是否满3年
     private Boolean marriageParentThenLessThan18;//再婚时子女不满18岁
+    private Boolean isSpouseIsLocation;
 
     private String special;//特殊身份
 
@@ -58,6 +63,7 @@ public class PersonInfo implements Serializable {
     public Date getBirth() {
         return birth;
     }
+
 
     public void setBirth(Date birth) {
         this.birth = birth;
@@ -91,10 +97,42 @@ public class PersonInfo implements Serializable {
         return house;
     }
 
+    public Boolean getResidencePermit3Year() {
+        return residencePermit3Year;
+    }
+
+    public void setResidencePermit3Year(Boolean residencePermit3Year) {
+        this.residencePermit3Year = residencePermit3Year;
+    }
+
+    public Boolean getSpouseIsLocation() {
+        return isSpouseIsLocation;
+    }
+
+    public void setSpouseIsLocation(Boolean spouseIsLocation) {
+        isSpouseIsLocation = spouseIsLocation;
+    }
+
     public void setHouse(Boolean house) {
         this.house = house;
     }
 
+    public Boolean getResidencePermit() {
+        return residencePermit;
+    }
+
+
+    public void setResidencePermit(Boolean residencePermit) {
+        this.residencePermit = residencePermit;
+    }
+
+    public Boolean getSpecialReasonRelocate() {
+        return specialReasonRelocate;
+    }
+
+    public void setSpecialReasonRelocate(Boolean specialReasonRelocate) {
+        this.specialReasonRelocate = specialReasonRelocate;
+    }
 
     public Boolean getHouseLoan() {
         return houseLoan;
